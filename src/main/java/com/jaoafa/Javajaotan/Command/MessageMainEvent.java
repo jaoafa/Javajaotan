@@ -55,6 +55,9 @@ public class MessageMainEvent {
 		Message message = event.getMessage();
 		String text = event.getMessage().getContentRaw();
 
+		if (message.isWebhookMessage()) {
+			return;
+		}
 		if (MuteManager.isMuted(member.getUser().getId())) {
 			return;
 		}

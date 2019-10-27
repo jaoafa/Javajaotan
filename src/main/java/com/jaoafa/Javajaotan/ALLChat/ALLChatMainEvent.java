@@ -28,6 +28,9 @@ public class ALLChatMainEvent {
 		if (channel.getIdLong() == 603841992404893707L) {
 			return; // #greeting
 		}
+		if (message.isWebhookMessage()) {
+			return;
+		}
 		if (MuteManager.isMuted(member.getUser().getId())) {
 			return; // Muted
 		}
