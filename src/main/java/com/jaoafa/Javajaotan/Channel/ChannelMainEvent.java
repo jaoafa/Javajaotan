@@ -25,6 +25,9 @@ public class ChannelMainEvent {
 		Member member = event.getMember();
 		Message message = event.getMessage();
 
+		if (message.isWebhookMessage()) {
+			return;
+		}
 		if (MuteManager.isMuted(member.getUser().getId())) {
 			return;
 		}
