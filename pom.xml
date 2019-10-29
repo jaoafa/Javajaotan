@@ -69,6 +69,10 @@
 			<id>okhttp</id>
 			<url>https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp</url>
 		</repository>
+		<repository>
+			<id>commons-lang</id>
+			<url>https://mvnrepository.com/artifact/commons-lang/commons-lang</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -116,6 +120,11 @@
 					<artifactId>opus-java</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
 		</dependency>
 	</dependencies>
 </project>

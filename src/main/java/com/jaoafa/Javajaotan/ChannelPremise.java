@@ -9,14 +9,14 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 public interface ChannelPremise {
 	/**
 	 * チャンネルでメッセージが送信されたときに呼び出します。
-	 * @param client IDiscordClient
+	 * @param jda JDA
 	 * @param guild 送信元のGuild(Discord Server)
 	 * @param channel 送信元のチャンネル
 	 * @param member 送信者(実行者)
 	 * @param message メッセージに関するデータ
 	 * @param edited 編集による呼び出しかどうか
 	 */
-	public void run(final JDA client, final Guild guild, final MessageChannel channel, final Member member,
+	public void run(final JDA jda, final Guild guild, final MessageChannel channel, final Member member,
 			final Message message, boolean edited);
 
 	/**
