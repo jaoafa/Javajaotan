@@ -208,8 +208,8 @@ public class Main {
 			InputStream is = new ByteArrayInputStream(sw.toString().getBytes("utf-8"));
 			channel.sendMessage(":pencil:おっと！Javajaotanでなにか問題が発生したようです！ <@221991565567066112>\n**ErrorMsg**: `"
 					+ exception.getMessage()
-					+ "`\n**Class**: `" + clazz.getName() + " (" + exception.getClass().getName() + ")`");
-			channel.sendFile(is, "stacktrace.txt");
+					+ "`\n**Class**: `" + clazz.getName() + " (" + exception.getClass().getName() + ")`").queue();
+			channel.sendFile(is, "stacktrace.txt").queue();
 		} catch (UnsupportedEncodingException ex) {
 			channel.sendMessage(":pencil:<@221991565567066112> おっと！メッセージ送信時に問題が発生したみたいです！\n**ErrorMsg**: `"
 					+ exception.getMessage() + "`\n**Class**: `" + clazz.getName() + " ("
@@ -221,7 +221,8 @@ public class Main {
 		if (channel != null) {
 			channel.sendMessage(
 					":pencil:おっと！Javajaotanでなにか問題が発生したようです！ <@221991565567066112>\n**Throwable Class**: `"
-							+ exception.getClass().getName() + "`");
+							+ exception.getClass().getName() + "`")
+					.queue();
 		}
 		if (Main.ReportChannel == null) {
 			System.out.println("ExceptionReporter: Javajaotan.ReportChannel == null.");
@@ -245,7 +246,7 @@ public class Main {
 			builder.addField("Message", "```" + exception.getMessage() + "```", false);
 			builder.addField("Cause", "```" + exception.getCause() + "```", false);
 			builder.setTimestamp(Instant.now());
-			channel.sendMessage(builder.build());
+			channel.sendMessage(builder.build()).queue();
 		} catch (Exception e) {
 			try {
 				String text = "javajaotan Error Reporter (" + Library.sdfFormat(new Date()) + ")\n"
@@ -257,7 +258,7 @@ public class Main {
 						+ exception.getCause();
 				InputStream stream = new ByteArrayInputStream(
 						text.getBytes("utf-8"));
-				Main.ReportChannel.sendFile(stream, "Javajaotanreport" + System.currentTimeMillis() + ".txt");
+				Main.ReportChannel.sendFile(stream, "Javajaotanreport" + System.currentTimeMillis() + ".txt").queue();
 			} catch (UnsupportedEncodingException ex) {
 				return;
 			}

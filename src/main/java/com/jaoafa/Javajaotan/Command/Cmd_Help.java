@@ -134,7 +134,7 @@ public class Cmd_Help implements CommandPremise {
 				builder.addField("/" + field.getTitle(), field.getContent(), true);
 			}
 
-			channel.sendMessage(builder.build());
+			channel.sendMessage(builder.build()).queue();
 			return;
 		}
 		try {
@@ -163,7 +163,7 @@ public class Cmd_Help implements CommandPremise {
 			builder.addField("/" + args[0].toLowerCase(),
 					"**Description**: `" + description + "`\n" + "**Usage**: `" + usage + "`", false);
 
-			channel.sendMessage(builder.build());
+			channel.sendMessage(builder.build()).queue();
 			return;
 		} catch (ClassNotFoundException e) {
 			EmbedBuilder builder = new EmbedBuilder();
@@ -171,7 +171,7 @@ public class Cmd_Help implements CommandPremise {
 			builder.setColor(Color.YELLOW);
 			builder.addField("/" + args[0].toLowerCase(), "Command not found.", false);
 
-			channel.sendMessage(builder.build());
+			channel.sendMessage(builder.build()).queue();
 			return;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
