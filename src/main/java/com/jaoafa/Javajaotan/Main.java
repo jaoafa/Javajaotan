@@ -185,7 +185,7 @@ public class Main {
 		return jda;
 	}
 
-	public static void DiscordExceptionError(@NotNull Class<?> clazz, @Nullable TextChannel channel,
+	public static void DiscordExceptionError(@NotNull Class<?> clazz, @Nullable MessageChannel channel,
 			@NotNull Throwable exception) {
 		if (channel == null && Main.ReportChannel != null) {
 			channel = Main.ReportChannel;
