@@ -51,10 +51,10 @@ public class Cmd_Link implements CommandPremise {
 						+ "**jao Minecraft Serverに入り**、以下コマンドを実行してください。").queue();
 				dm.sendMessage("```/discordlink " + authkey + "```").queue();
 			}, failure -> {
-				channel.sendMessage(member.getUser().getId() + ", 個人メッセージへの送信に失敗しました: `" + failure.getMessage() + "`")
+				channel.sendMessage(member.getAsMention() + ", 個人メッセージへの送信に失敗しました: `" + failure.getMessage() + "`")
 						.queue();
 			});
-			channel.sendMessage(member.getUser().getId() + ", 個人メッセージに送信されたメッセージを確認し、指定された行動を行って下さい。\n"
+			channel.sendMessage(member.getAsMention() + ", 個人メッセージに送信されたメッセージを確認し、指定された行動を行って下さい。\n"
 					+ "メッセージが送信されてきませんか？何度か実行し直して正常動作しなければ開発部にお問い合わせをお願いします！\n"
 					+ "\n"
 					+ "なお、原則**メールアドレスを登録したアカウントでのリンク**をお願いしています。それ以外のアカウントでリンクするとログイン出来なくなる可能性があります。").queue();
