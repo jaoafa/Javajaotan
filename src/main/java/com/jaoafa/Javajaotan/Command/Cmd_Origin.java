@@ -32,12 +32,12 @@ public class Cmd_Origin implements CommandPremise {
 	public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
 			Message message, String[] args) {
 		if (args.length != 1) {
-			channel.sendMessage("このコマンドを実行するには、1つの引数が必要です。").queue();
+			channel.sendMessage(member.getAsMention() + ", このコマンドを実行するには、1つの引数が必要です。").queue();
 			return;
 		}
 		String num = args[0];
 		if (!NumberUtils.isDigits(num)) {
-			channel.sendMessage("数値を指定してください。").queue();
+			channel.sendMessage(member.getAsMention() + ", 数値を指定してください。").queue();
 			return;
 		}
 		try {
@@ -46,7 +46,7 @@ public class Cmd_Origin implements CommandPremise {
 			List<String> datas = Files.readAllLines(path);
 			JSONObject json = new JSONObject(String.join("\n", datas));
 			if (!json.has(num)) {
-				channel.sendMessage("指定された記念日ナンバーの記念日が見つかりませんでした。").queue();
+				channel.sendMessage(member.getAsMention() + ", 指定された記念日ナンバーの記念日が見つかりませんでした。").queue();
 				return;
 			}
 			String url = json.getString(num);
@@ -56,13 +56,15 @@ public class Cmd_Origin implements CommandPremise {
 			String res = response.body().string();
 			Matcher title_matcher = title_pattern.matcher(res);
 			if (!title_matcher.find()) {
-				channel.sendMessage("指定された記念日ナンバーの記念日の情報を取得できませんでした。(title|`" + url + "`)").queue();
+				channel.sendMessage(member.getAsMention() + ", 指定された記念日ナンバーの記念日の情報を取得できませんでした。(title|`" + url + "`)")
+						.queue();
 				return;
 			}
 			String title = title_matcher.group(1);
 			Matcher text_matcher = text_pattern.matcher(res);
 			if (!text_matcher.find()) {
-				channel.sendMessage("指定された記念日ナンバーの記念日の情報を取得できませんでした。(text|`" + url + "`)").queue();
+				channel.sendMessage(member.getAsMention() + ", 指定された記念日ナンバーの記念日の情報を取得できませんでした。(text|`" + url + "`)")
+						.queue();
 				return;
 			}
 			String text = text_matcher.group(1);
