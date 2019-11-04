@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -36,6 +37,9 @@ import com.optimaize.langdetect.text.CommonTextObjectFactories;
 import com.optimaize.langdetect.text.TextObject;
 import com.optimaize.langdetect.text.TextObjectFactory;
 
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -126,16 +130,15 @@ public class Library {
 			;
 		return acp.substring(0, p);
 	}
-	/*
-		public static boolean isAllowRole(User author, Role[] roles) {
-			for (IRole role : roles) {
-				if (author.hasRole(role)) {
-					return true;
-				}
+
+	public static boolean isAllowRole(Member member, Role[] roles) {
+		for (Role role : roles) {
+			if (hasRole(member, role)) {
+				return true;
 			}
-			return false;
 		}
-	*/
+		return false;
+	}
 
 	@Deprecated
 	public static String implode(CharSequence delimiter, CharSequence... elements) {
@@ -179,20 +182,31 @@ public class Library {
 	 * @param author 判定するユーザ
 	 * @return Admin, Moderatorであればtrue
 	 */
-	/*public static boolean hasAdminModeratorRole(IGuild guild, IUser author) {
-		IRole AdminRole;
-		IRole ModeratorRole;
-		if (guild.getLongID() == 189377932429492224L) {
-			AdminRole = guild.getRoleByID(189381504059572224L);
-			ModeratorRole = guild.getRoleByID(281699181410910230L);
-		} else if (guild.getLongID() == 597378876556967936L) {
-			AdminRole = guild.getRoleByID(597405109290532864L);
-			ModeratorRole = guild.getRoleByID(597405110683041793L);
+	public static boolean hasAdminModeratorRole(Guild guild, Member member) {
+		Role AdminRole;
+		Role ModeratorRole;
+		if (guild.getIdLong() == 189377932429492224L) {
+			AdminRole = guild.getRoleById(189381504059572224L);
+			ModeratorRole = guild.getRoleById(281699181410910230L);
+		} else if (guild.getIdLong() == 597378876556967936L) {
+			AdminRole = guild.getRoleById(597405109290532864L);
+			ModeratorRole = guild.getRoleById(597405110683041793L);
 		} else {
 			return false;
 		}
-		return author.hasRole(AdminRole) || author.hasRole(ModeratorRole);
-	}*/
+		return hasRole(member, AdminRole) || hasRole(member, ModeratorRole);
+	}
+
+	public static boolean hasRole(Member member, Role role) {
+		if (member == null || role == null)
+			return false;
+		return !member
+				.getRoles()
+				.stream()
+				.filter(_role -> _role.getId() == role.getId())
+				.collect(Collectors.toList())
+				.isEmpty();
+	}
 
 	public static String sdfFormat(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
