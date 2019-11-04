@@ -53,7 +53,7 @@ public class Cmd_Mcserver implements CommandPremise {
 				builder.addField("systemctl_state", json.optString("systemctl_state", "null"), false);
 				builder.addField("pid", json.optString("pid", "null"), false);
 				builder.addField("name", json.optString("name", "null"), false);
-				channel.sendMessage(builder.build());
+				channel.sendMessage(builder.build()).queue();
 				return;
 			} else if (args[0].equalsIgnoreCase("uptime")) {
 				runCommand(message, "uptime");
@@ -78,7 +78,7 @@ public class Cmd_Mcserver implements CommandPremise {
 				return;
 			}
 		}
-		channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+		channel.sendMessage(member.getAsMention() + ", `" + getUsage() + "`").queue();
 	}
 
 	private void runCommand(Message message, String... command) {
