@@ -8,6 +8,7 @@ import com.jaoafa.Javajaotan.Lib.ClassFinder;
 import com.jaoafa.Javajaotan.Lib.MuteManager;
 
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -20,6 +21,9 @@ public class ALLChatMainEvent {
 	@SubscribeEvent
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
 		JDA jda = event.getJDA();
+		if (!event.isFromType(ChannelType.TEXT)) {
+			return;
+		}
 		Guild guild = event.getGuild();
 		MessageChannel channel = event.getChannel();
 		Member member = event.getMember();

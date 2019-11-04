@@ -50,6 +50,9 @@ public class MessageMainEvent {
 	@SubscribeEvent
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
 		JDA jda = event.getJDA();
+		if (!event.isFromType(ChannelType.TEXT)) {
+			return;
+		}
 		Guild guild = event.getGuild();
 		MessageChannel channel = event.getChannel();
 		Member member = event.getMember();
