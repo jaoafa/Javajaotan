@@ -29,13 +29,13 @@ public class Cmd_Chat implements CommandPremise {
 				if (Library.isLong(args[0])) {
 					long channelID = Long.valueOf(args[0]);
 					if (jda.getTextChannelById(channelID) == null) {
-						channel.sendMessage(member.getAsMention() + ", 指定されたチャンネルが見つかりません。(ID指定)");
+						channel.sendMessage(member.getAsMention() + ", 指定されたチャンネルが見つかりません。(ID指定)").queue();
 						return;
 					}
 					sendToChannel = jda.getTextChannelById(channelID);
 				} else {
 					if (jda.getTextChannelById(args[0]) == null) {
-						channel.sendMessage(member.getAsMention() + ", 指定されたチャンネルが見つかりません。(チャンネル名指定)");
+						channel.sendMessage(member.getAsMention() + ", 指定されたチャンネルが見つかりません。(チャンネル名指定)").queue();
 						return;
 					}
 				}
@@ -49,7 +49,7 @@ public class Cmd_Chat implements CommandPremise {
 			// チャンネル指定あり
 			content = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 		}
-		sendToChannel.sendMessage(content);
+		sendToChannel.sendMessage(content).queue();
 	}
 
 	@Override
