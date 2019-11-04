@@ -11,6 +11,7 @@ import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MuteManager;
 
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -71,7 +72,16 @@ public class MessageMainEvent {
 		if (!text.startsWith("/")) {
 			return;
 		}
-		System.out.println("Msg: " + event.getAuthor().getName() + " " + event.getMessage().getContentRaw());
+		String sendFrom;
+		if (event.getChannelType() == ChannelType.TEXT) {
+			sendFrom = event.getGuild().getName() + " / " + event.getChannel().getName();
+		} else if (event.getChannelType() == ChannelType.PRIVATE) {
+			sendFrom = event.getChannel().getName();
+		} else {
+			sendFrom = "null";
+		}
+		System.out.println("Msg | " + sendFrom + " | " + event.getAuthor().getName() + " "
+				+ event.getMessage().getContentRaw());
 
 		String[] args;
 		String cmdname;
