@@ -45,7 +45,9 @@ public class Task_VerifiedCheck extends TimerTask {
 				// 10分以内
 				continue;
 			}
-			/*
+
+			System.out.println("kick: " + user.getUser().getName() + "#" + user.getUser().getDiscriminator()
+					+ " | between: " + diffmin + "min.");
 			guild.kick(user).queue(success -> {
 				channel.sendMessage(":wave:チャットがないまま10分を経過したため、ユーザー「" + user.getUser().getName() + "#"
 						+ user.getUser().getDiscriminator() + "」をキックしました。").queue();
@@ -56,8 +58,7 @@ public class Task_VerifiedCheck extends TimerTask {
 								+ failure.getClass().getName() + " | " + failure.getMessage() + "`")
 						.queue();
 			});
-			 */
-			System.out.println("kick: " + user.getUser().getName() + "#" + user.getUser().getDiscriminator());
+
 		}
 	}
 }
