@@ -13,7 +13,7 @@ public class Cmd_Alpha implements CommandPremise {
 	public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
 			Message message, String[] args) {
 		String msg = String.format(
-				"オ、オオwwwwwwwwオレ%swwwwwwww最近めっちょ%sられてんねんオレwwwwwwww%sとかかけるとめっちょ%sやねんwwwwァァァァァァァwww%sを見下しながら食べる%sは一段とウメェなァァァァwwwwwwww",
+				"オ、オオwwwwwwwwオレ%swwwwwwww最近めっちょ%sれてんねんオレwwwwwwww%sとかかけるとめっちょ%sやねんwwwwァァァァァァァwww%sを見下しながら食べる%sは一段とウメェなァァァァwwwwwwww",
 				opt(args, 0, "アルファ"),
 				opt(args, 1, "ふぁぼら"),
 				opt(args, 2, "人気"),
