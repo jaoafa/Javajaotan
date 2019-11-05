@@ -27,7 +27,7 @@ public class Event_ServerJoin {
 		TextChannel greeting = event.getGuild().getTextChannelById(603841992404893707L);
 
 		general.sendMessage(
-				":man_dancing:<@" + user.getId() + ">(#" + user.getDiscriminator() + ")さんがjMS Gamers Clubに参加しました。")
+				":man_dancing:<@" + user.getId() + ">(#" + user.getDiscriminator() + ")さんがjMS Gamers Clubに参加しました！")
 				.queue(
 						success -> {
 						},
@@ -37,7 +37,7 @@ public class Event_ServerJoin {
 		greeting.sendMessage(
 				":man_dancing:<@" + user.getId() + ">(#" + user.getDiscriminator()
 						+ ")さん、jao Minecraft Server Discordにようこそ。\n"
-						+ "運営方針により、参加から10分以内に発言がない場合システムによって自動的にキックされます。<#603841992404893707>チャンネルで「jao」「afa」とあいさつしてみましょう。")
+						+ "運営方針により、参加から10分以内に発言がない場合システムによって自動的にキックされます。<#603841992404893707>チャンネルで「jao」「afa」とあいさつしてみましょう！")
 				.queue(
 						success -> {
 						},

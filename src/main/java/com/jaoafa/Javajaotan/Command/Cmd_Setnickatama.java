@@ -81,7 +81,7 @@ public class Cmd_Setnickatama implements CommandPremise {
 		member.modifyNickname(builder.toString()).queue(null, failure -> {
 			Main.DiscordExceptionError(getClass(), channel, failure);
 		});
-		channel.sendMessage("`" + oldnick + "` -> `" + builder.toString() + "`").queue();
+		channel.sendMessage(member.getAsMention() + ", `" + oldnick + "` -> `" + builder.toString() + "`").queue();
 	}
 
 	@Override
