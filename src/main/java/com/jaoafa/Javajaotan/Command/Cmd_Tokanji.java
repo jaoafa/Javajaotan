@@ -55,7 +55,7 @@ public class Cmd_Tokanji implements CommandPremise {
 			StringBuilder builder = new StringBuilder();
 			for (int i = 0; i < array.length(); i++) {
 				JSONArray predictions = array.getJSONArray(i).getJSONArray(1);
-				if (predictions.length() < (readNum - 2)) {
+				if (readNum >= predictions.length()) {
 					builder.append(array.getJSONArray(i).getString(0));
 				} else {
 					builder.append(predictions.getString(readNum));
