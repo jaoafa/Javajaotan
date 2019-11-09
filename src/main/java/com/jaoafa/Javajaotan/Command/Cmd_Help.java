@@ -34,6 +34,9 @@ public class Cmd_Help implements CommandPremise {
 					if (!clazz.getName().startsWith("com.jaoafa.Javajaotan.Command.Cmd_")) {
 						continue;
 					}
+					if (clazz.getName().contains("$")) {
+						continue;
+					}
 					String commandName = clazz.getName().substring("com.jaoafa.Javajaotan.Command.Cmd_".length());
 
 					Constructor<?> construct = clazz.getConstructor();
@@ -87,6 +90,9 @@ public class Cmd_Help implements CommandPremise {
 				//Set<Class<?>> classes = Library.getClasses("com.jaoafa.Javajaotan.Command");
 				for (Class<?> clazz : classFinder.findClasses("com.jaoafa.Javajaotan.Command")) {
 					if (!clazz.getName().startsWith("com.jaoafa.Javajaotan.Command.Cmd_")) {
+						continue;
+					}
+					if (clazz.getName().contains("$")) {
 						continue;
 					}
 					String commandName = clazz.getName().substring("com.jaoafa.Javajaotan.Command.Cmd_".length());
