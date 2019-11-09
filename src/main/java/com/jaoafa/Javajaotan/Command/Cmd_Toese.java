@@ -124,6 +124,10 @@ public class Cmd_Toese implements CommandPremise {
 				put("HUAWEI", "华为技术有限公司");
 			}
 		};
+		if (args.length == 0) {
+			channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+			return;
+		}
 		String content = String.join(" ", args);
 		for (Entry<String, String> entry : map.entrySet()) {
 			content = content.replaceAll(Pattern.quote(entry.getKey()), entry.getValue());

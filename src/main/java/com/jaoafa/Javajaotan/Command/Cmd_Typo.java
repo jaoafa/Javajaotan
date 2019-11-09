@@ -26,6 +26,10 @@ public class Cmd_Typo implements CommandPremise {
 	@Override
 	public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
 			Message message, String[] args) {
+		if (args.length == 0) {
+			channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+			return;
+		}
 		String original = String.join(" ", args);
 		String json = getRunCommand(message, "php", "/var/jaoafa/Javajaotan/extcmds/typo.php", original);
 		JSONArray array = new JSONArray(json);
