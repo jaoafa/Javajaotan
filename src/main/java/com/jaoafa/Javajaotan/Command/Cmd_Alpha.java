@@ -16,8 +16,8 @@ public class Cmd_Alpha implements CommandPremise {
 				"オ、オオwwwwwwwwオレ%swwwwwwww最近めっちょ%sれてんねんオレwwwwwwww%sとかかけるとめっちょ%sやねんwwwwァァァァァァァwww%sを見下しながら食べる%sは一段とウメェなァァァァwwwwwwww",
 				opt(args, 0, "アルファ"),
 				opt(args, 1, "ふぁぼら"),
-				opt(args, 2, "人気"),
-				opt(args, 3, "エゴサ"),
+				opt(args, 2, "エゴサ"),
+				opt(args, 3, "人気"),
 				opt(args, 4, "クソアルファ"),
 				opt(args, 5, "エビフィレオ"));
 		channel.sendMessage(msg).queue();
@@ -30,7 +30,7 @@ public class Cmd_Alpha implements CommandPremise {
 
 	@Override
 	public String getUsage() {
-		return "/alpha [アルファ] [ふぁぼら] [人気] [エゴサ] [クソアルファ] [エビフィレオ]";
+		return "/alpha [アルファ] [ふぁぼら] [エゴサ] [人気] [クソアルファ] [エビフィレオ]";
 	}
 
 	@Override
