@@ -26,7 +26,8 @@ public class Event_TomachiEmojis {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle(":new:NEW EMOJI : " + emote.getAsMention() + " (`:" + emote.getName() + ":`)");
 		builder.setThumbnail(emote.getImageUrl());
-		builder.setAuthor(user.getAsMention());
+		builder.setAuthor(user.getName() + "#" + user.getAsTag(), "https://discordapp.com/users/" + user.getId(),
+				user.getAvatarUrl());
 		builder.setTimestamp(Instant.now());
 		emojiLog.sendMessage(builder.build()).queue();
 	}
@@ -45,7 +46,8 @@ public class Event_TomachiEmojis {
 		builder.setTitle(":repeat:CHANGE EMOJI : " + emote.getAsMention()
 				+ " (`:" + event.getOldName() + ":` -> `:" + event.getNewName() + ":`)");
 		builder.setThumbnail(emote.getImageUrl());
-		builder.setAuthor(user.getAsMention());
+		builder.setAuthor(user.getName() + "#" + user.getAsTag(), "https://discordapp.com/users/" + user.getId(),
+				user.getAvatarUrl());
 		builder.setTimestamp(Instant.now());
 		emojiLog.sendMessage(builder.build()).queue();
 	}
@@ -56,14 +58,11 @@ public class Event_TomachiEmojis {
 			return; // Tomachi Emojisのみ
 		}
 		Emote emote = event.getEmote();
-		ListedEmote listemote = event.getGuild().retrieveEmoteById(emote.getIdLong()).complete();
-		User user = listemote.getUser();
 
 		TextChannel emojiLog = event.getGuild().getTextChannelById(645864591775105034L);
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle(":wave:DELETED EMOJI : (`:" + emote.getName() + ":`)");
 		builder.setThumbnail(emote.getImageUrl());
-		builder.setAuthor(user.getAsMention());
 		builder.setTimestamp(Instant.now());
 		emojiLog.sendMessage(builder.build()).queue();
 	}
