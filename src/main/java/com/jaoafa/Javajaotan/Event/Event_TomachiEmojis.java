@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.hooks.SubscribeEvent;
 public class Event_TomachiEmojis {
 	@SubscribeEvent
 	public void onEmoteAddedEvent(EmoteAddedEvent event) {
-		if (event.getGuild().getIdLong() != 645864591775105034L) {
+		if (event.getGuild().getIdLong() != 627851806990663724L) {
 			return; // Tomachi Emojisのみ
 		}
 		Emote emote = event.getEmote();
@@ -33,7 +33,7 @@ public class Event_TomachiEmojis {
 
 	@SubscribeEvent
 	public void onEmoteUpdateNameEvent(EmoteUpdateNameEvent event) {
-		if (event.getGuild().getIdLong() != 645864591775105034L) {
+		if (event.getGuild().getIdLong() != 627851806990663724L) {
 			return; // Tomachi Emojisのみ
 		}
 		Emote emote = event.getEmote();
@@ -52,7 +52,7 @@ public class Event_TomachiEmojis {
 
 	@SubscribeEvent
 	public void onEmoteRemovedEvent(EmoteRemovedEvent event) {
-		if (event.getGuild().getIdLong() != 645864591775105034L) {
+		if (event.getGuild().getIdLong() != 627851806990663724L) {
 			return; // Tomachi Emojisのみ
 		}
 		Emote emote = event.getEmote();
