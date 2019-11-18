@@ -27,6 +27,7 @@ import com.jaoafa.Javajaotan.Event.Event_ServerBanned;
 import com.jaoafa.Javajaotan.Event.Event_ServerJoin;
 import com.jaoafa.Javajaotan.Event.Event_ServerLeave;
 import com.jaoafa.Javajaotan.Event.Event_TodoCheck;
+import com.jaoafa.Javajaotan.Event.Event_TomachiEmojis;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
@@ -128,6 +129,7 @@ public class Main {
 			jdabuilder.addEventListeners(new Event_ServerBanned());
 			jdabuilder.addEventListeners(new Event_ReactionAddEvent());
 			jdabuilder.addEventListeners(new Event_TodoCheck());
+			jdabuilder.addEventListeners(new Event_TomachiEmojis());
 
 			jda = jdabuilder.build().awaitReady();
 		} catch (Exception e) {
