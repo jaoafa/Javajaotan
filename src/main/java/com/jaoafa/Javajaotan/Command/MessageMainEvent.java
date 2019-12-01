@@ -75,6 +75,9 @@ public class MessageMainEvent {
 		if (!text.startsWith("/")) {
 			return;
 		}
+		if (text.equals("/")) {
+			return;
+		}
 		String sendFrom;
 		if (event.getChannelType() == ChannelType.TEXT) {
 			sendFrom = event.getGuild().getName() + " / " + event.getChannel().getName();

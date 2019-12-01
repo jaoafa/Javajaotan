@@ -12,6 +12,7 @@ public class MySQLDBManager {
 	private final String password;
 	private final String port;
 	private final String hostname;
+
 	private long WAIT_TIMEOUT = -1;
 	private long LAST_PACKET = -1;
 	Connection conn = null;
@@ -64,5 +65,21 @@ public class MySQLDBManager {
 			WAIT_TIMEOUT = -1;
 		}
 		return WAIT_TIMEOUT;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getPort() {
+		return port;
+	}
+
+	public String getHostname() {
+		return hostname;
 	}
 }
