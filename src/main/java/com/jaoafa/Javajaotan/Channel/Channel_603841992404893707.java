@@ -49,7 +49,7 @@ public class Channel_603841992404893707 implements ChannelPremise {
 				return;
 			}
 			channel.sendMessage(member.getAsMention() + ", あいさつしていただきありがとうございます！これにより、多くのチャンネルを閲覧できるようになりました。\n" +
-					"このあとは<#597419057251090443>などで「`/link`」を実行(投稿)して、MinecraftアカウントとDiscordアカウントを連携しましょう！");
+					"このあとは<#597419057251090443>などで「`/link`」を実行(投稿)して、MinecraftアカウントとDiscordアカウントを連携しましょう！").queue();
 			jaoPlayers.remove(member.getUser().getIdLong());
 		}
 	}
