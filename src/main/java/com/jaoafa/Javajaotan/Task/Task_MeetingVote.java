@@ -57,7 +57,7 @@ public class Task_MeetingVote extends TimerTask {
 			int good_count = good.size();
 			List<User> bad = message.retrieveReactionUsers("\uD83D\uDC4E").complete();
 			int bad_count = bad.size();
-			List<User> white = message.retrieveReactionUsers("\uD83C\uDFF3").complete();
+			List<User> white = message.retrieveReactionUsers("🏳️").complete();
 			int white_count = white.size();
 
 			int _VoteBorder = VoteBorder;
