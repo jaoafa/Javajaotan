@@ -17,7 +17,7 @@ public class Event_TodoCheck {
 
 		event.getTextChannel().retrieveMessageById(event.getMessageId()).queue(message -> {
 			if (!message.isPinned()) {
-				return;
+
 			}
 			message.retrieveReactionUsers("\u2705").queue(white_check_mark -> {
 				if (white_check_mark.size() == 0) {

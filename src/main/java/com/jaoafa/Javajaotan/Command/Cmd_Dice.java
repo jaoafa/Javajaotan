@@ -27,7 +27,7 @@ public class Cmd_Dice implements CommandPremise {
 		Random r = new Random();
 		int old = 0;
 		String firstSelect = list.get(0);
-		Message post_message = channel.sendMessage(firstSelect).complete();
+		Message post_message = channel.sendMessage(firstSelect + " `[-1]`").complete();
 		if (post_message == null) {
 			channel.sendMessage(member.getAsMention() + ", コマンドを実行できませんでした。");
 			return;
@@ -48,7 +48,7 @@ public class Cmd_Dice implements CommandPremise {
 			}
 			String select = list.get(selectNum);
 
-			post_message.editMessage(select).complete();
+			post_message.editMessage(select + " `[" + i + "]`").complete();
 
 			try {
 				Thread.sleep(1000);
@@ -56,7 +56,7 @@ public class Cmd_Dice implements CommandPremise {
 			}
 		}
 
-		post_message.editMessage(":arrows_counterclockwise:");
+		post_message.editMessage(":arrows_counterclockwise:").complete();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -70,7 +70,7 @@ public class Cmd_Dice implements CommandPremise {
 			selectNum = r.nextInt(list.size());
 		}
 		String select = list.get(selectNum);
-		post_message.editMessage(select).complete();
+		post_message.editMessage(select + " `[END]`").complete();
 	}
 
 	@Override
