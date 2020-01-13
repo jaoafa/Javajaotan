@@ -42,6 +42,9 @@ public class Cmd_Toswja implements CommandPremise {
 				if (from == null) {
 					from = "auto";
 				}
+				if (from.equals("sw")) {
+					from = "auto";
+				}
 			} catch (IOException e) {
 				Main.ExceptionReporter(channel, e);
 				from = "auto";
