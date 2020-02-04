@@ -1,19 +1,7 @@
 package com.jaoafa.Javajaotan.Command;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
-import org.json.JSONObject;
-
 import com.jaoafa.Javajaotan.CommandPremise;
-import com.jaoafa.Javajaotan.Main;
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -28,6 +16,11 @@ public class Cmd_Mcserver implements CommandPremise {
 			channel.sendMessage(member.getAsMention() + ", 実行しようとしたコマンドはこのチャンネルでは使用できません。").queue();
 			return;
 		}
+
+		channel.sendMessage(
+				member.getAsMention() + ", 現在この機能は動作サーバの違いにより無効化されています。Minecraftサーバ停止・再起動は管理部までお問合せください。").queue();
+		return;
+		/*
 		if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("start")) {
 				runCommand(message, "systemctl", "start", "minecraft");
@@ -79,8 +72,9 @@ public class Cmd_Mcserver implements CommandPremise {
 			}
 		}
 		channel.sendMessage(member.getAsMention() + ", `" + getUsage() + "`").queue();
+		*/
 	}
-
+	/*
 	private void runCommand(Message message, String... command) {
 		MessageChannel channel = message.getChannel();
 		Process p;
@@ -101,7 +95,7 @@ public class Cmd_Mcserver implements CommandPremise {
 		int ret = p.exitValue();
 		InputStream is = p.getInputStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
+	
 		String text = "";
 		try {
 			while (true) {
@@ -129,7 +123,7 @@ public class Cmd_Mcserver implements CommandPremise {
 							Main.DiscordExceptionError(getClass(), channel, failure);
 						});
 	}
-
+	
 	private String getRunCommand(Message message, String... command) {
 		MessageChannel channel = message.getChannel();
 		Process p;
@@ -149,7 +143,7 @@ public class Cmd_Mcserver implements CommandPremise {
 		}
 		InputStream is = p.getInputStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
+	
 		String text = "";
 		try {
 			while (true) {
@@ -167,6 +161,7 @@ public class Cmd_Mcserver implements CommandPremise {
 		}
 		return text;
 	}
+	*/
 
 	@Override
 	public String getDescription() {
