@@ -26,7 +26,7 @@ public class Cmd_Stats implements CommandPremise {
 	public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
 			Message message, String[] args) {
 		if (args.length == 1) {
-			channel.sendMessage(member.getAsMention() + ", ```" + getStats(message, args[1]) + "```").queue();
+			channel.sendMessage(member.getAsMention() + ", ```" + getStats(message, args[0]) + "```").queue();
 			return;
 		}
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
