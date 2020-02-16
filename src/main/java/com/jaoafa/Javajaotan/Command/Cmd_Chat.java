@@ -23,7 +23,7 @@ public class Cmd_Chat implements CommandPremise {
 				jda.getRoleById(597405110683041793L), // new jGC Moderator
 		};
 		MessageChannel sendToChannel = channel;
-		if (Library.isAllowRole(member, allowRoles)) {
+		if (Library.isAllowRole(member, allowRoles) || member.getIdLong() == 221991565567066112L) {
 			// チャンネル指定可
 			if (args.length >= 2) {
 				if (Library.isLong(args[0])) {
