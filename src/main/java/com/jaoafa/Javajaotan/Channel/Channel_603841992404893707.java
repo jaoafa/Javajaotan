@@ -38,7 +38,7 @@ public class Channel_603841992404893707 implements ChannelPremise {
 					.collect(Collectors.toList());
 			if (roles.size() == 0) {
 				guild.addRoleToMember(member, role).queue();
-				message.addReaction("\u2B55").queue(); // o
+				message.addReaction("\u003F").queue(); // ?
 				jaoPlayers.add(member.getUser().getIdLong());
 			} else {
 				message.addReaction("\u274C").queue(); // x
@@ -48,6 +48,7 @@ public class Channel_603841992404893707 implements ChannelPremise {
 				message.addReaction("\u274C").queue(); // x
 				return;
 			}
+			message.addReaction("\u2B55").queue(); // o
 			channel.sendMessage(member.getAsMention() + ", あいさつしていただきありがとうございます！これにより、多くのチャンネルを閲覧できるようになりました。\n" +
 					"このあとは<#597419057251090443>などで「`/link`」を実行(投稿)して、MinecraftアカウントとDiscordアカウントを連携しましょう！").queue();
 			jaoPlayers.remove(member.getUser().getIdLong());

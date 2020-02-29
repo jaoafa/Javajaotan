@@ -25,8 +25,11 @@ public class Cmd_Chat implements CommandPremise {
 		MessageChannel sendToChannel = channel;
 		if (Library.isAllowRole(member, allowRoles) || member.getIdLong() == 221991565567066112L) {
 			// チャンネル指定可
+			System.out.println("isAllowRole: " + Boolean.valueOf(Library.isAllowRole(member, allowRoles)));
 			if (args.length >= 2) {
+				System.out.println("args.length >= 2");
 				if (Library.isLong(args[0])) {
+					System.out.println("Library.isLong(args[0]): " + args[0]);
 					long channelID = Long.valueOf(args[0]);
 					if (jda.getTextChannelById(channelID) == null) {
 						channel.sendMessage(member.getAsMention() + ", 指定されたチャンネルが見つかりません。(ID指定)").queue();
@@ -34,7 +37,8 @@ public class Cmd_Chat implements CommandPremise {
 					}
 					sendToChannel = jda.getTextChannelById(channelID);
 				} else {
-					if (jda.getTextChannelById(args[0]) == null) {
+					System.out.println("!Library.isLong(args[0]): " + args[0]);
+					if (jda.getTextChannelsByName(args[0], false) == null) {
 						channel.sendMessage(member.getAsMention() + ", 指定されたチャンネルが見つかりません。(チャンネル名指定)").queue();
 						return;
 					}
