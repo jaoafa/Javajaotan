@@ -73,6 +73,10 @@
 			<id>commons-lang</id>
 			<url>https://mvnrepository.com/artifact/commons-lang/commons-lang</url>
 		</repository>
+		<repository>
+			<id>jsoup</id>
+			<url>https://mvnrepository.com/artifact/org.jsoup/jsoup</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -125,6 +129,11 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.12.2</version>
 		</dependency>
 	</dependencies>
 </project>
