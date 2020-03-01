@@ -1,6 +1,7 @@
 package com.jaoafa.Javajaotan.Lib;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,7 +10,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class PriconeCharacter {
+public class PriconeCharacter implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String characterImgUrl;
 	private String characterUrl;
 	private String characterName;

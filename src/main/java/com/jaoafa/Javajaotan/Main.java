@@ -12,7 +12,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
 
@@ -30,6 +32,7 @@ import com.jaoafa.Javajaotan.Event.Event_TodoCheck;
 import com.jaoafa.Javajaotan.Event.Event_TomachiEmojis;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
+import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
 import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
 import com.jaoafa.Javajaotan.Task.Task_VerifiedCheck;
 
@@ -46,6 +49,7 @@ public class Main {
 	private static JDA jda = null;
 	public static MySQLDBManager MySQLDBManager = null;
 	public static String translateGAS = null;
+	public static List<PriconeCharacter> pricone_Characters = new ArrayList<>();
 
 	public static void main(String[] args) {
 		File f = new File("conf.properties");

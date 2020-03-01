@@ -1,7 +1,12 @@
 package com.jaoafa.Javajaotan.Command;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +36,7 @@ public class Cmd_Pricone implements CommandPremise {
 				if (characters.size() == 0) {
 					try {
 						crawlGameWith();
-					} catch (IOException e) {
+					} catch (IOException | ClassNotFoundException e) {
 						channel.sendMessage(member.getAsMention() + ", キャラクター情報の取得に失敗しました。").queue();
 						return;
 					}
@@ -39,13 +44,16 @@ public class Cmd_Pricone implements CommandPremise {
 				String[] characterSearchName = Arrays.copyOfRange(args, 1, args.length);
 				PriconeCharacter selectCharacter = null;
 				for (PriconeCharacter character : characters) {
+					boolean isMatch = false;
 					for (String searchText : characterSearchName) {
-						if (!character.getCharacterName().contains(searchText)) {
-							continue;
+						if (character.getCharacterName().contains(searchText)) {
+							isMatch = true;
 						}
 					}
-					selectCharacter = character;
-					break;
+					if (isMatch) {
+						selectCharacter = character;
+						break;
+					}
 				}
 				if (selectCharacter == null) {
 					channel.sendMessage(member.getAsMention() + ", 指定されたキャラ名にマッチするキャラクターは見つかりませんでした。").queue();
@@ -66,6 +74,7 @@ public class Cmd_Pricone implements CommandPremise {
 				embed.setAuthor("プリコネ攻略(全キャラ評価一覧) - GameWith", "https://gamewith.jp/pricone-re/article/show/92923");
 				embed.setTimestamp(Instant.now());
 				channel.sendMessage(embed.build()).queue();
+				return;
 			}
 		}
 		channel.sendMessage(member.getAsMention() + ", `" + getUsage() + "`").queue();
@@ -86,9 +95,17 @@ public class Cmd_Pricone implements CommandPremise {
 		return false;
 	}
 
-	List<PriconeCharacter> characters = new ArrayList<>();
+	static List<PriconeCharacter> characters = new ArrayList<>();
 
-	public void crawlGameWith() throws IOException {
+	@SuppressWarnings("unchecked")
+	public void crawlGameWith() throws IOException, ClassNotFoundException {
+		File file = new File("data.dat");
+		System.out.println(file.getAbsolutePath());
+		if (file.exists()) {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+			characters = (List<PriconeCharacter>) ois.readObject();
+			ois.close();
+		}
 		Document doc = Jsoup.connect("https://gamewith.jp/pricone-re/article/show/92923").get();
 		Element table = doc.selectFirst(".puri_chara table");
 		Elements trs = table.select("tr");
@@ -115,5 +132,8 @@ public class Cmd_Pricone implements CommandPremise {
 					score_NonDedicated, score_Dedicated, score_star6);
 			characters.add(character);
 		}
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+		oos.writeObject(characters);
+		oos.close();
 	}
 }
