@@ -105,6 +105,7 @@ public class Cmd_Pricone implements CommandPremise {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 			characters = (List<PriconeCharacter>) ois.readObject();
 			ois.close();
+			return;
 		}
 		Document doc = Jsoup.connect("https://gamewith.jp/pricone-re/article/show/92923").get();
 		Element table = doc.selectFirst(".puri_chara table");

@@ -12,15 +12,16 @@ public class Cmd_Mcserver implements CommandPremise {
 	@Override
 	public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
 			Message message, String[] args) {
+		return;
+		/*
 		if (channel.getIdLong() != 597423444501463040L) {
 			channel.sendMessage(member.getAsMention() + ", 実行しようとしたコマンドはこのチャンネルでは使用できません。").queue();
 			return;
 		}
-
+		
 		channel.sendMessage(
 				member.getAsMention() + ", 現在この機能は動作サーバの違いにより無効化されています。Minecraftサーバ停止・再起動は管理部までお問合せください。").queue();
-		return;
-		/*
+		
 		if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("start")) {
 				runCommand(message, "systemctl", "start", "minecraft");
