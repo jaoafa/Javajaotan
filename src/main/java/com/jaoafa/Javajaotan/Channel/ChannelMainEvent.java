@@ -30,9 +30,11 @@ public class ChannelMainEvent {
 		Message message = event.getMessage();
 
 		if (message.isWebhookMessage()) {
-			return;
+			if (channel.getIdLong() != 626727474922913792L) { // #develop_todoだけ例外
+				return;
+			}
 		}
-		if (MuteManager.isMuted(member.getUser().getId())) {
+		if (!message.isWebhookMessage() && MuteManager.isMuted(member.getUser().getId())) {
 			return;
 		}
 		if (event.getAuthor().getIdLong() == 222018383556771840L) {
