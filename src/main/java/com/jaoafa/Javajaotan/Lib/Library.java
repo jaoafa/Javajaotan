@@ -352,4 +352,101 @@ public class Library {
 			return null;
 		}
 	}
+
+	public static double calcBlockNumber(List<Integer> X, List<Integer> Z) {
+		double size = 0; // 面積
+		double side = 0; // 辺の長さ
+		double blocks = 0; // ブロック数
+
+		double x1 = 0; // 1点目のX座標値
+		double x2 = 0; // 2点目のX座標値
+		double z1 = 0; // 1点目のZ座標値
+		double z2 = 0; // 2点目のZ座標値
+
+		/* 図形の面積を計算 */
+		for (int i = 0; i < X.size(); i++) {
+			if ((i + 1) >= X.size()) {
+				x1 = X.get(i);
+				x2 = X.get(0);
+				z1 = Z.get(i);
+				z2 = Z.get(0);
+			} else {
+				x1 = X.get(i);
+				x2 = X.get(i + 1);
+				z1 = Z.get(i);
+				z2 = Z.get(i + 1);
+			}
+			// 外積を計算して加算
+			size += (x1 * z2) - (x2 * z1);
+		}
+		size = size / 2;
+		size = Math.abs(size);
+
+		for (int i = 0; i < X.size(); i++) {
+			if ((i + 1) >= X.size()) {
+				side = side
+						+ Math.abs(X.get(i) - X.get(0))
+						+ Math.abs(Z.get(i) - Z.get(0));
+			} else {
+				side = side
+						+ Math.abs(X.get(i) - X.get(i + 1))
+						+ Math.abs(Z.get(i) - Z.get(i + 1));
+			}
+		}
+
+		/* ブロック数を計算 */
+		if (size > 0) {
+			// ブロック数 = 面積 + (辺の長さ / 2) + 1
+			blocks = size + (side / 2) + 1;
+		}
+		return blocks;
+	}
+
+	public static boolean checkBlocks(List<Integer> X, List<Integer> Z) {
+		int oldx = X.get(0);
+		int oldz = Z.get(0);
+		String changed = null; // 変化したのがXかZか。最初はnull、XまたはZを代入
+		for (int i = 1; i <= X.size(); i++) {
+			int x;
+			int z;
+			if (i == X.size()) {
+				x = X.get(0);
+				z = Z.get(0);
+			} else {
+				x = X.get(i);
+				z = Z.get(i);
+			}
+			if (changed == null) {
+				// 最初だけ動作
+				if (oldx != x && oldz == z) {
+					// Xが変わってZは変わっていない
+					oldx = x;
+					changed = "X";
+				} else if (oldx == x && oldz != z) {
+					// Xが変わっていなくてZは変わっている
+					oldz = z;
+					changed = "Z";
+				} else {
+					// XとZ両方変わっているもしくは両方変わっていない
+					return false;
+				}
+			} else {
+				// 最初以外動作
+				if (changed.equals("Z") && oldx != x && oldz == z) {
+					// 前回Zが変わっていて、Xが変わってZは変わっていない
+					oldx = x;
+					changed = "X";
+				} else if (changed.equals("X") && oldx == x && oldz != z) {
+					// 前回Xが変わっていて、Xが変わっていなくてZは変わっている
+					oldz = z;
+					changed = "Z";
+				} else {
+					// XとZ両方変わっているもしくは両方変わっていない
+					// またはX,Zが連続して変わった
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
