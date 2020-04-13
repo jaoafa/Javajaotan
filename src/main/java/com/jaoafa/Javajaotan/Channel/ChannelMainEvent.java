@@ -30,7 +30,8 @@ public class ChannelMainEvent {
 		Message message = event.getMessage();
 
 		if (message.isWebhookMessage()) {
-			if (channel.getIdLong() != 626727474922913792L) { // #develop_todoだけ例外
+			if (channel.getIdLong() != 626727474922913792L && channel.getIdLong() != 597423974816808970L) {
+				// #develop_todo、#meeting_voteだけ例外
 				return;
 			}
 		}
