@@ -18,6 +18,7 @@ public class Cmd_Watching implements CommandPremise {
 			return;
 		}
 		jda.getPresence().setActivity(Activity.watching(String.join(" ", args)));
+		channel.sendMessage(member.getAsMention() + ", NowWatchingを更新しました。").queue();
 	}
 
 	@Override

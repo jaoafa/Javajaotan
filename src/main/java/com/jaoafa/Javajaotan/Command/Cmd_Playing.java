@@ -18,6 +18,7 @@ public class Cmd_Playing implements CommandPremise {
 			return;
 		}
 		jda.getPresence().setActivity(Activity.playing(String.join(" ", args)));
+		channel.sendMessage(member.getAsMention() + ", NowPlayingを更新しました。").queue();
 	}
 
 	@Override

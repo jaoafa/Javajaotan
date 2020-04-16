@@ -18,6 +18,7 @@ public class Cmd_Listening implements CommandPremise {
 			return;
 		}
 		jda.getPresence().setActivity(Activity.listening(String.join(" ", args)));
+		channel.sendMessage(member.getAsMention() + ", NowListeningを更新しました。").queue();
 	}
 
 	@Override
