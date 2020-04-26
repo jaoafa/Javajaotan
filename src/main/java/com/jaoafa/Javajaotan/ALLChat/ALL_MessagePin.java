@@ -19,7 +19,13 @@ public class ALL_MessagePin implements ALLChatPremise {
 
 		if (text.startsWith("📌")) {
 			if (edited && message.isPinned()) {
-				message.addReaction("📌").queue();
+				message.retrieveReactionUsers("📌").queue(users -> {
+					long isjaotanPinned = users.stream()
+							.filter(user -> (user != null && user.getIdLong() == 222018383556771840L)).count();
+					if (isjaotanPinned == 0) {
+						message.addReaction("📌").queue();
+					}
+				});
 				return;
 			}
 			message.pin().queue(null, failure -> {
