@@ -19,28 +19,30 @@ public class ALL_MessagePin implements ALLChatPremise {
 
 		if (text.startsWith("📌")) {
 			if (edited && message.isPinned()) {
-				message.retrieveReactionUsers("📌").queue(users -> {
-					long isjaotanPinned = users.stream()
-							.filter(user -> (user != null && user.getIdLong() == 222018383556771840L)).count();
-					if (isjaotanPinned == 0) {
-						message.addReaction("📌").queue();
-					}
-				});
+				message.addReaction("📌").queue();
 				return;
 			}
-			message.pin().queue(null, failure -> {
-				message.retrieveReactionUsers("❌").queue(success -> {
-					boolean bool = success.stream()
-							.filter(_user -> (_user != null && _user.getIdLong() == jda.getSelfUser().getIdLong()))
-							.collect(Collectors.toList()).isEmpty();
-					if (!bool) {
-						return;
-					}
-					channel.sendMessage(
-							member.getAsMention() + ", メッセージをピン止めするのに失敗しました。```" + failure.getMessage() + "```")
-							.queue();
-				});
+			message.retrieveReactionUsers("📌").queue(users -> {
+				long isjaotanPinned = users.stream()
+						.filter(user -> (user != null && user.getIdLong() == 222018383556771840L)).count();
+				if (isjaotanPinned == 0) {
+					message.pin().queue(null, failure -> {
+						message.retrieveReactionUsers("❌").queue(success -> {
+							boolean bool = success.stream()
+									.filter(_user -> (_user != null
+											&& _user.getIdLong() == jda.getSelfUser().getIdLong()))
+									.collect(Collectors.toList()).isEmpty();
+							if (!bool) {
+								return;
+							}
+							channel.sendMessage(
+									member.getAsMention() + ", メッセージをピン止めするのに失敗しました。```" + failure.getMessage() + "```")
+									.queue();
+						});
+					});
+				}
 			});
+
 			message.addReaction("📌").queue(null, failure -> {
 				Main.DiscordExceptionError(getClass(), channel, failure);
 			});
