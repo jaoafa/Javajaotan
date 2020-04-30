@@ -70,8 +70,12 @@ public class Cmd_Help implements CommandPremise {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setTitle("jaotan Commands (" + (nowpage + 1) + " / " + allpage + ")");
 			builder.setColor(Color.YELLOW);
+
+			String version = Main.getVersion();
 			if (nowpage < allpage) {
-				builder.setFooter("View more command by typing /help <Page>.");
+				builder.setFooter("View more command by typing /help <Page>. - Javajaotan v" + version);
+			} else {
+				builder.setFooter("Javajaotan v" + version);
 			}
 			for (int i = pagestart; i < pageend; i++) {
 				if (i < 0 || i >= cmdList.size()) {
@@ -128,8 +132,12 @@ public class Cmd_Help implements CommandPremise {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setTitle("jaotan Commands (" + (nowpage + 1) + " / " + allpage + ")");
 			builder.setColor(Color.YELLOW);
+
+			String version = Main.getVersion();
 			if (nowpage < allpage) {
-				builder.setFooter("View more command by typing /help <Page>.");
+				builder.setFooter("View more command by typing /help <Page>. - Javajaotan v" + version);
+			} else {
+				builder.setFooter("Javajaotan v" + version);
 			}
 
 			for (int i = pagestart; i < pageend; i++) {
@@ -169,6 +177,9 @@ public class Cmd_Help implements CommandPremise {
 			builder.addField("/" + args[0].toLowerCase(),
 					"**Description**: `" + description + "`\n" + "**Usage**: `" + usage + "`", false);
 
+			String version = Main.getVersion();
+			builder.setFooter("Javajaotan v" + version);
+
 			channel.sendMessage(builder.build()).queue();
 			return;
 		} catch (ClassNotFoundException e) {
@@ -176,6 +187,9 @@ public class Cmd_Help implements CommandPremise {
 			builder.setTitle("jaotan Command Help");
 			builder.setColor(Color.YELLOW);
 			builder.addField("/" + args[0].toLowerCase(), "Command not found.", false);
+
+			String version = Main.getVersion();
+			builder.setFooter("Javajaotan v" + version);
 
 			channel.sendMessage(builder.build()).queue();
 			return;
