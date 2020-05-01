@@ -276,7 +276,7 @@ public class Main {
 	public static String getVersion() {
 		String version = null;
 		try {
-			InputStream is = ClassLoader.getSystemResourceAsStream("/version");
+			InputStream is = ClassLoader.getSystemResourceAsStream("version");
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			version = br.readLine();
 		} catch (IOException e) {
