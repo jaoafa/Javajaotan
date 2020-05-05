@@ -37,7 +37,7 @@ public class Event_ServerJoin {
 		greeting.sendMessage(
 				":man_dancing:<@" + user.getId() + ">(#" + user.getDiscriminator()
 						+ ")さん、jao Minecraft Server Discordにようこそ。\n"
-						+ "運営方針により、参加から10分以内に発言がない場合システムによって自動的にキックされます。<#603841992404893707>チャンネルで「jao」「afa」とあいさつしてみましょう！")
+						+ "__**運営方針により、参加から10分以内に発言がない場合システムによって自動的にキック**__されます。<#603841992404893707>チャンネルで「jao」「afa」とあいさつしてみましょう！")
 				.queue(
 						success -> {
 						},

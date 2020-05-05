@@ -50,7 +50,8 @@ public class Channel_603841992404893707 implements ChannelPremise {
 			guild.addRoleToMember(member, role).queue();
 			message.addReaction("\u2B55").queue(); // o
 			channel.sendMessage(member.getAsMention() + ", あいさつしていただきありがとうございます！これにより、多くのチャンネルを閲覧できるようになりました。\n" +
-					"このあとは<#597419057251090443>などで「`/link`」を実行(投稿)して、MinecraftアカウントとDiscordアカウントを連携しましょう！").queue();
+					"このあとは<#597419057251090443>などで__**「`/link`」を実行(投稿)して、MinecraftアカウントとDiscordアカウントを連携**__しましょう！\n"
+					+ "**<#706818240759988224>に記載されているメッセージもお読みください！**").queue();
 			jaoPlayers.remove(member.getUser().getIdLong());
 		}
 	}
