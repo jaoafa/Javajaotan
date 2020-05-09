@@ -126,7 +126,6 @@ public class Main {
 					.setContextEnabled(false)
 					.setEventManager(new AnnotatedEventManager());
 
-			jdabuilder.addEventListeners(new Event_ServerJoin());
 			jdabuilder.addEventListeners(new MessageMainEvent());
 			jdabuilder.addEventListeners(new ChannelMainEvent());
 			jdabuilder.addEventListeners(new ALLChatMainEvent());
