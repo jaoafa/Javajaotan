@@ -1,11 +1,21 @@
 package com.jaoafa.Javajaotan.Channel;
 
+import java.awt.Polygon;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.jaoafa.Javajaotan.ChannelPremise;
+import com.jaoafa.Javajaotan.Main;
 import com.jaoafa.Javajaotan.Lib.Library;
+import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -33,6 +43,7 @@ public class Channel_597423370589700098 implements ChannelPremise {
 		String debug = "";
 		LinkedList<Integer> X = new LinkedList<>();
 		LinkedList<Integer> Z = new LinkedList<>();
+		Polygon polygon = new Polygon();
 		while (m.find()) {
 			String keynum = m.group(1);
 			String X_str = m.group(2);
@@ -40,6 +51,9 @@ public class Channel_597423370589700098 implements ChannelPremise {
 
 			X.add(Integer.valueOf(X_str));
 			Z.add(Integer.valueOf(Z_str));
+
+			polygon.addPoint(Integer.valueOf(X_str), Integer.valueOf(Z_str));
+			System.out.println("polygon.addPoint " + X_str + " " + Z_str);
 
 			debug += "Added #" + keynum + " : " + X_str + " " + Z_str + "\n";
 		}
@@ -69,6 +83,67 @@ public class Channel_597423370589700098 implements ChannelPremise {
 				+ "範囲指定に誤りがあり、修正を行う場合は申請のメッセージを削除するなど、__**明確に申請の取り消し**__を行ってください。\n"
 				+ "また、申請後に未だ認可がされてない状態で申請内容を変更したい場合、__**申請のメッセージを編集するのではなく再度申請をし直して**__ください。"
 				+ "```" + debug + "```").queue();
+		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+		if (MySQLDBManager == null) {
+			channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。(`MySQLDBManager null`)")
+					.queue();
+			return;
+		}
+		String ret_message = "";
+		boolean bool = true;
+		try {
+			Connection conn = MySQLDBManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities");
+			ResultSet res = statement.executeQuery();
+			while (res.next()) {
+				int regID = res.getInt("id");
+				String regName = res.getString("name");
+				Polygon other_polygon = new Polygon();
+				JSONArray corners = new JSONArray(res.getString("corners"));
+				for (int i = 0; i < corners.length(); i++) {
+					JSONObject obj = corners.getJSONObject(i);
+					int x = obj.optInt("x", Integer.MIN_VALUE);
+					int z = obj.optInt("z", Integer.MIN_VALUE);
+
+					other_polygon.addPoint(x, z);
+					System.out.println("other_polygon.addPoint " + x + " " + z);
+				}
+
+				if (polygon.intersects(other_polygon.getBounds())) {
+					ret_message += regName + "(" + regID + "|intersects1)";
+					bool = false;
+					continue;
+				}
+
+				if (polygon.contains(other_polygon.getBounds())) {
+					ret_message += regName + "(" + regID + "|contains1)";
+					bool = false;
+					continue;
+				}
+
+				if (other_polygon.intersects(polygon.getBounds())) {
+					ret_message += regName + "(" + regID + "|intersects2)";
+					bool = false;
+					continue;
+				}
+
+				if (other_polygon.contains(polygon.getBounds())) {
+					ret_message += regName + "(" + regID + "|contains2)";
+					bool = false;
+					continue;
+				}
+			}
+			if (!bool) {
+				channel.sendMessage(member.getAsMention() + ", 次の自治体と範囲が重複している可能性があります。```" + ret_message + "```")
+						.queue();
+			}
+			return;
+		} catch (SQLException e) {
+			channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
+					+ "**Message**: `" + e.getMessage() + "`").queue();
+			return;
+		}
 	}
 
 	@Override
