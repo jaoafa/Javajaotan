@@ -56,7 +56,6 @@ public class Cmd_Checkintersects implements CommandPremise {
 			Connection conn = MySQLDBManager.getConnection();
 			PreparedStatement statement = conn
 					.prepareStatement("SELECT * FROM cities");
-			statement.setString(1, member.getId());
 			ResultSet res = statement.executeQuery();
 			while (res.next()) {
 				int regID = res.getInt("id");
