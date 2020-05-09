@@ -96,7 +96,7 @@ public class Cmd_Checkintersects implements CommandPremise {
 				}
 			}
 			if (bool) {
-				channel.sendMessage(member.getAsMention() + ", OK.\nResponse: ```" + ret_message + "```").queue();
+				channel.sendMessage(member.getAsMention() + ", OK.").queue();
 			} else {
 				channel.sendMessage(member.getAsMention() + ", NG.\nResponse: ```" + ret_message + "```").queue();
 			}
