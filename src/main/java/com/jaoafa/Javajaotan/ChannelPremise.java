@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public interface ChannelPremise {
 	/**
@@ -17,7 +18,7 @@ public interface ChannelPremise {
 	 * @param edited 編集による呼び出しかどうか
 	 */
 	public void run(final JDA jda, final Guild guild, final MessageChannel channel, final Member member,
-			final Message message, boolean edited);
+			final User user, final Message message, boolean edited);
 
 	/**
 	 * 編集された場合でも呼び出すかを指定・確認します。

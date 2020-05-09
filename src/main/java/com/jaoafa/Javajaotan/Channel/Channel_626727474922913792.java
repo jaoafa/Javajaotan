@@ -8,11 +8,12 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageType;
+import net.dv8tion.jda.api.entities.User;
 
 public class Channel_626727474922913792 implements ChannelPremise {
 	// #develop_todo
 	@Override
-	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, Message message,
+	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, User user, Message message,
 			boolean edited) {
 		if (message.getType() != MessageType.DEFAULT) {
 			return;

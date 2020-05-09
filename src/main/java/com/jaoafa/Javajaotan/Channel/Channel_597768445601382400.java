@@ -12,11 +12,12 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Message.Attachment;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class Channel_597768445601382400 implements ChannelPremise {
 	// #nsfw
 	@Override
-	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, Message message,
+	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, User user, Message message,
 			boolean edited) {
 		if (message.getAttachments().size() == 0) {
 			return;
@@ -31,7 +32,7 @@ public class Channel_597768445601382400 implements ChannelPremise {
 			} catch (MalformedURLException e) {
 				continue;
 			}
-			channel.sendMessage(member.getUser().getAsMention() + ", スポイラーの設定がされていないファイルは投稿できません。").queue();
+			channel.sendMessage(user.getAsMention() + ", スポイラーの設定がされていないファイルは投稿できません。").queue();
 			message.delete().queue();
 			return;
 		}

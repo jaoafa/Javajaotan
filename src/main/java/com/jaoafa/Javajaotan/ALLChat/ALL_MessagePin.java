@@ -10,10 +10,11 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class ALL_MessagePin implements ALLChatPremise {
 	@Override
-	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, Message message,
+	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, User user, Message message,
 			boolean edited) {
 		String text = message.getContentRaw();
 
@@ -24,7 +25,7 @@ public class ALL_MessagePin implements ALLChatPremise {
 			}
 			message.retrieveReactionUsers("📌").queue(users -> {
 				long isjaotanPinned = users.stream()
-						.filter(user -> (user != null && user.getIdLong() == 222018383556771840L)).count();
+						.filter(_user -> (_user != null && _user.getIdLong() == 222018383556771840L)).count();
 				if (isjaotanPinned == 0) {
 					message.pin().queue(null, failure -> {
 						message.retrieveReactionUsers("❌").queue(success -> {

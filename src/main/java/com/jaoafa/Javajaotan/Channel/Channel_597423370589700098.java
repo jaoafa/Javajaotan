@@ -23,11 +23,12 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageType;
+import net.dv8tion.jda.api.entities.User;
 
 public class Channel_597423370589700098 implements ChannelPremise {
 	// #support
 	@Override
-	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, Message message,
+	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, User user, Message message,
 			boolean edited) {
 		if (message.getType() != MessageType.DEFAULT) {
 			return;
@@ -77,7 +78,7 @@ public class Channel_597423370589700098 implements ChannelPremise {
 			system_msg = "範囲情報を入力してください。";
 		}
 
-		channel.sendMessage(member.getAsMention() + ", " + blocks + " Blocks (" + X.size() + ")\n"
+		channel.sendMessage(user.getAsMention() + ", " + blocks + " Blocks (" + X.size() + ")\n"
 				+ "メッセージ: `" + system_msg + "`\n"
 				+ "\n"
 				+ "範囲指定に誤りがあり、修正を行う場合は申請のメッセージを削除するなど、__**明確に申請の取り消し**__を行ってください。\n"
@@ -85,7 +86,7 @@ public class Channel_597423370589700098 implements ChannelPremise {
 				+ "```" + debug + "```").queue();
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 		if (MySQLDBManager == null) {
-			channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。(`MySQLDBManager null`)")
+			channel.sendMessage(user.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。(`MySQLDBManager null`)")
 					.queue();
 			return;
 		}
@@ -135,12 +136,12 @@ public class Channel_597423370589700098 implements ChannelPremise {
 				}
 			}
 			if (!bool) {
-				channel.sendMessage(member.getAsMention() + ", 次の自治体と範囲が重複している可能性があります。```" + ret_message + "```")
+				channel.sendMessage(user.getAsMention() + ", 次の自治体と範囲が重複している可能性があります。```" + ret_message + "```")
 						.queue();
 			}
 			return;
 		} catch (SQLException e) {
-			channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
+			channel.sendMessage(user.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
 					+ "**Message**: `" + e.getMessage() + "`").queue();
 			return;
 		}

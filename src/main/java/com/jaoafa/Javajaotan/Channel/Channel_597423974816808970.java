@@ -27,11 +27,12 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageType;
+import net.dv8tion.jda.api.entities.User;
 
 public class Channel_597423974816808970 implements ChannelPremise {
 	// #meeting_vote
 	@Override
-	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, Message message,
+	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, User user, Message message,
 			boolean edited) {
 		if (message.getType() != MessageType.DEFAULT) {
 			return;
@@ -56,7 +57,7 @@ public class Channel_597423974816808970 implements ChannelPremise {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle("NEW VOTE");
 		builder.appendDescription(
-				"@here " + member.getUser().getName() + "#" + member.getUser().getDiscriminator() + "から新しい投票です。");
+				"@here " + user.getName() + "#" + user.getDiscriminator() + "から新しい投票です。");
 		builder.addField("賛成の場合", "投票メッセージに対して:thumbsup:を付けてください。", false);
 		builder.addField("反対の場合", "投票メッセージに対して:thumbsdown:を付けてください。\n"
 				+ "**反対の場合は<#597423467796758529>に意見理由を必ず書いてください。**", false);

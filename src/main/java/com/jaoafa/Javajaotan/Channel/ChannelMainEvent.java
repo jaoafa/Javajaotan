@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
@@ -27,6 +28,7 @@ public class ChannelMainEvent {
 		Guild guild = event.getGuild();
 		MessageChannel channel = event.getChannel();
 		Member member = event.getMember();
+		User user = event.getAuthor();
 		Message message = event.getMessage();
 
 		if (message.isWebhookMessage()) {
@@ -52,7 +54,7 @@ public class ChannelMainEvent {
 					.forName("com.jaoafa.Javajaotan.Channel.Channel_" + className).getConstructor();
 			ChannelPremise cmd = (ChannelPremise) construct.newInstance();
 
-			cmd.run(jda, guild, channel, member, message, false);
+			cmd.run(jda, guild, channel, member, user, message, false);
 		} catch (ClassNotFoundException e) {
 			// not found
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -68,6 +70,7 @@ public class ChannelMainEvent {
 		Guild guild = event.getGuild();
 		MessageChannel channel = event.getChannel();
 		Member member = event.getMember();
+		User user = event.getAuthor();
 		Message message = event.getMessage();
 
 		if (message.isWebhookMessage()) {
@@ -95,7 +98,7 @@ public class ChannelMainEvent {
 				return;
 			}
 
-			chan.run(jda, guild, channel, member, message, true);
+			chan.run(jda, guild, channel, member, user, message, true);
 		} catch (ClassNotFoundException e) {
 			// not found
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

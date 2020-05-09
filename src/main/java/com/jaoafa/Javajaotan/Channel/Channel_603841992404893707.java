@@ -13,13 +13,14 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 
 public class Channel_603841992404893707 implements ChannelPremise {
 	// #greeting 603841992404893707
 	private static List<Long> jaoPlayers = new ArrayList<Long>();
 
 	@Override
-	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, Message message,
+	public void run(JDA jda, Guild guild, MessageChannel channel, Member member, User user, Message message,
 			boolean edited) {
 		if (message.getType() != MessageType.DEFAULT) {
 			return;
@@ -38,21 +39,21 @@ public class Channel_603841992404893707 implements ChannelPremise {
 					.collect(Collectors.toList());
 			if (roles.size() == 0) {
 				message.addReaction("\u2753").queue(); // ?
-				jaoPlayers.add(member.getUser().getIdLong());
+				jaoPlayers.add(user.getIdLong());
 			} else {
 				message.addReaction("\u274C").queue(); // x
 			}
 		} else if (message.getContentRaw().equals("afa")) {
-			if (!jaoPlayers.contains(member.getUser().getIdLong())) {
+			if (!jaoPlayers.contains(user.getIdLong())) {
 				message.addReaction("\u274C").queue(); // x
 				return;
 			}
 			guild.addRoleToMember(member, role).queue();
 			message.addReaction("\u2B55").queue(); // o
-			channel.sendMessage(member.getAsMention() + ", あいさつしていただきありがとうございます！これにより、多くのチャンネルを閲覧できるようになりました。\n" +
+			channel.sendMessage(user.getAsMention() + ", あいさつしていただきありがとうございます！これにより、多くのチャンネルを閲覧できるようになりました。\n" +
 					"このあとは<#597419057251090443>などで__**「`/link`」を実行(投稿)して、MinecraftアカウントとDiscordアカウントを連携**__しましょう！\n"
 					+ "**<#706818240759988224>に記載されているメッセージもお読みください！**").queue();
-			jaoPlayers.remove(member.getUser().getIdLong());
+			jaoPlayers.remove(user.getIdLong());
 		}
 	}
 

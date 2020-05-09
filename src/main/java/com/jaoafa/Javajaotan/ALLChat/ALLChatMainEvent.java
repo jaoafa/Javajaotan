@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
@@ -27,6 +28,7 @@ public class ALLChatMainEvent {
 		Guild guild = event.getGuild();
 		MessageChannel channel = event.getChannel();
 		Member member = event.getMember();
+		User user = event.getAuthor();
 		Message message = event.getMessage();
 
 		if (channel.getIdLong() == 603841992404893707L) {
@@ -50,7 +52,7 @@ public class ALLChatMainEvent {
 				}
 				Constructor<?> construct = clazz.getConstructor();
 				ALLChatPremise allchat = (ALLChatPremise) construct.newInstance();
-				allchat.run(jda, guild, channel, member, message, false);
+				allchat.run(jda, guild, channel, member, user, message, false);
 			}
 		} catch (Exception e) {
 			Main.ExceptionReporter(channel, e);
@@ -64,6 +66,7 @@ public class ALLChatMainEvent {
 		Guild guild = event.getGuild();
 		MessageChannel channel = event.getChannel();
 		Member member = event.getMember();
+		User user = event.getAuthor();
 		Message message = event.getMessage();
 
 		if (channel.getIdLong() == 603841992404893707L) {
@@ -96,7 +99,7 @@ public class ALLChatMainEvent {
 					continue;
 				}
 
-				allchat.run(jda, guild, channel, member, message, true);
+				allchat.run(jda, guild, channel, member, user, message, true);
 			}
 		} catch (Exception e) {
 			Main.ExceptionReporter(channel, e);
