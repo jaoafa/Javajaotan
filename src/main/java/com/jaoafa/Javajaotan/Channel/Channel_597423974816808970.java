@@ -178,7 +178,7 @@ public class Channel_597423974816808970 implements ChannelPremise {
 					return false;
 				}
 			}
-			return false;
+			return true;
 		} catch (SQLException e) {
 			return false;
 		}
