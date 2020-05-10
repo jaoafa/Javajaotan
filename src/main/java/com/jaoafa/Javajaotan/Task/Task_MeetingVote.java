@@ -238,7 +238,7 @@ public class Task_MeetingVote extends TimerTask {
 			}
 
 			Main.getJDA().getTextChannelById(597423467796758529L).sendMessage(
-					"**自治体「`" + cities_name + "`」の範囲変更申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。**\n"
+					"**自治体「`" + cities_name + "`」の新規登録申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。**\n"
 							+ String.join("\n", approvalflows))
 					.queue();
 		} catch (SQLException e) {
