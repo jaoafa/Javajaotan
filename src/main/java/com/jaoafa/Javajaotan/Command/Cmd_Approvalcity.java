@@ -22,22 +22,23 @@ public class Cmd_Approvalcity implements CommandPremise {
 	public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
 			Message message, String[] args) {
 		if (channel.getIdLong() != 597423467796758529L) {
+			channel.sendMessage(member.getAsMention() + ", このチャンネルではこのコマンドを使用することはできません。").queue();
 			return; // #meeting以外
 		}
 		if (args.length != 2) {
-			channel.sendMessage(member.getAsMention() + ", 引数が不正です。");
+			channel.sendMessage(member.getAsMention() + ", 引数が不正です。").queue();
 			return;
 		}
 		String type = args[0];
 		if (!Library.isInt(args[1])) {
-			channel.sendMessage(member.getAsMention() + ", RequestIDが不正です。int型で指定してください。");
+			channel.sendMessage(member.getAsMention() + ", RequestIDが不正です。int型で指定してください。").queue();
 			return;
 		}
 		int reqID = Integer.parseInt(args[1]);
 
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 		if (MySQLDBManager == null) {
-			channel.sendMessage(member.getAsMention() + ", MySQLDBManagerがロードされていません。");
+			channel.sendMessage(member.getAsMention() + ", MySQLDBManagerがロードされていません。").queue();
 			return;
 		}
 
@@ -50,7 +51,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 			ApprovalCorners(MySQLDBManager, channel, member.getAsMention(), reqID);
 			return;
 		}
-		channel.sendMessage(member.getAsMention() + ", 指定されたTypeは未実装です。");
+		channel.sendMessage(member.getAsMention() + ", 指定されたTypeは未実装です。").queue();
 	}
 
 	void ApprovalCreate(MySQLDBManager MySQLDBManager, MessageChannel channel, String mention, int reqID) {
@@ -62,7 +63,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 			ResultSet res = statement.executeQuery();
 
 			if (!res.next()) {
-				channel.sendMessage(mention + ", 指定されたRequestIDのリクエストが見つかりません。");
+				channel.sendMessage(mention + ", 指定されたRequestIDのリクエストが見つかりません。").queue();
 				return;
 			}
 
@@ -122,10 +123,10 @@ public class Cmd_Approvalcity implements CommandPremise {
 					+ "(" + blocknum + "ブロック / リクエストID: " + reqID + " /  | 自治体内部管理ID: " + cities_id + ")\n"
 					+ "```" + warnMsg + "```").queue();
 
-			channel.sendMessage(mention + ", 自治体新規登録申請の承認処理を完了しました。");
+			channel.sendMessage(mention + ", 自治体新規登録申請の承認処理を完了しました。").queue();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			channel.sendMessage(mention + ", 自治体新規登録申請の承認処理に失敗しました。");
+			channel.sendMessage(mention + ", 自治体新規登録申請の承認処理に失敗しました。").queue();
 		}
 	}
 
@@ -138,7 +139,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 			ResultSet res = statement.executeQuery();
 
 			if (!res.next()) {
-				channel.sendMessage(mention + ", 指定されたRequestIDのリクエストが見つかりません。");
+				channel.sendMessage(mention + ", 指定されたRequestIDのリクエストが見つかりません。").queue();
 				return;
 			}
 
@@ -151,7 +152,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 			ResultSet res_cities = statement.executeQuery();
 
 			if (!res.next()) {
-				channel.sendMessage(mention + ", 自治体IDに合致する自治体情報が見つかりません。");
+				channel.sendMessage(mention + ", 自治体IDに合致する自治体情報が見つかりません。").queue();
 				return;
 			}
 
@@ -178,10 +179,10 @@ public class Cmd_Approvalcity implements CommandPremise {
 			Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
 					+ name + "` (" + cities_id + ")」の自治体範囲変更申請を**承認**しました。").queue();
 
-			channel.sendMessage(mention + ", 自治体範囲変更申請の承認処理を完了しました。");
+			channel.sendMessage(mention + ", 自治体範囲変更申請の承認処理を完了しました。").queue();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			channel.sendMessage(mention + ", 自治体範囲変更申請の承認処理に失敗しました。");
+			channel.sendMessage(mention + ", 自治体範囲変更申請の承認処理に失敗しました。").queue();
 		}
 	}
 
