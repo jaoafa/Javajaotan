@@ -215,29 +215,30 @@ public class Task_MeetingVote extends TimerTask {
 
 			List<String> approvalflowBuilder = new LinkedList<>();
 			approvalflowBuilder.add("サーバにログインします。");
-			approvalflowBuilder.add("鯖内でコマンドを実行: 「`//sel poly`」");
+			approvalflowBuilder.add("鯖内でコマンドを実行: `//sel poly`");
 			for (int i = 0; i < corners.length(); i++) {
 				JSONObject corner = corners.getJSONObject(i);
 				approvalflowBuilder
-						.add("鯖内でコマンドを実行: 「`/tp " + corner.getInt("x") + " 100 " + corner.getInt("z") + "`」");
+						.add("鯖内でコマンドを実行: `/tp " + corner.getInt("x") + " 100 " + corner.getInt("z") + "`");
 				if (i == 0) {
-					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos1`」");
+					approvalflowBuilder.add("鯖内でコマンドを実行: `//pos1`");
 				} else {
-					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos2`」");
+					approvalflowBuilder.add("鯖内でコマンドを実行: `//pos2`");
 				}
 			}
-			approvalflowBuilder.add("鯖内でコマンドを実行: 「`//expand vert`」");
-			approvalflowBuilder.add("鯖内でコマンドを実行: 「`/rg define " + regionName + " " + regionOwner + "`」");
+			approvalflowBuilder.add("鯖内でコマンドを実行: `//expand vert`");
+			approvalflowBuilder.add("鯖内でコマンドを実行: `/rg define " + regionName + " " + regionOwner + "`");
 			approvalflowBuilder.add("<#597423467796758529>内でコマンド「`/approvalcity create " + reqid + "`」を実行してください。");
 
 			List<String> approvalflows = new LinkedList<>();
-			int i = 0;
+			int i = 1;
 			for (String str : approvalflowBuilder) {
 				approvalflows.add(i + ". " + str);
+				i++;
 			}
 
 			Main.getJDA().getTextChannelById(597423467796758529L).sendMessage(
-					"自治体「" + cities_name + "」の範囲変更申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。\n"
+					"**自治体「`" + cities_name + "`」の範囲変更申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。**\n"
 							+ String.join("\n", approvalflows))
 					.queue();
 		} catch (SQLException e) {
@@ -286,29 +287,30 @@ public class Task_MeetingVote extends TimerTask {
 
 			List<String> approvalflowBuilder = new LinkedList<>();
 			approvalflowBuilder.add("サーバにログインします。");
-			approvalflowBuilder.add("鯖内でコマンドを実行: 「`//sel poly`」");
+			approvalflowBuilder.add("鯖内でコマンドを実行: `//sel poly`");
 			for (int i = 0; i < corners.length(); i++) {
 				JSONObject corner = corners.getJSONObject(i);
 				approvalflowBuilder
 						.add("鯖内でコマンドを実行: 「`/tp " + corner.getInt("x") + " 100 " + corner.getInt("z") + "`」");
 				if (i == 0) {
-					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos1`」");
+					approvalflowBuilder.add("鯖内でコマンドを実行: `//pos1`");
 				} else {
-					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos2`」");
+					approvalflowBuilder.add("鯖内でコマンドを実行: `//pos2`");
 				}
 			}
-			approvalflowBuilder.add("鯖内でコマンドを実行: 「`//expand vert`」");
-			approvalflowBuilder.add("鯖内でコマンドを実行: 「`/rg redefine " + regionName + " " + regionOwner + "`」");
+			approvalflowBuilder.add("鯖内でコマンドを実行: `//expand vert`");
+			approvalflowBuilder.add("鯖内でコマンドを実行: `/rg redefine " + regionName + " " + regionOwner + "`");
 			approvalflowBuilder.add("<#597423467796758529>内でコマンド「`/approvalcity corners " + reqid + "`」を実行してください。");
 
 			List<String> approvalflows = new LinkedList<>();
-			int i = 0;
+			int i = 1;
 			for (String str : approvalflowBuilder) {
 				approvalflows.add(i + ". " + str);
+				i++;
 			}
 
 			Main.getJDA().getTextChannelById(597423467796758529L).sendMessage(
-					"自治体「" + cities_name + "」の範囲変更申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。\n"
+					"**自治体「`" + cities_name + "`」の範囲変更申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。**\n"
 							+ String.join("\n", approvalflows))
 					.queue();
 		} catch (SQLException e) {
