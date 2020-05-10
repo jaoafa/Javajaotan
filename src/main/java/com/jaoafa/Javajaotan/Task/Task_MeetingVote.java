@@ -177,7 +177,7 @@ public class Task_MeetingVote extends TimerTask {
 	}
 
 	private void autoGood_CREATE_WAITING(String contents) {
-		System.out.println("autoBad_CREATE_WAITING()");
+		System.out.println("autoGood_CREATE_WAITING()");
 		Pattern p = Pattern.compile("\\[API-CITIES-CREATE-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
@@ -219,7 +219,7 @@ public class Task_MeetingVote extends TimerTask {
 			for (int i = 0; i < corners.length(); i++) {
 				JSONObject corner = corners.getJSONObject(i);
 				approvalflowBuilder
-						.add("鯖内でコマンドを実行: 「`/tp " + corner.getString("x") + " 100 " + corner.getString("z") + "`」");
+						.add("鯖内でコマンドを実行: 「`/tp " + corner.getInt("x") + " 100 " + corner.getInt("z") + "`」");
 				if (i == 0) {
 					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos1`」");
 				} else {
@@ -246,7 +246,7 @@ public class Task_MeetingVote extends TimerTask {
 	}
 
 	private void autoGood_CHANGE_CORNERS(String contents) {
-		System.out.println("autoBad_CHANGE_CORNERS()");
+		System.out.println("autoGood_CHANGE_CORNERS()");
 		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-CORNERS-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
@@ -290,7 +290,7 @@ public class Task_MeetingVote extends TimerTask {
 			for (int i = 0; i < corners.length(); i++) {
 				JSONObject corner = corners.getJSONObject(i);
 				approvalflowBuilder
-						.add("鯖内でコマンドを実行: 「`/tp " + corner.getString("x") + " 100 " + corner.getString("z") + "`」");
+						.add("鯖内でコマンドを実行: 「`/tp " + corner.getInt("x") + " 100 " + corner.getInt("z") + "`」");
 				if (i == 0) {
 					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos1`」");
 				} else {
@@ -317,7 +317,7 @@ public class Task_MeetingVote extends TimerTask {
 	}
 
 	private void autoGood_CHANGE_OTHER(String contents) {
-		System.out.println("autoBad_CHANGE_OTHER()");
+		System.out.println("autoGood_CHANGE_OTHER()");
 		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-OTHER-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
