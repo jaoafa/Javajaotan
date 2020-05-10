@@ -171,9 +171,11 @@ public class Task_MeetingVote extends TimerTask {
 	}
 
 	private void autoBad_CREATE_WAITING(String contents) {
+		System.out.println("autoBad_CREATE_WAITING()");
 		Pattern p = Pattern.compile("\\[API-CITIES-CREATE-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
+			System.out.println("autoBad_CREATE_WAITING(): m.find false");
 			return;
 		}
 
@@ -181,6 +183,7 @@ public class Task_MeetingVote extends TimerTask {
 
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 		if (MySQLDBManager == null) {
+			System.out.println("autoBad_CREATE_WAITING(): MySQLDBManager null");
 			return;
 		}
 
@@ -192,6 +195,7 @@ public class Task_MeetingVote extends TimerTask {
 			ResultSet res = statement.executeQuery();
 
 			if (!res.next()) {
+				System.out.println("autoBad_CREATE_WAITING(): res.next false");
 				return;
 			}
 
@@ -201,8 +205,8 @@ public class Task_MeetingVote extends TimerTask {
 			res.close();
 			statement.close();
 
-			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「"
-					+ cities_name + "」の自治体新規登録申請を**否認**しました。(リクエストID: " + reqid + ")");
+			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「`"
+					+ cities_name + "`」の自治体新規登録申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
 			PreparedStatement statement_update = conn
 					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
@@ -215,9 +219,11 @@ public class Task_MeetingVote extends TimerTask {
 	}
 
 	private void autoBad_CHANGE_CORNERS(String contents) {
+		System.out.println("autoBad_CHANGE_CORNERS()");
 		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-CORNERS-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
+			System.out.println("autoBad_CHANGE_CORNERS(): m.find false");
 			return;
 		}
 
@@ -225,6 +231,7 @@ public class Task_MeetingVote extends TimerTask {
 
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 		if (MySQLDBManager == null) {
+			System.out.println("autoBad_CHANGE_CORNERS(): MySQLDBManager null");
 			return;
 		}
 
@@ -236,6 +243,7 @@ public class Task_MeetingVote extends TimerTask {
 			ResultSet res = statement.executeQuery();
 
 			if (!res.next()) {
+				System.out.println("autoBad_CHANGE_CORNERS(): res.next false");
 				return;
 			}
 
@@ -247,8 +255,8 @@ public class Task_MeetingVote extends TimerTask {
 			String discord_userid = getDiscordUserID(conn, cities_id);
 			String cities_name = getCitiesName(conn, cities_id);
 
-			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「"
-					+ cities_name + " (" + cities_id + ")」の自治体範囲変更申請を**否認**しました。(リクエストID: " + reqid + ")");
+			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「`"
+					+ cities_name + "` (" + cities_id + ")」の自治体範囲変更申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
 			PreparedStatement statement_update = conn
 					.prepareStatement("UPDATE cities_corners_waiting SET status = ? WHERE id = ?");
@@ -261,9 +269,11 @@ public class Task_MeetingVote extends TimerTask {
 	}
 
 	private void autoBad_CHANGE_OTHER(String contents) {
+		System.out.println("autoBad_CHANGE_OTHER()");
 		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-OTHER-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
+			System.out.println("autoBad_CHANGE_OTHER(): m.find false");
 			return;
 		}
 
@@ -271,6 +281,7 @@ public class Task_MeetingVote extends TimerTask {
 
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 		if (MySQLDBManager == null) {
+			System.out.println("autoBad_CHANGE_OTHER(): MySQLDBManager null");
 			return;
 		}
 
@@ -282,6 +293,7 @@ public class Task_MeetingVote extends TimerTask {
 			ResultSet res = statement.executeQuery();
 
 			if (!res.next()) {
+				System.out.println("autoBad_CHANGE_OTHER(): res.next false");
 				return;
 			}
 
@@ -293,8 +305,8 @@ public class Task_MeetingVote extends TimerTask {
 			String discord_userid = getDiscordUserID(conn, cities_id);
 			String cities_name = getCitiesName(conn, cities_id);
 
-			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「"
-					+ cities_name + " (" + cities_id + ")」の自治体情報変更申請を**否認**しました。(リクエストID: " + reqid + ")");
+			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「`"
+					+ cities_name + "` (" + cities_id + ")」の自治体情報変更申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
 			PreparedStatement statement_update = conn
 					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
