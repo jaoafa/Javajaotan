@@ -1,6 +1,10 @@
 package com.jaoafa.Javajaotan.Task;
 
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,6 +19,7 @@ import java.util.regex.Pattern;
 
 import com.jaoafa.Javajaotan.Main;
 import com.jaoafa.Javajaotan.Lib.Library;
+import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -114,6 +119,8 @@ public class Task_MeetingVote extends TimerTask {
 				builder.setColor(Color.RED);
 				channel.sendMessage(builder.build()).queue();
 				message.unpin().queue();
+
+				autoBadCitiesRequest(message);
 			}
 
 			long start = timestamp.toEpochSecond(ZoneOffset.ofHours(9));
@@ -146,7 +153,198 @@ public class Task_MeetingVote extends TimerTask {
 				builder.setColor(Color.ORANGE);
 				channel.sendMessage(builder.build()).queue();
 				message.unpin().queue();
+
+				autoBadCitiesRequest(message);
 			}
+		}
+	}
+
+	private void autoBadCitiesRequest(Message message) {
+		String contents = message.getContentRaw();
+		if (!contents.startsWith("[API-CITIES-")) {
+			return;
+		}
+
+		autoBad_CREATE_WAITING(contents);
+		autoBad_CHANGE_CORNERS(contents);
+		autoBad_CHANGE_OTHER(contents);
+	}
+
+	private void autoBad_CREATE_WAITING(String contents) {
+		Pattern p = Pattern.compile("\\[API-CITIES-CREATE-WAITING:([0-9]+)\\]");
+		Matcher m = p.matcher(contents);
+		if (!m.find()) {
+			return;
+		}
+
+		int id = Integer.parseInt(m.group(1));
+
+		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+		if (MySQLDBManager == null) {
+			return;
+		}
+
+		try {
+			Connection conn = MySQLDBManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities_new_waiting WHERE id = ?");
+			statement.setInt(1, id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				return;
+			}
+
+			int reqid = res.getInt("id");
+			String discord_userid = res.getString("discord_userid");
+			String cities_name = res.getString("name");
+			res.close();
+			statement.close();
+
+			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「"
+					+ cities_name + "」の自治体新規登録申請を**否認**しました。(リクエストID: " + reqid + ")");
+
+			PreparedStatement statement_update = conn
+					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
+			statement_update.setInt(1, -1);
+			statement_update.setInt(2, id);
+			statement_update.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void autoBad_CHANGE_CORNERS(String contents) {
+		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-CORNERS-WAITING:([0-9]+)\\]");
+		Matcher m = p.matcher(contents);
+		if (!m.find()) {
+			return;
+		}
+
+		int id = Integer.parseInt(m.group(1));
+
+		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+		if (MySQLDBManager == null) {
+			return;
+		}
+
+		try {
+			Connection conn = MySQLDBManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities_new_waiting WHERE id = ?");
+			statement.setInt(1, id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				return;
+			}
+
+			int reqid = res.getInt("id");
+			int cities_id = res.getInt("cities_id");
+			res.close();
+			statement.close();
+
+			String discord_userid = getDiscordUserID(conn, cities_id);
+			String cities_name = getCitiesName(conn, cities_id);
+
+			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「"
+					+ cities_name + " (" + cities_id + ")」の自治体範囲変更申請を**否認**しました。(リクエストID: " + reqid + ")");
+
+			PreparedStatement statement_update = conn
+					.prepareStatement("UPDATE cities_corners_waiting SET status = ? WHERE id = ?");
+			statement_update.setInt(1, -1);
+			statement_update.setInt(2, id);
+			statement_update.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void autoBad_CHANGE_OTHER(String contents) {
+		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-OTHER-WAITING:([0-9]+)\\]");
+		Matcher m = p.matcher(contents);
+		if (!m.find()) {
+			return;
+		}
+
+		int id = Integer.parseInt(m.group(1));
+
+		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+		if (MySQLDBManager == null) {
+			return;
+		}
+
+		try {
+			Connection conn = MySQLDBManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities_other_waiting WHERE id = ?");
+			statement.setInt(1, id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				return;
+			}
+
+			int reqid = res.getInt("id");
+			int cities_id = res.getInt("cities_id");
+			res.close();
+			statement.close();
+
+			String discord_userid = getDiscordUserID(conn, cities_id);
+			String cities_name = getCitiesName(conn, cities_id);
+
+			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「"
+					+ cities_name + " (" + cities_id + ")」の自治体情報変更申請を**否認**しました。(リクエストID: " + reqid + ")");
+
+			PreparedStatement statement_update = conn
+					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
+			statement_update.setInt(1, -1);
+			statement_update.setInt(2, id);
+			statement_update.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String getDiscordUserID(Connection conn, int cities_id) {
+		try {
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities WHERE id = ?");
+			statement.setInt(1, cities_id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				return null;
+			}
+
+			String discorduserid = res.getString("discord_userid");
+			res.close();
+			statement.close();
+			return discorduserid;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private String getCitiesName(Connection conn, int cities_id) {
+		try {
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities WHERE id = ?");
+			statement.setInt(1, cities_id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				return null;
+			}
+
+			String discorduserid = res.getString("name");
+			res.close();
+			statement.close();
+			return discorduserid;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
