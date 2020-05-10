@@ -109,6 +109,8 @@ public class Task_MeetingVote extends TimerTask {
 				builder.setColor(Color.GREEN);
 				channel.sendMessage(builder.build()).queue();
 				message.unpin().queue();
+
+				autoGoodCitiesRequest(message);
 			} else if (bad_count >= _VoteBorder) {
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.setTitle("VOTE RESULT");
