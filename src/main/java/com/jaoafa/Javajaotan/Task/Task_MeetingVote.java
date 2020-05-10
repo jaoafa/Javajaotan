@@ -11,11 +11,15 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.jaoafa.Javajaotan.Main;
 import com.jaoafa.Javajaotan.Lib.Library;
@@ -159,6 +163,239 @@ public class Task_MeetingVote extends TimerTask {
 		}
 	}
 
+	private void autoGoodCitiesRequest(Message message) {
+		String contents = message.getContentRaw();
+		if (!contents.startsWith("[API-CITIES-")) {
+			return;
+		}
+
+		autoGood_CREATE_WAITING(contents);
+		autoGood_CHANGE_CORNERS(contents);
+		autoGood_CHANGE_OTHER(contents);
+	}
+
+	private void autoGood_CREATE_WAITING(String contents) {
+		System.out.println("autoBad_CREATE_WAITING()");
+		Pattern p = Pattern.compile("\\[API-CITIES-CREATE-WAITING:([0-9]+)\\]");
+		Matcher m = p.matcher(contents);
+		if (!m.find()) {
+			System.out.println("autoBad_CREATE_WAITING(): m.find false");
+			return;
+		}
+
+		int id = Integer.parseInt(m.group(1));
+
+		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+		if (MySQLDBManager == null) {
+			System.out.println("autoBad_CREATE_WAITING(): MySQLDBManager null");
+			return;
+		}
+
+		try {
+			Connection conn = MySQLDBManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities_new_waiting WHERE id = ?");
+			statement.setInt(1, id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				System.out.println("autoBad_CREATE_WAITING(): res.next false");
+				return;
+			}
+
+			int reqid = res.getInt("id");
+			String cities_name = res.getString("name");
+			String regionName = res.getString("regionname");
+			String regionOwner = res.getString("player");
+			JSONArray corners = new JSONArray(res.getString("corners"));
+			res.close();
+			statement.close();
+
+			List<String> approvalflowBuilder = new LinkedList<>();
+			approvalflowBuilder.add("サーバにログインします。");
+			approvalflowBuilder.add("鯖内でコマンドを実行: 「`//sel poly`」");
+			for (int i = 0; i < corners.length(); i++) {
+				JSONObject corner = corners.getJSONObject(i);
+				approvalflowBuilder
+						.add("鯖内でコマンドを実行: 「`/tp " + corner.getString("x") + " 100 " + corner.getString("z") + "`」");
+				if (i == 0) {
+					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos1`」");
+				} else {
+					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos2`」");
+				}
+			}
+			approvalflowBuilder.add("鯖内でコマンドを実行: 「`//expand vert`」");
+			approvalflowBuilder.add("鯖内でコマンドを実行: 「`/rg define " + regionName + " " + regionOwner + "`」");
+			approvalflowBuilder.add("<#597423467796758529>内でコマンド「`/approvalcity create " + reqid + "`」を実行してください。");
+
+			List<String> approvalflows = new LinkedList<>();
+			int i = 0;
+			for (String str : approvalflowBuilder) {
+				approvalflows.add(i + ". " + str);
+			}
+
+			Main.getJDA().getTextChannelById(597423467796758529L).sendMessage(
+					"自治体「" + cities_name + "」の範囲変更申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。\n"
+							+ String.join("\n", approvalflows))
+					.queue();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void autoGood_CHANGE_CORNERS(String contents) {
+		System.out.println("autoBad_CHANGE_CORNERS()");
+		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-CORNERS-WAITING:([0-9]+)\\]");
+		Matcher m = p.matcher(contents);
+		if (!m.find()) {
+			System.out.println("autoBad_CHANGE_CORNERS(): m.find false");
+			return;
+		}
+
+		int id = Integer.parseInt(m.group(1));
+
+		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+		if (MySQLDBManager == null) {
+			System.out.println("autoBad_CHANGE_CORNERS(): MySQLDBManager null");
+			return;
+		}
+
+		try {
+			Connection conn = MySQLDBManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities_new_waiting WHERE id = ?");
+			statement.setInt(1, id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				System.out.println("autoBad_CHANGE_CORNERS(): res.next false");
+				return;
+			}
+
+			int reqid = res.getInt("id");
+			int cities_id = res.getInt("cities_id");
+			JSONArray corners = new JSONArray(res.getString("corners_new"));
+			res.close();
+			statement.close();
+
+			String cities_name = getCitiesName(conn, cities_id);
+			String regionName = getRegionName(conn, cities_id);
+			String regionOwner = getCitiesOwner(conn, cities_id);
+
+			List<String> approvalflowBuilder = new LinkedList<>();
+			approvalflowBuilder.add("サーバにログインします。");
+			approvalflowBuilder.add("鯖内でコマンドを実行: 「`//sel poly`」");
+			for (int i = 0; i < corners.length(); i++) {
+				JSONObject corner = corners.getJSONObject(i);
+				approvalflowBuilder
+						.add("鯖内でコマンドを実行: 「`/tp " + corner.getString("x") + " 100 " + corner.getString("z") + "`」");
+				if (i == 0) {
+					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos1`」");
+				} else {
+					approvalflowBuilder.add("鯖内でコマンドを実行: 「`//pos2`」");
+				}
+			}
+			approvalflowBuilder.add("鯖内でコマンドを実行: 「`//expand vert`」");
+			approvalflowBuilder.add("鯖内でコマンドを実行: 「`/rg redefine " + regionName + " " + regionOwner + "`」");
+			approvalflowBuilder.add("<#597423467796758529>内でコマンド「`/approvalcity corners " + reqid + "`」を実行してください。");
+
+			List<String> approvalflows = new LinkedList<>();
+			int i = 0;
+			for (String str : approvalflowBuilder) {
+				approvalflows.add(i + ". " + str);
+			}
+
+			Main.getJDA().getTextChannelById(597423467796758529L).sendMessage(
+					"自治体「" + cities_name + "」の範囲変更申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。\n"
+							+ String.join("\n", approvalflows))
+					.queue();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void autoGood_CHANGE_OTHER(String contents) {
+		System.out.println("autoBad_CHANGE_OTHER()");
+		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-OTHER-WAITING:([0-9]+)\\]");
+		Matcher m = p.matcher(contents);
+		if (!m.find()) {
+			System.out.println("autoBad_CHANGE_OTHER(): m.find false");
+			return;
+		}
+
+		int id = Integer.parseInt(m.group(1));
+
+		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+		if (MySQLDBManager == null) {
+			System.out.println("autoBad_CHANGE_OTHER(): MySQLDBManager null");
+			return;
+		}
+
+		try {
+			Connection conn = MySQLDBManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities_other_waiting WHERE id = ?");
+			statement.setInt(1, id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				System.out.println("autoBad_CHANGE_OTHER(): res.next false");
+				return;
+			}
+
+			int reqid = res.getInt("id");
+			int cities_id = res.getInt("cities_id");
+
+			LinkedList<String> pre_sql = new LinkedList<>();
+			LinkedList<String> setStrings = new LinkedList<>();
+
+			String[] keys = new String[] {
+					"name",
+					"namekana",
+					"regionname",
+					"summary",
+					"name_origin"
+			};
+			for (String key : keys) {
+				if (res.getString(key + "_new") == null) {
+					continue;
+				}
+				pre_sql.add(key + " = ?");
+				setStrings.add(res.getString(key + "_new"));
+			}
+
+			res.close();
+			statement.close();
+
+			PreparedStatement statement_cities_update = conn
+					.prepareStatement("UPDATE cities SET " + String.join(", ", pre_sql) + " WHERE id = ?");
+			int i = 1;
+			for (String str : setStrings) {
+				statement_cities_update.setString(i, str);
+				i++;
+			}
+			statement_cities_update.setInt(i, cities_id);
+			System.out.println("SQL: " + statement_cities_update.toString());
+			statement_cities_update.executeUpdate();
+
+			String discord_userid = getDiscordUserID(conn, cities_id);
+			String cities_name = getCitiesName(conn, cities_id);
+
+			Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
+					+ cities_name + "` (" + cities_id + ")」の自治体情報変更申請を**承認**しました。(リクエストID: " + reqid + ")").queue();
+
+			PreparedStatement statement_update = conn
+					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
+			statement_update.setInt(1, -1);
+			statement_update.setInt(2, id);
+			statement_update.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// -------------------------------------------------- //
+
 	private void autoBadCitiesRequest(Message message) {
 		String contents = message.getContentRaw();
 		if (!contents.startsWith("[API-CITIES-")) {
@@ -205,7 +442,7 @@ public class Task_MeetingVote extends TimerTask {
 			res.close();
 			statement.close();
 
-			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「`"
+			Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
 					+ cities_name + "`」の自治体新規登録申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
 			PreparedStatement statement_update = conn
@@ -255,7 +492,7 @@ public class Task_MeetingVote extends TimerTask {
 			String discord_userid = getDiscordUserID(conn, cities_id);
 			String cities_name = getCitiesName(conn, cities_id);
 
-			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「`"
+			Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
 					+ cities_name + "` (" + cities_id + ")」の自治体範囲変更申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
 			PreparedStatement statement_update = conn
@@ -305,7 +542,7 @@ public class Task_MeetingVote extends TimerTask {
 			String discord_userid = getDiscordUserID(conn, cities_id);
 			String cities_name = getCitiesName(conn, cities_id);
 
-			Main.getJDA().getTextChannelById(597423370589700098L).sendMessage("<@" + discord_userid + "> 自治体「`"
+			Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
 					+ cities_name + "` (" + cities_id + ")」の自治体情報変更申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
 			PreparedStatement statement_update = conn
@@ -354,6 +591,48 @@ public class Task_MeetingVote extends TimerTask {
 			res.close();
 			statement.close();
 			return discorduserid;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private String getRegionName(Connection conn, int cities_id) {
+		try {
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities WHERE id = ?");
+			statement.setInt(1, cities_id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				return null;
+			}
+
+			String region_name = res.getString("regionname");
+			res.close();
+			statement.close();
+			return region_name;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private String getCitiesOwner(Connection conn, int cities_id) {
+		try {
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM cities WHERE id = ?");
+			statement.setInt(1, cities_id);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				return null;
+			}
+
+			String player = res.getString("player");
+			res.close();
+			statement.close();
+			return player;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
