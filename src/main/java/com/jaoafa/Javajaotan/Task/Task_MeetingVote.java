@@ -389,8 +389,8 @@ public class Task_MeetingVote extends TimerTask {
 					+ cities_name + "` (" + cities_id + ")」の自治体情報変更申請を**承認**しました。(リクエストID: " + reqid + ")").queue();
 
 			PreparedStatement statement_update = conn
-					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
-			statement_update.setInt(1, -1);
+					.prepareStatement("UPDATE cities_other_waiting SET status = ? WHERE id = ?");
+			statement_update.setInt(1, 1);
 			statement_update.setInt(2, id);
 			statement_update.executeUpdate();
 		} catch (SQLException e) {
@@ -479,7 +479,7 @@ public class Task_MeetingVote extends TimerTask {
 		try {
 			Connection conn = MySQLDBManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("SELECT * FROM cities_new_waiting WHERE id = ?");
+					.prepareStatement("SELECT * FROM cities_corners_waiting WHERE id = ?");
 			statement.setInt(1, id);
 			ResultSet res = statement.executeQuery();
 
@@ -550,7 +550,7 @@ public class Task_MeetingVote extends TimerTask {
 					+ cities_name + "` (" + cities_id + ")」の自治体情報変更申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
 			PreparedStatement statement_update = conn
-					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
+					.prepareStatement("UPDATE cities_other_waiting SET status = ? WHERE id = ?");
 			statement_update.setInt(1, -1);
 			statement_update.setInt(2, id);
 			statement_update.executeUpdate();
