@@ -149,7 +149,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 			PreparedStatement stmt_cities = conn
 					.prepareStatement("SELECT * FROM cities WHERE id = ?");
 			stmt_cities.setInt(1, cities_id);
-			ResultSet res_cities = statement.executeQuery();
+			ResultSet res_cities = stmt_cities.executeQuery();
 
 			if (!res_cities.next()) {
 				channel.sendMessage(mention + ", 自治体IDに合致する自治体情報が見つかりません。").queue();
