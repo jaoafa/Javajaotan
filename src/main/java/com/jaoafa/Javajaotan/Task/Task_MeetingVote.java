@@ -181,7 +181,7 @@ public class Task_MeetingVote extends TimerTask {
 		Pattern p = Pattern.compile("\\[API-CITIES-CREATE-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
-			System.out.println("autoBad_CREATE_WAITING(): m.find false");
+			System.out.println("autoGood_CREATE_WAITING(): m.find false");
 			return;
 		}
 
@@ -189,7 +189,7 @@ public class Task_MeetingVote extends TimerTask {
 
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 		if (MySQLDBManager == null) {
-			System.out.println("autoBad_CREATE_WAITING(): MySQLDBManager null");
+			System.out.println("autoGood_CREATE_WAITING(): MySQLDBManager null");
 			return;
 		}
 
@@ -201,7 +201,7 @@ public class Task_MeetingVote extends TimerTask {
 			ResultSet res = statement.executeQuery();
 
 			if (!res.next()) {
-				System.out.println("autoBad_CREATE_WAITING(): res.next false");
+				System.out.println("autoGood_CREATE_WAITING(): res.next false");
 				return;
 			}
 
@@ -251,7 +251,7 @@ public class Task_MeetingVote extends TimerTask {
 		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-CORNERS-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
-			System.out.println("autoBad_CHANGE_CORNERS(): m.find false");
+			System.out.println("autoGood_CHANGE_CORNERS(): m.find false");
 			return;
 		}
 
@@ -259,19 +259,19 @@ public class Task_MeetingVote extends TimerTask {
 
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 		if (MySQLDBManager == null) {
-			System.out.println("autoBad_CHANGE_CORNERS(): MySQLDBManager null");
+			System.out.println("autoGood_CHANGE_CORNERS(): MySQLDBManager null");
 			return;
 		}
 
 		try {
 			Connection conn = MySQLDBManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("SELECT * FROM cities_new_waiting WHERE id = ?");
+					.prepareStatement("SELECT * FROM cities_corners_waiting WHERE id = ?");
 			statement.setInt(1, id);
 			ResultSet res = statement.executeQuery();
 
 			if (!res.next()) {
-				System.out.println("autoBad_CHANGE_CORNERS(): res.next false");
+				System.out.println("autoGood_CHANGE_CORNERS(): res.next false");
 				return;
 			}
 
@@ -323,7 +323,7 @@ public class Task_MeetingVote extends TimerTask {
 		Pattern p = Pattern.compile("\\[API-CITIES-CHANGE-OTHER-WAITING:([0-9]+)\\]");
 		Matcher m = p.matcher(contents);
 		if (!m.find()) {
-			System.out.println("autoBad_CHANGE_OTHER(): m.find false");
+			System.out.println("autoGood_CHANGE_OTHER(): m.find false");
 			return;
 		}
 
@@ -331,7 +331,7 @@ public class Task_MeetingVote extends TimerTask {
 
 		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 		if (MySQLDBManager == null) {
-			System.out.println("autoBad_CHANGE_OTHER(): MySQLDBManager null");
+			System.out.println("autoGood_CHANGE_OTHER(): MySQLDBManager null");
 			return;
 		}
 
@@ -343,7 +343,7 @@ public class Task_MeetingVote extends TimerTask {
 			ResultSet res = statement.executeQuery();
 
 			if (!res.next()) {
-				System.out.println("autoBad_CHANGE_OTHER(): res.next false");
+				System.out.println("autoGood_CHANGE_OTHER(): res.next false");
 				return;
 			}
 
