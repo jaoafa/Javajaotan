@@ -291,7 +291,7 @@ public class Task_MeetingVote extends TimerTask {
 			for (int i = 0; i < corners.length(); i++) {
 				JSONObject corner = corners.getJSONObject(i);
 				approvalflowBuilder
-						.add("鯖内でコマンドを実行: 「`/tp " + corner.getInt("x") + " 100 " + corner.getInt("z") + "`」");
+						.add("鯖内でコマンドを実行: `/tp " + corner.getInt("x") + " 100 " + corner.getInt("z") + "`");
 				if (i == 0) {
 					approvalflowBuilder.add("鯖内でコマンドを実行: `//pos1`");
 				} else {
