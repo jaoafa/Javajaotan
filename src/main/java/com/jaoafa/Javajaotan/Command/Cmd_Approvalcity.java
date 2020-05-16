@@ -91,8 +91,8 @@ public class Cmd_Approvalcity implements CommandPremise {
 			stmt_insert.setString(6, discord_userid);
 			stmt_insert.setString(7, summary);
 			stmt_insert.setString(8, name_origin);
-			stmt_insert.setString(10, blocknum);
-			stmt_insert.setString(9, corners);
+			stmt_insert.setString(9, blocknum);
+			stmt_insert.setString(10, corners);
 			stmt_insert.setString(11, reason);
 			stmt_insert.executeUpdate();
 
