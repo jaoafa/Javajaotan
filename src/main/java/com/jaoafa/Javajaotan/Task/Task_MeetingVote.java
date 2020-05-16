@@ -114,7 +114,7 @@ public class Task_MeetingVote extends TimerTask {
 			} else if (bad_count >= _VoteBorder) {
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.setTitle("VOTE RESULT");
-				builder.setDescription("@here :thumbsup:投票が否認されたことをお知らせします。");
+				builder.setDescription("@here :thumbsdown:投票が否認されたことをお知らせします。");
 				builder.addField("賛成 / 反対 / 白票", good_count + " / " + bad_count + " / " + white_count, false);
 				builder.addField("決議ボーダー", String.valueOf(_VoteBorder), false);
 				builder.addField("内容", content, false);
