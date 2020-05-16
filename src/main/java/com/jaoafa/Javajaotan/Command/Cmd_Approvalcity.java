@@ -109,7 +109,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 
 			PreparedStatement statement_update = conn
 					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
-			statement_update.setInt(1, -1);
+			statement_update.setInt(1, 1);
 			statement_update.setInt(2, reqID);
 			statement_update.executeUpdate();
 			statement_update.close();
@@ -171,7 +171,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 
 			PreparedStatement statement_update = conn
 					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
-			statement_update.setInt(1, -1);
+			statement_update.setInt(1, 1);
 			statement_update.setInt(2, reqID);
 			statement_update.executeUpdate();
 			statement_update.close();
