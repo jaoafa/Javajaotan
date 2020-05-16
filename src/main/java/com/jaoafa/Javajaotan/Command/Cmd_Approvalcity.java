@@ -119,8 +119,8 @@ public class Cmd_Approvalcity implements CommandPremise {
 					+ "・その他のルールについては自治体関連方針にてご確認ください。 https://jaoafa.com/rule/management/cities";
 
 			Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
-					+ name + "`」の自治体新規登録申請を**承認**しました。保護名は`" + regionname + "`です。"
-					+ "(" + blocknum + "ブロック / リクエストID: " + reqID + " / 自治体内部管理ID: " + cities_id + ")\n"
+					+ name + "`」の自治体新規登録申請を**承認**しました(リクエストID: " + reqID + ")。保護名は`" + regionname + "`です。\n"
+					+ "(" + blocknum + "ブロック / 自治体内部管理ID: " + cities_id + ")\n"
 					+ "```" + warnMsg + "```").queue();
 
 			channel.sendMessage(mention + ", 自治体新規登録申請の承認処理を完了しました。").queue();
@@ -177,7 +177,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 			statement_update.close();
 
 			Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
-					+ name + "` (" + cities_id + ")」の自治体範囲変更申請を**承認**しました。").queue();
+					+ name + "` (" + cities_id + ")」の自治体範囲変更申請を**承認**しました。(リクエストID: " + reqID + ")").queue();
 
 			channel.sendMessage(mention + ", 自治体範囲変更申請の承認処理を完了しました。").queue();
 		} catch (SQLException e) {

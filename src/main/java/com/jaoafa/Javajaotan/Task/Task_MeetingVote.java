@@ -283,7 +283,6 @@ public class Task_MeetingVote extends TimerTask {
 
 			String cities_name = getCitiesName(conn, cities_id);
 			String regionName = getRegionName(conn, cities_id);
-			String regionOwner = getCitiesOwner(conn, cities_id);
 
 			List<String> approvalflowBuilder = new LinkedList<>();
 			approvalflowBuilder.add("サーバにログインします。");
@@ -616,27 +615,6 @@ public class Task_MeetingVote extends TimerTask {
 			res.close();
 			statement.close();
 			return region_name;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private String getCitiesOwner(Connection conn, int cities_id) {
-		try {
-			PreparedStatement statement = conn
-					.prepareStatement("SELECT * FROM cities WHERE id = ?");
-			statement.setInt(1, cities_id);
-			ResultSet res = statement.executeQuery();
-
-			if (!res.next()) {
-				return null;
-			}
-
-			String player = res.getString("player");
-			res.close();
-			statement.close();
-			return player;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
