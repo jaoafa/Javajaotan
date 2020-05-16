@@ -120,7 +120,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 
 			Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
 					+ name + "`」の自治体新規登録申請を**承認**しました。保護名は`" + regionname + "`です。"
-					+ "(" + blocknum + "ブロック / リクエストID: " + reqID + " /  | 自治体内部管理ID: " + cities_id + ")\n"
+					+ "(" + blocknum + "ブロック / リクエストID: " + reqID + " / 自治体内部管理ID: " + cities_id + ")\n"
 					+ "```" + warnMsg + "```").queue();
 
 			channel.sendMessage(mention + ", 自治体新規登録申請の承認処理を完了しました。").queue();
