@@ -299,7 +299,7 @@ public class Task_MeetingVote extends TimerTask {
 				}
 			}
 			approvalflowBuilder.add("鯖内でコマンドを実行: `//expand vert`");
-			approvalflowBuilder.add("鯖内でコマンドを実行: `/rg redefine " + regionName + " " + regionOwner + "`");
+			approvalflowBuilder.add("鯖内でコマンドを実行: `/rg redefine " + regionName + "`");
 			approvalflowBuilder.add("<#597423467796758529>内でコマンド「`/approvalcity corners " + reqid + "`」を実行してください。");
 
 			List<String> approvalflows = new LinkedList<>();

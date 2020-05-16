@@ -151,7 +151,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 			stmt_cities.setInt(1, cities_id);
 			ResultSet res_cities = statement.executeQuery();
 
-			if (!res.next()) {
+			if (!res_cities.next()) {
 				channel.sendMessage(mention + ", 自治体IDに合致する自治体情報が見つかりません。").queue();
 				return;
 			}
@@ -166,8 +166,8 @@ public class Cmd_Approvalcity implements CommandPremise {
 			stmt_insert.executeUpdate();
 			stmt_insert.close();
 
-			res.close();
-			statement.close();
+			res_cities.close();
+			stmt_cities.close();
 
 			PreparedStatement statement_update = conn
 					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
