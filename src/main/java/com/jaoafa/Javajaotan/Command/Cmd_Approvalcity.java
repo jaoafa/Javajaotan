@@ -100,7 +100,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 
 			int cities_id = -1;
 			if (r.next()) {
-				cities_id = res.getInt(1);
+				cities_id = r.getInt(1);
 			}
 			stmt_insert.close();
 
