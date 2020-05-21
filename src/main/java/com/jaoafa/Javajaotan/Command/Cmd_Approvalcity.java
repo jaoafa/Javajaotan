@@ -170,7 +170,7 @@ public class Cmd_Approvalcity implements CommandPremise {
 			stmt_cities.close();
 
 			PreparedStatement statement_update = conn
-					.prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
+					.prepareStatement("UPDATE cities_corners_waiting SET status = ? WHERE id = ?");
 			statement_update.setInt(1, 1);
 			statement_update.setInt(2, reqID);
 			statement_update.executeUpdate();
