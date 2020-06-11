@@ -37,9 +37,6 @@ public class ChannelMainEvent {
 				return;
 			}
 		}
-		if (!message.isWebhookMessage() && MuteManager.isMuted(member.getUser().getId())) {
-			return;
-		}
 		if (event.getAuthor().getIdLong() == 222018383556771840L) {
 			return;
 		}
