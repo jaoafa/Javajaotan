@@ -62,7 +62,7 @@ public class MessageMainEvent {
 		if (message.isWebhookMessage()) {
 			return;
 		}
-		if (MuteManager.isMuted(member.getUser().getId())) {
+		if (!text.startsWith("/link ") && MuteManager.isMuted(member.getUser().getId())) {
 			return;
 		}
 		if (event.getAuthor().getIdLong() == 222018383556771840L) {
