@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 import com.jaoafa.Javajaotan.CommandPremise;
 import com.jaoafa.Javajaotan.Main;
@@ -55,8 +56,12 @@ public class Cmd_Blmap implements CommandPremise {
 
 			InputStream stream = null;
 			try {
-				OkHttpClient client = new OkHttpClient();
-				Request request = new Request.Builder().url(url).get().build();
+				OkHttpClient client = new OkHttpClient().newBuilder()
+						.connectTimeout(60, TimeUnit.SECONDS)
+						.readTimeout(60, TimeUnit.SECONDS)
+						.build();
+				Request request = new Request.Builder().url(url).build();
+
 				Response response = client.newCall(request).execute();
 				if (response.code() != 200 && response.code() != 302) {
 					channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + response.code() + " "
