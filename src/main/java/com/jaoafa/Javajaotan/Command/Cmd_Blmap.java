@@ -64,10 +64,11 @@ public class Cmd_Blmap implements CommandPremise {
 				if (response.code() != 200 && response.code() != 302) {
 					channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + response.code() + " "
 							+ response.body().string()).queue();
+					response.close();
 					return;
 				}
 
-				channel.sendFile(response.body().byteStream(), uuid + ".png").queue();
+				channel.sendFile(response.body().byteStream(), uuid + ".png").complete();
 				response.close();
 			} catch (IOException ex) {
 				channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
