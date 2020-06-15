@@ -1,0 +1,96 @@
+package com.jaoafa.Javajaotan.Command;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.jaoafa.Javajaotan.CommandPremise;
+import com.jaoafa.Javajaotan.Main;
+import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class Cmd_Blmap implements CommandPremise {
+	@Override
+	public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
+			Message message, String[] args) {
+		MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+		if (MySQLDBManager == null) {
+			channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。(`MySQLDBManager null`)")
+					.queue();
+			return;
+		}
+		if (channel.getIdLong() != 597423444501463040L) {
+			channel.sendMessage(member.getAsMention() + ", このチャンネルでは使用できません。").queue();
+			return;
+		}
+		if (args.length == 0) {
+			channel.sendMessage(member.getAsMention() + ", 引数が足りません。\n" + getUsage()).queue();
+			return;
+		}
+		try {
+			Connection conn = MySQLDBManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM login WHERE player = ?");
+			statement.setString(1, args[0]);
+			ResultSet res = statement.executeQuery();
+
+			if (!res.next()) {
+				channel.sendMessage(member.getAsMention() + ", 指定されたユーザーは見つかりません。").queue();
+				return;
+			}
+
+			String uuid = res.getString("uuid");
+
+			String url = "https://api.jaoafa.com/cities/getblockimg?uuid=" + uuid;
+
+			InputStream stream = null;
+			try {
+				OkHttpClient client = new OkHttpClient();
+				Request request = new Request.Builder().url(url).get().build();
+				Response response = client.newCall(request).execute();
+				if (response.code() != 200 && response.code() != 302) {
+					channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + response.code() + " "
+							+ response.body().string()).queue();
+					return;
+				}
+
+				stream = response.body().byteStream();
+				response.close();
+			} catch (IOException ex) {
+				channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
+				return;
+			}
+			channel.sendFile(stream, uuid + ".png").queue();
+			return;
+		} catch (SQLException e) {
+			channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
+					+ "**Message**: `" + e.getMessage() + "`").queue();
+			return;
+		}
+	}
+
+	@Override
+	public String getDescription() {
+		return "ブロックの編集情報を示した画像を投稿します。特定のチャンネルで使用できます。";
+	}
+
+	@Override
+	public String getUsage() {
+		return "/blmap <PlayerName>";
+	}
+
+	@Override
+	public boolean isjMSOnly() {
+		return true;
+	}
+}
