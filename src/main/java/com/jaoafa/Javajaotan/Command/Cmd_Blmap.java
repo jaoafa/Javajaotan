@@ -68,7 +68,7 @@ public class Cmd_Blmap implements CommandPremise {
 					return;
 				}
 
-				channel.sendFile(response.body().byteStream(), uuid + ".png").complete();
+				channel.sendFile(response.body().byteStream(), uuid + ".png").append(member.getAsMention()).complete();
 				response.close();
 			} catch (IOException ex) {
 				channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
