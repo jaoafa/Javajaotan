@@ -1,7 +1,6 @@
 package com.jaoafa.Javajaotan.Command;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,7 +53,6 @@ public class Cmd_Blmap implements CommandPremise {
 
 			String url = "https://api.jaoafa.com/cities/getblockimg?uuid=" + uuid;
 
-			InputStream stream = null;
 			try {
 				OkHttpClient client = new OkHttpClient().newBuilder()
 						.connectTimeout(60, TimeUnit.SECONDS)
@@ -69,13 +67,12 @@ public class Cmd_Blmap implements CommandPremise {
 					return;
 				}
 
-				stream = response.body().byteStream();
+				channel.sendFile(response.body().byteStream(), uuid + ".png").queue();
 				response.close();
 			} catch (IOException ex) {
 				channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
 				return;
 			}
-			channel.sendFile(stream, uuid + ".png").queue();
 			return;
 		} catch (SQLException e) {
 			channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
