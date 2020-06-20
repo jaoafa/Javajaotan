@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -20,9 +19,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class Cmd_Origin implements CommandPremise {
 	Pattern title_pattern = Pattern.compile("<TD nowarp><FONT.+>(.+?)</FONT>");
@@ -49,26 +45,9 @@ public class Cmd_Origin implements CommandPremise {
 				channel.sendMessage(member.getAsMention() + ", 指定された記念日ナンバーの記念日が見つかりませんでした。").queue();
 				return;
 			}
-			String url = json.getString(num);
-			System.out.println("URL: " + url);
-			OkHttpClient okclient = new OkHttpClient();
-			Request request = new Request.Builder().url(url).get().build();
-			Response response = okclient.newCall(request).execute();
-			String res = response.body().string();
-			Matcher title_matcher = title_pattern.matcher(res);
-			if (!title_matcher.find()) {
-				channel.sendMessage(member.getAsMention() + ", 指定された記念日ナンバーの記念日の情報を取得できませんでした。(title|`" + url + "`)")
-						.queue();
-				return;
-			}
-			String title = title_matcher.group(1);
-			Matcher text_matcher = text_pattern.matcher(res);
-			if (!text_matcher.find()) {
-				channel.sendMessage(member.getAsMention() + ", 指定された記念日ナンバーの記念日の情報を取得できませんでした。(text|`" + url + "`)")
-						.queue();
-				return;
-			}
-			String text = text_matcher.group(1);
+			JSONObject obj = json.getJSONObject(num);
+			String title = obj.getString("title");
+			String text = obj.getString("text");
 			channel.sendMessage(title + "```" + text + "```").queue();
 			return;
 		} catch (IOException e) {
