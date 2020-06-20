@@ -50,6 +50,7 @@ public class Cmd_Origin implements CommandPremise {
 				return;
 			}
 			String url = json.getString(num);
+			System.out.println("URL: " + url);
 			OkHttpClient okclient = new OkHttpClient();
 			Request request = new Request.Builder().url(url).build();
 			Response response = okclient.newCall(request).execute();
