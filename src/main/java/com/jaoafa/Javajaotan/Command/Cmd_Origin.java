@@ -52,7 +52,7 @@ public class Cmd_Origin implements CommandPremise {
 			String url = json.getString(num);
 			System.out.println("URL: " + url);
 			OkHttpClient okclient = new OkHttpClient();
-			Request request = new Request.Builder().url(url).build();
+			Request request = new Request.Builder().url(url).get().build();
 			Response response = okclient.newCall(request).execute();
 			String res = response.body().string();
 			Matcher title_matcher = title_pattern.matcher(res);
