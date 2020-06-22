@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -200,12 +199,11 @@ public class Library {
 	public static boolean hasRole(Member member, Role role) {
 		if (member == null || role == null)
 			return false;
-		return !member
+		return member
 				.getRoles()
 				.stream()
-				.filter(_role -> _role.getId() == role.getId())
-				.collect(Collectors.toList())
-				.isEmpty();
+				.filter(_role -> _role.getIdLong() == role.getIdLong())
+				.count() != 0;
 	}
 
 	public static String sdfFormat(Date date) {
