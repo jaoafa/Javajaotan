@@ -46,9 +46,9 @@ public class MCBans {
 
 		JSONObject data = json.getJSONObject("data");
 
-		mcid = data.getString("mcid");
-		uuid = UUID.fromString(data.getString("uuid"));
-		getData(uuid);
+		this.mcid = data.getString("mcid");
+		this.uuid = UUID.fromString(data.getString("uuid"));
+		getData(this.uuid);
 	}
 
 	public MCBans(UUID uuid) throws IOException {
