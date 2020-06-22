@@ -20,7 +20,7 @@ public class MCBans {
 	double reputation = -1;
 	int localCount = -1;
 	int[] local_ids = new int[] {};
-	String update_at = null;
+	String updated_at = null;
 
 	public MCBans(String mcid) throws IOException {
 		String url = "https://api.jaoafa.com/users/" + mcid;
@@ -96,7 +96,7 @@ public class MCBans {
 			local_ids[i] = local_ids_array.getInt(i);
 		}
 
-		update_at = data.getString("update_at");
+		updated_at = data.getString("updated_at");
 
 		isFound = true;
 	}
@@ -133,8 +133,8 @@ public class MCBans {
 		return local_ids;
 	}
 
-	public String getUpdateAt() {
-		return update_at;
+	public String getUpdatedAt() {
+		return updated_at;
 	}
 
 	public static class Ban {
