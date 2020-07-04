@@ -28,7 +28,7 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
 			return;
 		}
 
-		String content = message.getContentStripped();
+		String content = message.getContentRaw();
 		content = content.replaceAll("<!?@[0-9]+>", "");
 		content = content.trim();
 
