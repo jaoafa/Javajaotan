@@ -35,6 +35,7 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
 		String ret = getReplyMessage(user, content);
 		if (ret == null) {
 			channel.sendMessage(member.getAsMention() + ", 返信メッセージの取得に失敗しました。").queue();
+			return;
 		}
 		channel.sendMessage(member.getAsMention() + ", " + ret).queue();
 	}
@@ -45,13 +46,9 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
 			return null;
 		}
 
-		if (content.contains("しりとり") || (chatManager.getDocomoContext(user) != null &&
-				chatManager.getDocomoContext(user).equalsIgnoreCase("srtr"))) {
-			String ret = chatManager.chatDocomo(user, content);
-			if (ret == null)
-				return null;
-			return ret + " (しりとり [③])";
-		} else if (content.startsWith("!")) {
+		System.out.println("content: " + content);
+
+		if (content.startsWith("!")) {
 			String ret = chatManager.chatA3RT(content);
 			if (ret == null)
 				return null;
@@ -61,11 +58,6 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
 			if (ret == null)
 				return null;
 			return ret + " (CotogotoNoby [④])";
-		} else if (content.startsWith("?")) {
-			String ret = chatManager.chatDocomo(user, content);
-			if (ret == null)
-				return null;
-			return ret + " (docomoAPI [③])";
 		} else {
 			String ret = chatManager.chatUserLocal(user, content);
 			if (ret != null) {

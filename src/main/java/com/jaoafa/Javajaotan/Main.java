@@ -118,12 +118,6 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		String docomoAPIKey = props.getProperty("docomoAPIKey");
-		if (docomoAPIKey.equalsIgnoreCase("PLEASETOKEN")) {
-			System.out.println("Please docomoAPIKey!");
-			return;
-		}
-
 		String nobyAPIKey = props.getProperty("nobyAPIKey");
 		if (nobyAPIKey.equalsIgnoreCase("PLEASETOKEN")) {
 			System.out.println("Please nobyAPIKey!");
@@ -141,7 +135,7 @@ public class Main {
 			System.out.println("Please A3RTAPIKey!");
 			return;
 		}
-		chatManager = new ChatManager(docomoAPIKey, nobyAPIKey, userlocalAPIKey, A3RTAPIKey);
+		chatManager = new ChatManager(nobyAPIKey, userlocalAPIKey, A3RTAPIKey);
 
 		// 分けてイベント自動登録できるように？
 		// 全部JDA移行

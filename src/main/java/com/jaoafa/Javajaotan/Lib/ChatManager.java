@@ -16,67 +16,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ChatManager {
-	String docomoAPIKey = null;
 	String nobyAPIKey = null; // https://www.cotogoto.ai/webapi.do
 	String userlocalAPIKey = null; // http://ai.userlocal.jp
 	String A3RTAPIKey = null; // https://a3rt.recruit-tech.co.jp/product/talkAPI/
 
-	static Map<String, String> contexts = new HashMap<>();
-	static Map<String, String> modes = new HashMap<>();
-	static Map<String, Long> times = new HashMap<>();
-
-	public ChatManager(String docomoAPIKey, String nobyAPIKey, String userlocalAPIKey, String A3RTAPIKey) {
-		this.docomoAPIKey = docomoAPIKey;
+	public ChatManager(String nobyAPIKey, String userlocalAPIKey, String A3RTAPIKey) {
 		this.nobyAPIKey = nobyAPIKey;
 		this.userlocalAPIKey = userlocalAPIKey;
 		this.A3RTAPIKey = A3RTAPIKey;
-	}
-
-	public String chatDocomo(User user, String message) {
-		String url = String.format(
-				"https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=%s",
-				this.docomoAPIKey);
-
-		Map<String, String> headers = new HashMap<>();
-		headers.put("Content-Type", "application/json; charset=UTF-8");
-
-		FormBody.Builder builder = new FormBody.Builder();
-		builder.add("utt", message);
-
-		if (times.containsKey(user.getId()) && times.get(user.getId()) > (System.currentTimeMillis() / 1000)) {
-			builder.add("context", contexts.get(user.getId()));
-			builder.add("mode", modes.get(user.getId()));
-		}
-
-		if (user.getName().length() <= 10) {
-			builder.add("nickname", user.getName());
-		}
-
-		JSONObject json = connectPOST(headers, builder, url);
-		if (json == null) {
-			return null;
-		}
-		if (!json.has("utt")) {
-			return null;
-		}
-		contexts.put(user.getId(), json.getString("context"));
-		modes.put(user.getId(), json.getString("mode"));
-		times.put(user.getId(), System.currentTimeMillis() / 1000);
-		return json.getString("utt");
-	}
-
-	public String getDocomoContext(User user) {
-		if (!contexts.containsKey(user.getId())) {
-			return null;
-		}
-		return contexts.get(user.getId());
-	}
-
-	public String getDocomoMode(User user) {
-		if (!modes.containsKey(user.getId())) {
-			return null;
-		}
-		return modes.get(user.getId());
 	}
 
 	public String chatNoby(String message) {
@@ -97,7 +44,7 @@ public class ChatManager {
 	public String chatUserLocal(User user, String message) {
 		String url = String.format(
 				"https://chatbot-api.userlocal.jp/api/chat?key=%s&bot_name=%s&user_id=%s&user_name=%s&message=%s",
-				this.docomoAPIKey,
+				this.userlocalAPIKey,
 				"jaotan",
 				user.getId(),
 				user.getName(),
