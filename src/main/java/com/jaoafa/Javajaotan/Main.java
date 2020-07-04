@@ -32,6 +32,7 @@ import com.jaoafa.Javajaotan.Event.Event_ServerJoin;
 import com.jaoafa.Javajaotan.Event.Event_ServerLeave;
 import com.jaoafa.Javajaotan.Event.Event_TodoCheck;
 import com.jaoafa.Javajaotan.Event.Event_TomachiEmojis;
+import com.jaoafa.Javajaotan.Lib.ChatManager;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
@@ -52,6 +53,7 @@ public class Main {
 	public static MySQLDBManager MySQLDBManager = null;
 	public static String translateGAS = null;
 	public static List<PriconeCharacter> pricone_Characters = new ArrayList<>();
+	private static ChatManager chatManager = null;
 
 	public static void main(String[] args) {
 		File f = new File("conf.properties");
@@ -115,6 +117,31 @@ public class Main {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+
+		String docomoAPIKey = props.getProperty("docomoAPIKey");
+		if (docomoAPIKey.equalsIgnoreCase("PLEASETOKEN")) {
+			System.out.println("Please docomoAPIKey!");
+			return;
+		}
+
+		String nobyAPIKey = props.getProperty("nobyAPIKey");
+		if (nobyAPIKey.equalsIgnoreCase("PLEASETOKEN")) {
+			System.out.println("Please nobyAPIKey!");
+			return;
+		}
+
+		String userlocalAPIKey = props.getProperty("userlocalAPIKey");
+		if (userlocalAPIKey.equalsIgnoreCase("PLEASETOKEN")) {
+			System.out.println("Please userlocalAPIKey!");
+			return;
+		}
+
+		String A3RTAPIKey = props.getProperty("A3RTAPIKey");
+		if (A3RTAPIKey.equalsIgnoreCase("PLEASETOKEN")) {
+			System.out.println("Please A3RTAPIKey!");
+			return;
+		}
+		chatManager = new ChatManager(docomoAPIKey, nobyAPIKey, userlocalAPIKey, A3RTAPIKey);
 
 		// 分けてイベント自動登録できるように？
 		// 全部JDA移行
@@ -281,5 +308,9 @@ public class Main {
 		} catch (IOException e) {
 		}
 		return version;
+	}
+
+	public static ChatManager getChatManager() {
+		return chatManager;
 	}
 }
