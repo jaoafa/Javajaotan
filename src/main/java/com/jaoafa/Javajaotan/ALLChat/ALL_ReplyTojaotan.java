@@ -49,12 +49,12 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
 		System.out.println("content: " + content);
 
 		if (content.startsWith("!")) {
-			String ret = chatManager.chatA3RT(content);
+			String ret = chatManager.chatA3RT(content.substring(1));
 			if (ret == null)
 				return null;
 			return ret + " (A3RT [②])";
 		} else if (content.startsWith(";")) {
-			String ret = chatManager.chatNoby(content);
+			String ret = chatManager.chatNoby(content.substring(1));
 			if (ret == null)
 				return null;
 			return ret + " (CotogotoNoby [④])";
