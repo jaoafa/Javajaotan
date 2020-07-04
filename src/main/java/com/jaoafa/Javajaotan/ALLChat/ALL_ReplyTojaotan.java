@@ -69,17 +69,17 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
 		} else {
 			String ret = chatManager.chatUserLocal(user, content);
 			if (ret != null) {
-				return ret + "(userLocal [①])";
+				return ret + " (userLocal [①])";
 			}
 
 			ret = chatManager.chatA3RT(content);
 			if (ret != null) {
-				return ret + "(A3RT [②])";
+				return ret + " (A3RT [②])";
 			}
 
 			ret = chatManager.chatNoby(content);
 			if (ret != null) {
-				return ret + "(Noby [④])";
+				return ret + " (Noby [④])";
 			}
 		}
 		return null;
