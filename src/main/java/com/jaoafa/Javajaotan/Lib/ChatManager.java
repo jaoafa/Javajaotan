@@ -1,6 +1,8 @@
 package com.jaoafa.Javajaotan.Lib;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,13 +44,21 @@ public class ChatManager {
 	}
 
 	public String chatUserLocal(User user, String message) {
+		String encodedName;
+		String encodedMessage;
+		try {
+			encodedName = URLEncoder.encode(user.getName(), "UTF-8");
+			encodedMessage = URLEncoder.encode(message, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
 		String url = String.format(
 				"https://chatbot-api.userlocal.jp/api/chat?key=%s&bot_name=%s&user_id=%s&user_name=%s&message=%s",
 				this.userlocalAPIKey,
 				"jaotan",
 				user.getId(),
-				user.getName(),
-				message);
+				encodedName,
+				encodedMessage);
 		JSONObject json = connect(url);
 		if (json == null) {
 			return null;
