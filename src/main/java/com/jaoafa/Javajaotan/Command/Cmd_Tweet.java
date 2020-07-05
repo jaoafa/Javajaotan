@@ -23,7 +23,7 @@ public class Cmd_Tweet implements CommandPremise {
 		}
 		Twitter twitter = TwitterFactory.getSingleton();
 		try {
-			Status status = twitter.updateStatus(String.join(" ", args));
+			Status status = twitter.updateStatus(String.join(" ", args) + " #jaoafa");
 			if (status == null) {
 				channel.sendMessage(member.getAsMention() + ", ツイートの送信に失敗しました: `status is null.`").queue();
 				return;
