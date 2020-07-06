@@ -107,7 +107,7 @@ public class Cmd_Blookup implements CommandPremise {
 			int z = location.getInt("z");
 
 			JSONObject block = d.getJSONObject("block");
-			String blockName = block.getString("material") + ":" + block.getInt("data");
+			String blockName = block.getString("material").replace("minecraft:", "") + ":" + block.getInt("data");
 
 			String action = d.getBoolean("action") ? "placed" : "destroyed";
 
@@ -117,7 +117,7 @@ public class Cmd_Blookup implements CommandPremise {
 			String time = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(date);
 
 			retMessages.add((rollbacked ? "~~" : "") +
-					String.format("%s `%s` in `%s %d %d %d` at `%s`", action, blockName, world, x, y, z, time)
+					String.format("%9s `%20s` in `%7s %5d %5d %5d` at `%s`", action, blockName, world, x, y, z, time)
 					+ (rollbacked ? "~~" : ""));
 		}
 
