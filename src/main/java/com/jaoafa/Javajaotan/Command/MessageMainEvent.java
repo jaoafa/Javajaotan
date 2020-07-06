@@ -121,6 +121,8 @@ public class MessageMainEvent {
 				| NoSuchMethodException | SecurityException e) {
 			// error
 			Main.ExceptionReporter(channel, e);
+		} catch (Exception e) {
+			Main.ExceptionReporter(channel, e);
 		}
 	}
 }
