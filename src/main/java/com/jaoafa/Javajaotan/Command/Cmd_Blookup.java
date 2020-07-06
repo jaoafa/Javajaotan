@@ -94,7 +94,7 @@ public class Cmd_Blookup implements CommandPremise {
 		LinkedList<String> retMessages = new LinkedList<>();
 
 		retMessages.add("__**Blookup - `" + inputPlayerName + "` (" + userid + ")**__");
-		retMessages.add("");
+		retMessages.add("```");
 
 		JSONObject response = getLookup(channel, member, userid, before, after);
 		for (int i = 0; i < response.getJSONArray("data").length(); i++) {
@@ -117,11 +117,11 @@ public class Cmd_Blookup implements CommandPremise {
 			String time = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(date);
 
 			retMessages.add((rollbacked ? "~~" : "") +
-					String.format("%9s `%20s` in `%7s %5d %5d %5d` at `%s`", action, blockName, world, x, y, z, time)
+					String.format("%9s %20s in %7s %5d %3d %5d at %s", action, blockName, world, x, y, z, time)
 					+ (rollbacked ? "~~" : ""));
 		}
 
-		retMessages.add("");
+		retMessages.add("```");
 		retMessages.add(String.format("old: `/blookup %s %d` | new: `/blookup %s %d`",
 				inputPlayerName, response.getInt("prevId"),
 				inputPlayerName, response.getInt("nextId")));
