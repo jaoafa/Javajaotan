@@ -1,6 +1,8 @@
 package com.jaoafa.Javajaotan.Command;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -91,13 +93,12 @@ public class Cmd_Blookup implements CommandPremise {
 			Message message, String inputPlayerName, int userid, int before, int after) {
 		LinkedList<String> retMessages = new LinkedList<>();
 
-		retMessages.add("__**Blookup - `" + inputPlayerName + "` (" + userid + ")");
+		retMessages.add("__**Blookup - `" + inputPlayerName + "` (" + userid + ")**__");
 		retMessages.add("");
 
 		JSONObject response = getLookup(channel, member, userid, before, after);
 		for (int i = 0; i < response.getJSONArray("data").length(); i++) {
 			JSONObject d = response.getJSONArray("data").getJSONObject(i);
-			int rowid = d.getInt("rowid");
 
 			JSONObject location = d.getJSONObject("location");
 			String world = location.getJSONObject("world").getString("name");
@@ -112,8 +113,11 @@ public class Cmd_Blookup implements CommandPremise {
 
 			boolean rollbacked = d.getBoolean("rolled_back");
 
+			Date date = new Date(d.getLong("time") * 1000);
+			String time = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(date);
+
 			retMessages.add((rollbacked ? "~~" : "") +
-					String.format("[%s] %s `%s` - `%s %d %d %d`", rowid, action, blockName, world, x, y, z)
+					String.format("%s `%s` in `%s %d %d %d` at `%s`", action, blockName, world, x, y, z, time)
 					+ (rollbacked ? "~~" : ""));
 		}
 
