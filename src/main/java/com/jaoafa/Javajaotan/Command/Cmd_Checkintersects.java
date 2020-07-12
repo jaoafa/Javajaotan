@@ -71,19 +71,19 @@ public class Cmd_Checkintersects implements CommandPremise {
 					System.out.println("other_polygon.addPoint " + x + " " + z);
 				}
 
-				if (polygon.intersects(other_polygon.getBounds())) {
+				if (polygon.intersects(other_polygon.getBounds2D())) {
 					ret_message += "[" + regID + "] request region intersects " + regName + "\n";
 					bool = false;
 					continue;
 				}
 
-				if (polygon.contains(other_polygon.getBounds())) {
+				if (polygon.contains(other_polygon.getBounds2D())) {
 					ret_message += "[" + regID + "] request region contains " + regName + ".";
 					bool = false;
 					continue;
 				}
 
-				if (other_polygon.intersects(polygon.getBounds())) {
+				if (other_polygon.intersects(polygon.getBounds2D())) {
 					ret_message += "[" + regID + "] " + regName + " intersects request region.";
 					bool = false;
 					continue;
