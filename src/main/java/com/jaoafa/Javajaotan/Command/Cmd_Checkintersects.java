@@ -1,6 +1,7 @@
 package com.jaoafa.Javajaotan.Command;
 
 import java.awt.Polygon;
+import java.awt.geom.Area;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,6 +49,7 @@ public class Cmd_Checkintersects implements CommandPremise {
 			polygon.addPoint(Integer.valueOf(X_str), Integer.valueOf(Z_str));
 			System.out.println("polygon.addPoint " + X_str + " " + Z_str);
 		}
+		Area area = new Area(polygon);
 
 		String ret_message = "";
 		boolean bool = true;
@@ -72,27 +74,30 @@ public class Cmd_Checkintersects implements CommandPremise {
 				}
 
 				if (polygon.intersects(other_polygon.getBounds2D())) {
-					ret_message += "[" + regID + "] request region intersects " + regName + "\n";
+					ret_message += "[" + regID + "] request region intersects " + regName + ".\n";
 					bool = false;
-					continue;
 				}
 
 				if (polygon.contains(other_polygon.getBounds2D())) {
-					ret_message += "[" + regID + "] request region contains " + regName + ".";
+					ret_message += "[" + regID + "] request region contains " + regName + ".\n";
 					bool = false;
-					continue;
 				}
 
 				if (other_polygon.intersects(polygon.getBounds2D())) {
-					ret_message += "[" + regID + "] " + regName + " intersects request region.";
+					ret_message += "[" + regID + "] " + regName + " intersects request region.\n";
 					bool = false;
-					continue;
 				}
 
 				if (other_polygon.contains(polygon.getBounds())) {
-					ret_message += "[" + regID + "] " + regName + " contains request region.";
+					ret_message += "[" + regID + "] " + regName + " contains request region.\n";
 					bool = false;
-					continue;
+				}
+
+				Area other_area = new Area(other_polygon);
+				other_area.intersect(area);
+				if (!other_area.isEmpty()) {
+					ret_message += "[" + regID + "] request area intersects " + regName + ".\n";
+					bool = false;
 				}
 			}
 			if (bool) {
