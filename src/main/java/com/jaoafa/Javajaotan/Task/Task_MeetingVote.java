@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -17,6 +18,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -135,6 +137,41 @@ public class Task_MeetingVote extends TimerTask {
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(TimeUnit.SECONDS.toMillis(start));
 			cal.add(Calendar.WEEK_OF_YEAR, 2);
+
+			if ((start + 604800) <= now) {
+				// 1週間 604800秒
+				long isRemind = message.retrieveReactionUsers("📳").complete().stream()
+						.filter(_user -> _user != null && _user.getIdLong() == jda.getSelfUser().getIdLong()).count();
+				if (isRemind == 0) {
+					List<Long> admin_and_moderator = Arrays.asList(new Long[] {
+							206692134991036416L, // zakuro
+							221498004505362433L, // hiratake
+							221991565567066112L, // tomachi
+							222337959087702016L, // omelet
+							189377054955798528L, // ekusas
+							189372008147058688L, // zokasu
+							315726390844719114L, // kohona
+							290787709721509890L, // nudonge
+							310570792691826688L, // ekp
+					});
+
+					List<Long> goodUsers = good.stream().map(_user -> _user.getIdLong()).collect(Collectors.toList());
+					List<Long> badUsers = bad.stream().map(_user -> _user.getIdLong()).collect(Collectors.toList());
+					List<Long> whiteUsers = white.stream().map(_user -> _user.getIdLong()).collect(Collectors.toList());
+
+					List<String> mentions = admin_and_moderator.stream()
+							.filter(_userid -> !goodUsers.contains(_userid) && !badUsers.contains(_userid)
+									&& !whiteUsers.contains(_userid))
+							.map(_userid -> "<@" + _userid + ">").collect(Collectors.toList());
+
+					channel.sendMessage("投票有効期限が1週間を切った投票があります。投票をお願いします。\n"
+							+ "未投票者: " + String.join(", ", mentions) + "\n"
+							+ "投票有効期限: " + sdf.format(timestamp.toEpochSecond(ZoneOffset.ofHours(9))) + "\n"
+							+ "メッセージURL: https://discordapp.com/channels/" + message.getGuild().getId() + "/"
+							+ message.getChannel().getId() + "/" + message.getId()).queue();
+					message.addReaction("📳").queue();
+				}
+			}
 
 			if ((start + 1209600) <= now) {
 				// 2週間 1209600秒
