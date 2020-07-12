@@ -162,10 +162,10 @@ public class Task_MeetingVote extends TimerTask {
 									&& !whiteUsers.contains(_userid))
 							.map(_userid -> "<@" + _userid + ">").collect(Collectors.toList());
 
-					channel.sendMessage("投票有効期限が1週間を切った投票があります。投票をお願いします。\n"
-							+ "未投票者: " + String.join(", ", mentions) + "\n"
-							+ "投票有効期限: " + dtf.format(timestamp) + "\n"
-							+ "メッセージURL: https://discordapp.com/channels/" + message.getGuild().getId() + "/"
+					channel.sendMessage("__**投票有効期限が1週間を切った投票があります。投票をお願いします。**__\n"
+							+ "**未投票者**: " + String.join(", ", mentions) + "\n"
+							+ "**投票有効期限**: " + sdf.format(cal.getTime()) + "\n"
+							+ "**メッセージURL**: https://discordapp.com/channels/" + message.getGuild().getId() + "/"
 							+ message.getChannel().getId() + "/" + message.getId()).queue();
 					message.addReaction("📳").queue();
 				}
