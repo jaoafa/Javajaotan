@@ -6,9 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,13 +56,13 @@ public class Task_MeetingVote extends TimerTask {
 			VoteBorder++;
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
 		TextChannel channel = jda.getTextChannelById(597423974816808970L);
 		List<Message> messages = channel.retrievePinnedMessages().complete();
 		for (Message message : messages) {
 			String content = message.getContentDisplay();
-			LocalDateTime timestamp = message.getTimeCreated().atZoneSameInstant(ZoneId.of("Asia/Tokyo"))
-					.toLocalDateTime();
+			OffsetDateTime timestamp = message.getTimeCreated().withOffsetSameInstant(ZoneOffset.ofHours(9));
 
 			List<User> good = message.retrieveReactionUsers("\uD83D\uDC4D").complete();
 			int good_count = good.size();
@@ -106,8 +106,7 @@ public class Task_MeetingVote extends TimerTask {
 				builder.addField("内容", content, false);
 				builder.addField("対象メッセージURL", "https://discordapp.com/channels/" + message.getGuild().getId()
 						+ "/" + message.getChannel().getId() + "/" + message.getId(), false);
-				builder.addField("投票開始日時",
-						sdf.format(new Date(timestamp.toEpochSecond(ZoneOffset.ofHours(9)) * 1000)), false);
+				builder.addField("投票開始日時", dtf.format(timestamp), false);
 				builder.setColor(Color.GREEN);
 				channel.sendMessage(builder.build()).queue();
 				message.unpin().queue();
@@ -122,8 +121,7 @@ public class Task_MeetingVote extends TimerTask {
 				builder.addField("内容", content, false);
 				builder.addField("対象メッセージURL", "https://discordapp.com/channels/" + message.getGuild().getId()
 						+ "/" + message.getChannel().getId() + "/" + message.getId(), false);
-				builder.addField("投票開始日時",
-						sdf.format(new Date(timestamp.toEpochSecond(ZoneOffset.ofHours(9)) * 1000)), false);
+				builder.addField("投票開始日時", dtf.format(timestamp), false);
 				builder.setColor(Color.RED);
 				channel.sendMessage(builder.build()).queue();
 				message.unpin().queue();
@@ -131,7 +129,7 @@ public class Task_MeetingVote extends TimerTask {
 				autoBadCitiesRequest(message);
 			}
 
-			long start = timestamp.toEpochSecond(ZoneOffset.ofHours(9));
+			long start = timestamp.toEpochSecond();
 			long now = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
 
 			Calendar cal = Calendar.getInstance();
@@ -166,7 +164,7 @@ public class Task_MeetingVote extends TimerTask {
 
 					channel.sendMessage("投票有効期限が1週間を切った投票があります。投票をお願いします。\n"
 							+ "未投票者: " + String.join(", ", mentions) + "\n"
-							+ "投票有効期限: " + sdf.format(timestamp.toEpochSecond(ZoneOffset.ofHours(9))) + "\n"
+							+ "投票有効期限: " + dtf.format(timestamp) + "\n"
 							+ "メッセージURL: https://discordapp.com/channels/" + message.getGuild().getId() + "/"
 							+ message.getChannel().getId() + "/" + message.getId()).queue();
 					message.addReaction("📳").queue();
@@ -184,8 +182,7 @@ public class Task_MeetingVote extends TimerTask {
 				builder.addField("対象メッセージURL", "https://discordapp.com/channels/" + message.getGuild().getId()
 						+ "/" + message.getChannel().getId() + "/" + message.getId(), false);
 				builder.addField("投票開始日時",
-						sdf.format(timestamp.toEpochSecond(ZoneOffset.ofHours(9))) + " ("
-								+ timestamp.toEpochSecond(ZoneOffset.ofHours(9)) + ")",
+						dtf.format(timestamp) + " (" + timestamp.toEpochSecond() + ")",
 						false);
 				builder.addField("有効会議期限",
 						sdf.format(cal.getTime()) + " (" + TimeUnit.MILLISECONDS.toSeconds(cal.getTimeInMillis()) + ")",
