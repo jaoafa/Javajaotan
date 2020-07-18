@@ -39,7 +39,6 @@ import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
 import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
 import com.jaoafa.Javajaotan.Task.Task_VerifiedCheck;
 
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -140,10 +139,9 @@ public class Main {
 		// 分けてイベント自動登録できるように？
 		// 全部JDA移行
 		try {
-			JDABuilder jdabuilder = new JDABuilder(AccountType.BOT)
+			JDABuilder jdabuilder = JDABuilder.createDefault(token)
 					.setAutoReconnect(true)
 					.setBulkDeleteSplittingEnabled(false)
-					.setToken(token)
 					.setContextEnabled(false)
 					.setEventManager(new AnnotatedEventManager());
 
