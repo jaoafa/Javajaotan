@@ -55,9 +55,7 @@ public class Cmd_Link implements CommandPremise {
 						.queue();
 			});
 			channel.sendMessage(member.getAsMention() + ", 個人メッセージに送信されたメッセージを確認し、指定された行動を行って下さい。\n"
-					+ "メッセージが送信されてきませんか？何度か実行し直して正常動作しなければ開発部にお問い合わせをお願いします！\n"
-					+ "\n"
-					+ "なお、原則**メールアドレスを登録したアカウントでのリンク**をお願いしています。それ以外のアカウントでリンクするとログイン出来なくなる可能性があります。").queue();
+					+ "メッセージが送信されてきませんか？何度か実行し直して正常動作しなければ開発部にお問い合わせをお願いします！").queue();
 			return;
 		} catch (SQLException e) {
 			channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
