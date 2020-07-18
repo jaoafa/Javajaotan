@@ -55,7 +55,7 @@ public class Library {
 	public static Boolean checkOtherServerMember(String guild_id, String user_id) {
 		Map<String, String> headers = new HashMap<>();
 		headers.put("User-Agent", "DiscordBot (https://jaoafacom, v0.1)");
-		JSONObject obj = getHttpsJson("https://discordapp.com/api/guilds/" + guild_id + "/widget.json", headers);
+		JSONObject obj = getHttpsJson("https://discord.com/api/guilds/" + guild_id + "/widget.json", headers);
 		if (obj.has("code") && obj.getInt("code") == 50004) {
 			// disabled
 			return false;

@@ -104,7 +104,7 @@ public class Task_MeetingVote extends TimerTask {
 				builder.addField("賛成 / 反対 / 白票", good_count + " / " + bad_count + " / " + white_count, false);
 				builder.addField("決議ボーダー", String.valueOf(_VoteBorder), false);
 				builder.addField("内容", content, false);
-				builder.addField("対象メッセージURL", "https://discordapp.com/channels/" + message.getGuild().getId()
+				builder.addField("対象メッセージURL", "https://discord.com/channels/" + message.getGuild().getId()
 						+ "/" + message.getChannel().getId() + "/" + message.getId(), false);
 				builder.addField("投票開始日時", dtf.format(timestamp), false);
 				builder.setColor(Color.GREEN);
@@ -119,7 +119,7 @@ public class Task_MeetingVote extends TimerTask {
 				builder.addField("賛成 / 反対 / 白票", good_count + " / " + bad_count + " / " + white_count, false);
 				builder.addField("決議ボーダー", String.valueOf(_VoteBorder), false);
 				builder.addField("内容", content, false);
-				builder.addField("対象メッセージURL", "https://discordapp.com/channels/" + message.getGuild().getId()
+				builder.addField("対象メッセージURL", "https://discord.com/channels/" + message.getGuild().getId()
 						+ "/" + message.getChannel().getId() + "/" + message.getId(), false);
 				builder.addField("投票開始日時", dtf.format(timestamp), false);
 				builder.setColor(Color.RED);
@@ -165,7 +165,7 @@ public class Task_MeetingVote extends TimerTask {
 					channel.sendMessage("__**投票有効期限が1週間を切った投票があります。投票をお願いします。**__\n"
 							+ "**未投票者**: " + String.join(", ", mentions) + "\n"
 							+ "**投票有効期限**: " + sdf.format(cal.getTime()) + "\n"
-							+ "**メッセージURL**: https://discordapp.com/channels/" + message.getGuild().getId() + "/"
+							+ "**メッセージURL**: https://discord.com/channels/" + message.getGuild().getId() + "/"
 							+ message.getChannel().getId() + "/" + message.getId()).queue();
 					message.addReaction("📳").queue();
 				}
@@ -179,7 +179,7 @@ public class Task_MeetingVote extends TimerTask {
 				builder.addField("賛成 / 反対 / 白票", good_count + " / " + bad_count + " / " + white_count, false);
 				builder.addField("決議ボーダー", String.valueOf(_VoteBorder), false);
 				builder.addField("内容", content, false);
-				builder.addField("対象メッセージURL", "https://discordapp.com/channels/" + message.getGuild().getId()
+				builder.addField("対象メッセージURL", "https://discord.com/channels/" + message.getGuild().getId()
 						+ "/" + message.getChannel().getId() + "/" + message.getId(), false);
 				builder.addField("投票開始日時",
 						dtf.format(timestamp) + " (" + timestamp.toEpochSecond() + ")",
