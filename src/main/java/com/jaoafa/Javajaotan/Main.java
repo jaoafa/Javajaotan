@@ -141,7 +141,7 @@ public class Main {
 		// 全部JDA移行
 		try {
 			JDABuilder jdabuilder = JDABuilder.createDefault(token)
-					.enableIntents(GatewayIntent.GUILD_MEMBERS,
+					.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES,
 							GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_TYPING)
 					.setAutoReconnect(true)
 					.setBulkDeleteSplittingEnabled(false)
