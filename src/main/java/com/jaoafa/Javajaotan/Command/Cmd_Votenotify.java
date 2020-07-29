@@ -64,8 +64,6 @@ public class Cmd_Votenotify implements CommandPremise {
 			if (!mcjp.has(member.getId())) {
 				// ない
 				embed.addField("minecraft.jp : 現在の設定", "オフ", false);
-				channel.sendMessage(embed.build()).queue();
-				return;
 			} else {
 				JSONObject obj = mcjp.getJSONObject(member.getId());
 				if (obj.getString("type").equals("everyday")) {
@@ -84,8 +82,6 @@ public class Cmd_Votenotify implements CommandPremise {
 			if (!mono.has(member.getId())) {
 				// ない
 				embed.addField("monocraft.net : 現在の設定", "オフ", false);
-				channel.sendMessage(embed.build()).queue();
-				return;
 			} else {
 				JSONObject obj = mono.getJSONObject(member.getId());
 				if (obj.getString("type").equals("everyday")) {
