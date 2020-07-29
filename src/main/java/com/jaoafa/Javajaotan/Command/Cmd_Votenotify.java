@@ -39,8 +39,6 @@ public class Cmd_Votenotify implements CommandPremise {
 			Message message, String[] args) {
 		// サービス選択 -> タイプ選択(毎日無条件・前日投票の場合のみ・オフ) -> 何時にチェックか -> 保存
 
-		channel.sendMessage(member.getAsMention() + ", 作ろうとしてるからちょっと待っててね。").queue();
-
 		File file = new File("votenotify.json");
 		JSONObject mcjp = new JSONObject();
 		JSONObject mono = new JSONObject();
@@ -72,14 +70,14 @@ public class Cmd_Votenotify implements CommandPremise {
 				JSONObject obj = mcjp.getJSONObject(member.getId());
 				if (obj.getString("type").equals("everyday")) {
 					// 毎日無条件
-					embed.addField("現在の設定", "オン (毎日通知)", false);
+					embed.addField("minecraft.jp : 現在の設定", "オン (毎日通知)", false);
 				} else if (obj.getString("type").equals("before")) {
 					// 前日に投票した場合のみ
-					embed.addField("現在の設定", "オン (前日に投票した場合のみ)", false);
+					embed.addField("minecraft.jp : 現在の設定", "オン (前日に投票した場合のみ)", false);
 				} else {
-					embed.addField("現在の設定", "オン (" + obj.getString("type") + ")", false);
+					embed.addField("minecraft.jp : 現在の設定", "オン (" + obj.getString("type") + ")", false);
 				}
-				embed.addField("通知時刻", String.format("%02d", obj.getInt("time")) + "時", false);
+				embed.addField("minecraft.jp : 通知時刻", String.format("%02d", obj.getInt("time")) + "時", false);
 			}
 
 			// mono
@@ -92,14 +90,14 @@ public class Cmd_Votenotify implements CommandPremise {
 				JSONObject obj = mono.getJSONObject(member.getId());
 				if (obj.getString("type").equals("everyday")) {
 					// 毎日無条件
-					embed.addField("現在の設定", "オン (毎日通知)", false);
+					embed.addField("monocraft.net : 現在の設定", "オン (毎日通知)", false);
 				} else if (obj.getString("type").equals("before")) {
 					// 前日に投票した場合のみ
-					embed.addField("現在の設定", "オン (前日に投票した場合のみ)", false);
+					embed.addField("monocraft.net : 現在の設定", "オン (前日に投票した場合のみ)", false);
 				} else {
-					embed.addField("現在の設定", "オン (" + obj.getString("type") + ")", false);
+					embed.addField("monocraft.net : 現在の設定", "オン (" + obj.getString("type") + ")", false);
 				}
-				embed.addField("通知時刻", String.format("%02d", obj.getInt("time")) + "時", false);
+				embed.addField("monocraft.net : 通知時刻", String.format("%02d", obj.getInt("time")) + "時", false);
 			}
 
 			channel.sendMessage(embed.build()).queue();
@@ -115,17 +113,17 @@ public class Cmd_Votenotify implements CommandPremise {
 			}
 			if (mcjp_strings.contains(args[0])) {
 				// mcjp -> off
-				JSONObject obj = new JSONObject();
-				obj.put("type", "off");
-				mcjp.put(member.getId(), obj);
+				if (mcjp.has(member.getId())) {
+					mcjp.remove(member.getId());
+				}
 				save(file, mcjp, mono);
 				channel.sendMessage(member.getAsMention() + ", minecraft.jpの投票お知らせを無効化しました。").queue();
 				return;
 			} else if (mono_strings.contains(args[0])) {
 				// mono -> off
-				JSONObject obj = new JSONObject();
-				obj.put("type", "off");
-				mono.put(member.getId(), obj);
+				if (mono.has(member.getId())) {
+					mono.remove(member.getId());
+				}
 				save(file, mcjp, mono);
 				channel.sendMessage(member.getAsMention() + ", monocraft.netの投票お知らせを無効化しました。").queue();
 				return;
@@ -146,12 +144,12 @@ public class Cmd_Votenotify implements CommandPremise {
 				return;
 			}
 			if (!Library.isInt(args[2])) {
-				channel.sendMessage(member.getAsMention() + ", 第4引数には数値を指定してください。").queue();
+				channel.sendMessage(member.getAsMention() + ", 第3引数には数値を指定してください。").queue();
 				return;
 			}
 			int hour = Integer.parseInt(args[2]);
-			if (hour < 0 || hour > 24) {
-				channel.sendMessage(member.getAsMention() + ", 第4引数には00～24を指定してください。").queue();
+			if (hour < 0 || hour > 23) {
+				channel.sendMessage(member.getAsMention() + ", 第3引数には00～23を指定してください。").queue();
 				return;
 			}
 			String type = args[1].equalsIgnoreCase("everyday") ? "everyday" : "before";
