@@ -1,5 +1,6 @@
 package com.jaoafa.Javajaotan.Command;
 
+import java.awt.Color;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import com.jaoafa.Javajaotan.Main;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MuteManager;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
@@ -111,6 +113,29 @@ public class MessageMainEvent {
 			CommandPremise cmd = (CommandPremise) construct.newInstance();
 
 			if (cmd.isjMSOnly() && guild.getIdLong() != 597378876556967936L) {
+				return;
+			}
+
+			if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
+				EmbedBuilder builder = new EmbedBuilder();
+				builder.setTitle("jaotan Command Help");
+				builder.setColor(Color.YELLOW);
+
+				String description = cmd.getDescription();
+				if (description == null) {
+					description = "null";
+				}
+				String usage = cmd.getUsage();
+				if (usage == null) {
+					usage = "null";
+				}
+				builder.addField("/" + args[0].toLowerCase(),
+						"**Description**: `" + description + "`\n" + "**Usage**: `" + usage + "`", false);
+
+				String version = Main.getVersion();
+				builder.setFooter("Javajaotan v" + version);
+
+				channel.sendMessage(builder.build()).queue();
 				return;
 			}
 
