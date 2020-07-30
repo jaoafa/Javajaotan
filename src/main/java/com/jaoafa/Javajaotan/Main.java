@@ -36,6 +36,7 @@ import com.jaoafa.Javajaotan.Lib.ChatManager;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
+import com.jaoafa.Javajaotan.Task.Task_AccountConnectChecker;
 import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
 import com.jaoafa.Javajaotan.Task.Task_VerifiedCheck;
 
@@ -198,6 +199,7 @@ public class Main {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new Task_VerifiedCheck(), 10000, 60000); // 1分
 		timer.scheduleAtFixedRate(new Task_MeetingVote(), 10000, 600000); // 10分
+		timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 10000, 1800000); // 30分
 
 		/*
 		JavajaotanWatcher JavajaotanWatcher = new JavajaotanWatcher();

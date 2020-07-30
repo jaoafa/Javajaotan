@@ -1,6 +1,7 @@
 package com.jaoafa.Javajaotan.Command;
 
 import com.jaoafa.Javajaotan.CommandPremise;
+import com.jaoafa.Javajaotan.Task.Task_AccountConnectChecker;
 import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
 
 import net.dv8tion.jda.api.JDA;
@@ -15,6 +16,8 @@ public class Cmd_Javajaotan implements CommandPremise {
 			Message message, String[] args) {
 		if (args.length >= 1 && args[0].equalsIgnoreCase("task_meetingvote")) {
 			new Task_MeetingVote(true).run();
+		} else if (args.length >= 1 && args[0].equalsIgnoreCase("task_accountconnectchecker")) {
+			new Task_AccountConnectChecker().run();
 		}
 	}
 
