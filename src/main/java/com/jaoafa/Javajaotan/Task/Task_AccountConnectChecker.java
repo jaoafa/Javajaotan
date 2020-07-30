@@ -130,7 +130,8 @@ public class Task_AccountConnectChecker extends TimerTask {
 				});
 			} else if (!isConnected) {
 				// 連携されていない。(MinecraftConnectedロールも付与されていない)
-				// -> 終了
+				// -> VerifiedとRegularの付与確認だけして終了
+				removePermissionRoles(member);
 				return;
 			}
 			// MinecraftConnectedロールが付与されていて、連携されている。
