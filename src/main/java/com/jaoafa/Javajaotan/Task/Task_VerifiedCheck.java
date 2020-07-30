@@ -27,38 +27,38 @@ public class Task_VerifiedCheck extends TimerTask {
 			System.out.println("[VerifiedError] general(597419057251090443) channel is not found.");
 			return;
 		}
-		for (Member user : guild.getMembers()) {
-			List<Role> roles = user.getRoles().stream().filter(_role -> _role.getIdLong() == role.getIdLong())
-					.collect(Collectors.toList());
-			if (roles.size() != 0) {
-				// role exists : ok
-				continue;
-			}
-			if (user.getUser().isBot()) {
-				// bot
-				continue;
-			}
-			LocalDateTime joinTime = user.getTimeJoined().atZoneSameInstant(ZoneId.of("Asia/Tokyo")).toLocalDateTime();
-			LocalDateTime now = LocalDateTime.now();
-			long diffmin = ChronoUnit.MINUTES.between(joinTime, now);
-			if (diffmin <= 10) {
-				// 10分以内
-				continue;
-			}
+		guild.loadMembers().onSuccess(members -> members.forEach(member -> check(guild, role, channel, member)));
+	}
 
-			System.out.println("kick: " + user.getUser().getName() + "#" + user.getUser().getDiscriminator()
-					+ " | between: " + diffmin + "min.");
-			guild.kick(user).queue(success -> {
-				channel.sendMessage(":wave:チャットがないまま10分を経過したため、ユーザー「" + user.getUser().getName() + "#"
-						+ user.getUser().getDiscriminator() + "」をキックしました。").queue();
-			}, failure -> {
-				Main.ReportChannel
-						.sendMessage("Task_VerifiedCheckにてチャットがないまま10分を経過したためユーザー「" + user.getUser().getName() + "#"
-								+ user.getUser().getDiscriminator() + "」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `"
-								+ failure.getClass().getName() + " | " + failure.getMessage() + "`")
-						.queue();
-			});
-
+	private void check(Guild guild, Role role, TextChannel channel, Member member) {
+		List<Role> roles = member.getRoles().stream().filter(_role -> _role.getIdLong() == role.getIdLong())
+				.collect(Collectors.toList());
+		if (roles.size() != 0) {
+			// role exists : ok
+			return;
 		}
+		if (member.getUser().isBot()) {
+			// bot
+			return;
+		}
+		LocalDateTime joinTime = member.getTimeJoined().atZoneSameInstant(ZoneId.of("Asia/Tokyo")).toLocalDateTime();
+		LocalDateTime now = LocalDateTime.now();
+		long diffmin = ChronoUnit.MINUTES.between(joinTime, now);
+		if (diffmin <= 10) {
+			// 10分以内
+			return;
+		}
+
+		System.out.println("kick: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
+				+ " | between: " + diffmin + "min.");/*
+		guild.kick(member).queue(success -> {
+			channel.sendMessage(":wave:チャットがないまま10分を経過したため、ユーザー「" + member.getUser().getAsTag() + "」をキックしました。").queue();
+		}, failure -> {
+			Main.ReportChannel
+					.sendMessage("Task_VerifiedCheckにてチャットがないまま10分を経過したためユーザー「" + member.getUser().getAsTag()
+							+ "」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `"
+							+ failure.getClass().getName() + " | " + failure.getMessage() + "`")
+					.queue();
+		});*/
 	}
 }
