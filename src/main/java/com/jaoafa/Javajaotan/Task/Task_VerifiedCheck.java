@@ -50,7 +50,7 @@ public class Task_VerifiedCheck extends TimerTask {
 		}
 
 		System.out.println("kick: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
-				+ " | between: " + diffmin + "min.");/*
+				+ " | between: " + diffmin + "min.");
 		guild.kick(member).queue(success -> {
 			channel.sendMessage(":wave:チャットがないまま10分を経過したため、ユーザー「" + member.getUser().getAsTag() + "」をキックしました。").queue();
 		}, failure -> {
@@ -59,6 +59,6 @@ public class Task_VerifiedCheck extends TimerTask {
 							+ "」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `"
 							+ failure.getClass().getName() + " | " + failure.getMessage() + "`")
 					.queue();
-		});*/
+		});
 	}
 }
