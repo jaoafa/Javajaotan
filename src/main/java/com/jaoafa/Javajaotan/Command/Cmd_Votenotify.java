@@ -158,7 +158,9 @@ public class Cmd_Votenotify implements CommandPremise {
 				mcjp.put(member.getId(), obj);
 				save(file, mcjp, mono);
 				channel.sendMessage(member.getAsMention() + ", minecraft.jpの投票お知らせを「" + type_ja + "」・「"
-						+ String.format("%02d", hour) + "時」に設定しました。").queue();
+						+ String.format("%02d", hour)
+						+ "時」に設定しました。jaotanからのDM受信設定(フレンドへの追加・サーバメンバーからのDM許可等)が許可されていないとDMが送信されませんので、今一度ご確認ください。")
+						.queue();
 				return;
 			} else if (mono_strings.contains(args[0])) {
 				// mono -> everyday or before
@@ -168,7 +170,9 @@ public class Cmd_Votenotify implements CommandPremise {
 				mono.put(member.getId(), obj);
 				save(file, mcjp, mono);
 				channel.sendMessage(member.getAsMention() + ", monocraft.netの投票お知らせを「" + type_ja + "」・「"
-						+ String.format("%02d", hour) + "時」に設定しました。").queue();
+						+ String.format("%02d", hour)
+						+ "時」に設定しました。jaotanからのDM受信設定(フレンドへの追加・サーバメンバーからのDM許可等)が許可されていないとDMが送信されませんので、今一度ご確認ください。")
+						.queue();
 				return;
 			} else {
 				channel.sendMessage(member.getAsMention() + ", 第1引数には`" + String.join(", ", mcjp_strings) + "`, `"
