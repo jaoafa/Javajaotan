@@ -14,16 +14,13 @@ import java.util.TimerTask;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import net.dv8tion.jda.api.entities.*;
 import org.json.JSONObject;
 
 import com.jaoafa.Javajaotan.Main;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -71,7 +68,7 @@ public class Task_AccountConnectChecker extends TimerTask {
 		// Guildに所属するメンバーをチェック
 		guild.loadMembers()
 				.onSuccess(members -> {
-					members.stream().forEach(member -> processMember(member)); // まず処理
+					members.forEach(this::processMember); // まず処理
 					processLinkedAndLeaved(members); // 参加していないメンバーを処理
 				})
 				.onError(err -> {
@@ -82,7 +79,7 @@ public class Task_AccountConnectChecker extends TimerTask {
 
 	/**
 	 * Guildに所属するメンバーを一人一人処理
-	 * @param member
+	 * @param member メンバー
 	 */
 	private void processMember(Member member) {
 		if (member.getUser().isBot()) {
@@ -103,31 +100,23 @@ public class Task_AccountConnectChecker extends TimerTask {
 				isConnected = false;
 			}
 
-			boolean isMinecraftConnected = member.getRoles().stream()
-					.filter(role -> role != null && role.getIdLong() == MinecraftConnected.getIdLong())
-					.count() != 0;
+			boolean isMinecraftConnected = member.getRoles().stream().anyMatch(role -> role != null && role.getIdLong() == MinecraftConnected.getIdLong());
 			if (isMinecraftConnected && !isConnected) {
 				// MinecraftConnectedロールが付与されていて、連携されていない。
 				// -> MinecraftConnectedロールを外す。
-				guild.removeRoleFromMember(member, MinecraftConnected).queue(v -> {
-					notify("`" + member.getUser().getAsTag()
-							+ "`: MinecraftConnectedロールが設定されていましたが、連携されていないためロールを外しました。");
-				}, failure -> {
-					notify("`" + member.getUser().getAsTag()
-							+ "`: MinecraftConnectedロールが設定されていましたが、連携されていないためロールを外そうとしましたが失敗しました。\n"
-							+ "`" + failure.getClass().getName() + "` -> `" + failure.getMessage() + "`");
-				});
+				guild.removeRoleFromMember(member, MinecraftConnected).queue(
+						v -> notify(String.format("`%s`: MinecraftConnectedロールが設定されていましたが、連携されていないためロールを外しました。", member.getUser().getAsTag())),
+						failure -> notify(String.format("`%s`: MinecraftConnectedロールが設定されていましたが、連携されていないためロールを外そうとしましたが失敗しました。\n`%s` -> `%s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
+				);
 				removePermissionRoles(member);
 				return;
 			} else if (!isMinecraftConnected && isConnected) {
 				// MinecraftConnectedロールが付与されていなくて、連携されている。
 				// -> MinecraftConnectedロールを付ける。続行
-				guild.addRoleToMember(member, MinecraftConnected).queue(v -> {
-					notify("`" + member.getUser().getAsTag() + "`: MinecraftConnectedロールを設定しました。");
-				}, failure -> {
-					notify("`" + member.getUser().getAsTag() + "`: MinecraftConnectedロールを設定しようとしましたが、失敗しました。\n"
-							+ "`" + failure.getClass().getName() + "` -> `" + failure.getMessage() + "`");
-				});
+				guild.addRoleToMember(member, MinecraftConnected).queue(
+						v -> notify(String.format("`%s`: MinecraftConnectedロールを設定しました。", member.getUser().getAsTag())),
+						failure -> notify(String.format("`%s`: MinecraftConnectedロールを設定しようとしましたが、失敗しました。\n`%s` -> `%s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
+				);
 			} else if (!isConnected) {
 				// 連携されていない。(MinecraftConnectedロールも付与されていない)
 				// -> VerifiedとRegularの付与確認だけして終了
@@ -209,50 +198,42 @@ public class Task_AccountConnectChecker extends TimerTask {
 			statement.close();
 
 			// 権限グループのチェック及び妥当なロールの設定
-			boolean isVerified = member.getRoles().stream()
-					.filter(role -> role != null && role.getIdLong() == Verified.getIdLong())
-					.count() != 0;
-			boolean isRegular = member.getRoles().stream()
-					.filter(role -> role != null && role.getIdLong() == Regular.getIdLong())
-					.count() != 0;
-			if (!isVerified && group.equalsIgnoreCase("Verified")) {
+			boolean isVerified = member.getRoles().stream().anyMatch(role -> role != null && role.getIdLong() == Verified.getIdLong());
+			boolean isRegular = member.getRoles().stream().anyMatch(role -> role != null && role.getIdLong() == Regular.getIdLong());
+			if (!isVerified && group != null && group.equalsIgnoreCase("Verified")) {
 				// Verified
 				removePermissionRoles(member);
-				guild.addRoleToMember(member, Verified).queue(v -> {
-					notify("`" + member.getUser().getAsTag() + "`: Verifiedロールを設定しました。 (" + group + ")");
-				}, failure -> {
-					notify("`" + member.getUser().getAsTag() + "`: Verifiedロールを設定しようとしましたが、失敗しました。\n"
-							+ "`" + failure.getClass().getName() + "` -> `" + failure.getMessage() + "`");
-				});
-			} else if (!isRegular && group.equalsIgnoreCase("Regular")) {
+				guild.addRoleToMember(member, Verified).queue(
+						v -> notify(String.format("`%s`: Verifiedロールを設定しました。 (%s)", member.getUser().getAsTag(), group)),
+						failure -> notify(String.format("`%s`: Verifiedロールを設定しようとしましたが、失敗しました。\n`%s` -> `%s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
+				);
+			} else if (!isRegular && group != null && group.equalsIgnoreCase("Regular")) {
 				// Regular
 				removePermissionRoles(member);
-				guild.addRoleToMember(member, Regular).queue(v -> {
-					notify("`" + member.getUser().getAsTag() + "`: Regularロールを設定しました。 (" + group + ")");
-				}, failure -> {
-					notify("`" + member.getUser().getAsTag() + "`: Regularロールを設定しようとしましたが、失敗しました。\n"
-							+ "`" + failure.getClass().getName() + "` -> `" + failure.getMessage() + "`");
-				});
+				guild.addRoleToMember(member, Regular).queue(
+						v -> notify(String.format("`%s`: Regularロールを設定しました。 (%s)", member.getUser().getAsTag(), group)),
+						failure -> notify(String.format("`%s`: Regularロールを設定しようとしましたが、失敗しました。\n`%s` -> `%s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
+				);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return;
 		}
 	}
 
 	/**
 	 * 「Guildに所属していなくて連携されている」かどうかのチェック及びその場合の処理
-	 * @param member
+	 * @param members メンバー一覧
 	 */
 	private void processLinkedAndLeaved(List<Member> members) {
 		if (members.isEmpty()) {
 			return;
 		}
 		// Guildメンバーのidセット
-		Set<String> membersIds = members.stream().map(member -> member.getId()).collect(Collectors.toSet());
+		Set<String> membersIds = members.stream().map(ISnowflake::getId).collect(Collectors.toSet());
 		// 連携済みアカウントのidセット
 		Set<String> linkedMembers = new HashSet<>();
 		Map<String, String> discordTagMap = new HashMap<>();
+		Map<String, String> MinecraftIdMap = new HashMap<>();
 		try {
 			MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
 			Connection conn = MySQLDBManager.getConnection();
@@ -263,6 +244,7 @@ public class Task_AccountConnectChecker extends TimerTask {
 			while (res.next()) {
 				linkedMembers.add(res.getString("disid"));
 				discordTagMap.put(res.getString("disid"), res.getString("name") + "#" + res.getString("discriminator"));
+				MinecraftIdMap.put(res.getString("disid"), res.getString("player"));
 			}
 			res.close();
 			statement.close();
@@ -283,17 +265,17 @@ public class Task_AccountConnectChecker extends TimerTask {
 				Connection conn = MySQLDBManager.getConnection();
 				PreparedStatement statement = conn
 						.prepareStatement("UPDATE discordlink SET disabled = ? WHERE disid = ?");
-				statement.setBoolean(1, false);
+				statement.setBoolean(1, true);
 				statement.setString(2, id);
 				statement.executeUpdate();
 				statement.close();
 
 				String discordTag = discordTagMap.get(id);
-				notify("`" + discordTag + "`: jMS Gamers Clubから退出したため、連携を解除しました。");
+				String minecraftId = MinecraftIdMap.get(id);
+				notify(String.format("`%s`: jMS Gamers Clubから退出したため、`%s`との連携を解除しました。", discordTag, minecraftId));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return;
 		}
 	}
 
@@ -324,6 +306,9 @@ public class Task_AccountConnectChecker extends TimerTask {
 			if (response.code() != 200) {
 				return null;
 			}
+			if(response.body() == null){
+				return null;
+			}
 			JSONObject json = new JSONObject(response.body().string());
 			if (!json.has("status")) {
 				return null;
@@ -341,38 +326,30 @@ public class Task_AccountConnectChecker extends TimerTask {
 			return data.optString("permission");
 		} catch (IOException e) {
 			System.out
-					.println("[Task_AccountConnectChecker|getPermissionGroup] Throwed IOException: " + e.getMessage());
+					.println("[Task_AccountConnectChecker|getPermissionGroup] Threw IOException: " + e.getMessage());
 			return null;
 		}
 	}
 
 	/**
 	 * VerifiedとRegularロールを解除します。
-	 * @param member
+	 * @param member メンバー
 	 */
 	private void removePermissionRoles(Member member) {
-		boolean isVerified = member.getRoles().stream()
-				.filter(role -> role != null && role.getIdLong() == Verified.getIdLong())
-				.count() != 0;
-		boolean isRegular = member.getRoles().stream()
-				.filter(role -> role != null && role.getIdLong() == Regular.getIdLong())
-				.count() != 0;
+		boolean isVerified = member.getRoles().stream().anyMatch(role -> role != null && role.getIdLong() == Verified.getIdLong());
+		boolean isRegular = member.getRoles().stream().anyMatch(role -> role != null && role.getIdLong() == Regular.getIdLong());
 
 		if (isVerified) {
-			guild.removeRoleFromMember(member, Verified).queue(v -> {
-				notify("`" + member.getUser().getAsTag() + "`: Verifiedロールを外しました。");
-			}, failure -> {
-				notify("`" + member.getUser().getAsTag() + "`: Verifiedロールを外そうとしましたが、失敗しました。\n"
-						+ "`" + failure.getClass().getName() + "` -> `" + failure.getMessage() + "`");
-			});
+			guild.removeRoleFromMember(member, Verified).queue(
+					v -> notify(String.format("`%s`: Verifiedロールを外しました。", member.getUser().getAsTag())),
+					failure -> notify(String.format("`%s`: Verifiedロールを外そうとしましたが、失敗しました。\n`%s` -> `%s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
+			);
 		}
 		if (isRegular) {
-			guild.removeRoleFromMember(member, Regular).queue(v -> {
-				notify("`" + member.getUser().getAsTag() + "`: Regularロールを外しました。");
-			}, failure -> {
-				notify("`" + member.getUser().getAsTag() + "`: Regularロールを外そうとしましたが、失敗しました。\n"
-						+ "`" + failure.getClass().getName() + "` -> `" + failure.getMessage() + "`");
-			});
+			guild.removeRoleFromMember(member, Regular).queue(
+					v -> notify(String.format("`%s`: Regularロールを外しました。", member.getUser().getAsTag())),
+					failure -> notify(String.format("`%s`: Regularロールを外そうとしましたが、失敗しました。\n`%s` -> `%s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
+			);
 		}
 	}
 
