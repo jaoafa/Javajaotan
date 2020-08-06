@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project name="Javajaotan" default="JarCopy">
-	<target name="JarCopy" description="Copy Jar file">
-		<copy file="target/Javajaotan-jar-with-dependencies.jar" tofile="Javajaotan-jar-with-dependencies.jar" />
-	</target>
+    <target name="JarCopy" description="Copy Jar file">
+        <copy file="target/Javajaotan-jar-with-dependencies.jar" tofile="Javajaotan-jar-with-dependencies.jar"/>
+    </target>
 </project>

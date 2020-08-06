@@ -1,25 +1,19 @@
 package com.jaoafa.Javajaotan.Command;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.json.JSONObject;
-
 import com.jaoafa.Javajaotan.CommandPremise;
 import com.jaoafa.Javajaotan.Lib.Library;
-
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import org.json.JSONObject;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Cmd_Votenotify implements CommandPremise {
     static Set<String> mcjp_strings = new HashSet<>();
