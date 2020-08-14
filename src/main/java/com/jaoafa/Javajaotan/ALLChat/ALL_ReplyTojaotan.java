@@ -51,7 +51,7 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
             String ret = chatManager.chatChaplus(user, content.substring(1).trim());
             if (ret == null)
                 return null;
-            return ret + " (Chatplus [②])";
+            return ret + " (Chaplus [②])";
         } else if (content.startsWith(";")) {
             System.out.println("chatNoby content: " + content.substring(1).trim());
             String ret = chatManager.chatNoby(content.substring(1).trim());
@@ -67,7 +67,7 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
 
             ret = chatManager.chatChaplus(user, content);
             if (ret != null) {
-                return ret + " (Chatplus [②])";
+                return ret + " (Chaplus [②])";
             }
 
             ret = chatManager.chatA3RT(content);
