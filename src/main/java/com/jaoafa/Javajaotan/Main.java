@@ -116,7 +116,13 @@ public class Main {
             System.out.println("Please A3RTAPIKey!");
             return;
         }
-        chatManager = new ChatManager(nobyAPIKey, userlocalAPIKey, A3RTAPIKey);
+
+        String ChaplusAPIKey = props.getProperty("ChaplusAPIKey");
+        if (ChaplusAPIKey.equalsIgnoreCase("PLEASETOKEN")) {
+            System.out.println("Please ChaplusAPIKey!");
+            return;
+        }
+        chatManager = new ChatManager(nobyAPIKey, userlocalAPIKey, A3RTAPIKey, ChaplusAPIKey);
 
         // 分けてイベント自動登録できるように？
         // 全部JDA移行
