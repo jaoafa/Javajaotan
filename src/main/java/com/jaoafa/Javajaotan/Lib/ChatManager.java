@@ -16,11 +16,13 @@ public class ChatManager {
     String nobyAPIKey; // https://www.cotogoto.ai/webapi.do
     String userlocalAPIKey; // http://ai.userlocal.jp
     String A3RTAPIKey; // https://a3rt.recruit-tech.co.jp/product/talkAPI/
+    String ChaplusAPIKey; // https://k-masashi.github.io/chaplus-api-doc/
 
-    public ChatManager(String nobyAPIKey, String userlocalAPIKey, String A3RTAPIKey) {
+    public ChatManager(String nobyAPIKey, String userlocalAPIKey, String A3RTAPIKey, String ChaplusAPIKey) {
         this.nobyAPIKey = nobyAPIKey;
         this.userlocalAPIKey = userlocalAPIKey;
         this.A3RTAPIKey = A3RTAPIKey;
+        this.ChaplusAPIKey = ChaplusAPIKey;
     }
 
     public String chatNoby(String message) {
@@ -90,6 +92,33 @@ public class ChatManager {
         return json.getJSONArray("results").getJSONObject(0).getString("reply");
     }
 
+    public String chatChaplus(User user, String message) {
+        String url = String.format("https://www.chaplus.jp/v1/chat?apikey=%s", ChaplusAPIKey);
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        JSONObject body = new JSONObject();
+        body.put("utterance", message);
+        body.put("username", user.getName());
+
+        JSONObject agentState = new JSONObject();
+        agentState.put("agentName", "jaotan");
+        agentState.put("tone", "normal");
+
+        body.put("agentState", agentState);
+
+        JSONObject json = connectPOST(headers, body.toString(), url);
+        if (json == null) {
+            return null;
+        }
+        if (!json.has("bestResponse")) {
+            return null;
+        }
+        JSONObject bestResponse = json.getJSONObject("bestResponse");
+        return bestResponse.getString("utterance");
+    }
+
     private JSONObject connect(String address) {
         try {
             OkHttpClient client = new OkHttpClient();
@@ -118,6 +147,34 @@ public class ChatManager {
 
             OkHttpClient client = new OkHttpClient();
             Builder builder = new Request.Builder().url(address).post(reqbody);
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                builder.addHeader(header.getKey(), header.getValue());
+            }
+            Request request = builder.build();
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200) {
+                System.out.println("[ChatManager] URLGetConnected(Error): " + address);
+                System.out.println("[ChatManager] ResponseCode: " + response.code());
+                if (response.body() != null) {
+                    System.out.println("[ChatManager] Response: " + response.body().string());
+                }
+                return null;
+            }
+            JSONObject obj = new JSONObject(response.body().string());
+            response.close();
+            return obj;
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private JSONObject connectPOST(Map<String, String> headers, String json, String address) {
+        try {
+            final RequestBody requestBody = RequestBody.create(json, MediaType.parse("application/json; charset=UTF-8"));
+
+            OkHttpClient client = new OkHttpClient();
+            Builder builder = new Request.Builder().url(address).post(requestBody);
             for (Map.Entry<String, String> header : headers.entrySet()) {
                 builder.addHeader(header.getKey(), header.getValue());
             }

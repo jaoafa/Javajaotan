@@ -45,7 +45,13 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
             String ret = chatManager.chatA3RT(content.substring(1).trim());
             if (ret == null)
                 return null;
-            return ret + " (A3RT [②])";
+            return ret + " (A3RT [③])";
+        } else if (content.startsWith(":")) {
+            System.out.println("chatChatplus content: " + content.substring(1).trim());
+            String ret = chatManager.chatChaplus(user, content.substring(1).trim());
+            if (ret == null)
+                return null;
+            return ret + " (Chatplus [②])";
         } else if (content.startsWith(";")) {
             System.out.println("chatNoby content: " + content.substring(1).trim());
             String ret = chatManager.chatNoby(content.substring(1).trim());
@@ -59,9 +65,14 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
                 return ret + " (userLocal [①])";
             }
 
+            ret = chatManager.chatChaplus(user, content);
+            if (ret != null) {
+                return ret + " (Chatplus [②])";
+            }
+
             ret = chatManager.chatA3RT(content);
             if (ret != null) {
-                return ret + " (A3RT [②])";
+                return ret + " (A3RT [③])";
             }
 
             ret = chatManager.chatNoby(content);
