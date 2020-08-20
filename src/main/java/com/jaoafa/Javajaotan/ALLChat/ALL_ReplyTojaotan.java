@@ -47,11 +47,11 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
                 return null;
             return ret + " (A3RT [③])";
         } else if (content.startsWith(":")) {
-            System.out.println("chatChatplus content: " + content.substring(1).trim());
-            String ret = chatManager.chatChaplus(user, content.substring(1).trim());
+            System.out.println("chatuserLocal content: " + content.substring(1).trim());
+            String ret = chatManager.chatUserLocal(user, content);
             if (ret == null)
                 return null;
-            return ret + " (Chaplus [②])";
+            return ret + " (userLocal [②])";
         } else if (content.startsWith(";")) {
             System.out.println("chatNoby content: " + content.substring(1).trim());
             String ret = chatManager.chatNoby(content.substring(1).trim());
@@ -60,14 +60,15 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
             return ret + " (CotogotoNoby [④])";
         } else {
             System.out.println("content: " + content);
-            String ret = chatManager.chatUserLocal(user, content);
+
+            String ret = chatManager.chatChaplus(user, content);
             if (ret != null) {
-                return ret + " (userLocal [①])";
+                return ret + " (Chaplus [①])";
             }
 
-            ret = chatManager.chatChaplus(user, content);
+            ret = chatManager.chatUserLocal(user, content);
             if (ret != null) {
-                return ret + " (Chaplus [②])";
+                return ret + " (userLocal [②])";
             }
 
             ret = chatManager.chatA3RT(content);
