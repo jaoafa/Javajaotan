@@ -17,7 +17,9 @@ public class Cmd_Gentext implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         String json;
-        if (args.length == 1 && args[0].startsWith("rasyoumon")) {
+        if (args.length == 1 && args[0].startsWith("news")) {
+            json = getRunCommand(message, "php", "/var/jaoafa/Javajaotan/extcmds/gentext.php", "news");
+        } else if (args.length == 1 && args[0].startsWith("rasyoumon")) {
             json = getRunCommand(message, "php", "/var/jaoafa/Javajaotan/extcmds/gentext.php", "rasyoumon");
         } else {
             json = getRunCommand(message, "php", "/var/jaoafa/Javajaotan/extcmds/gentext.php");
@@ -71,7 +73,7 @@ public class Cmd_Gentext implements CommandPremise {
 
     @Override
     public String getUsage() {
-        return "/gentext [rasyoumon]";
+        return "/gentext [rasyoumon|news]";
     }
 
     @Override
