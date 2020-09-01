@@ -30,7 +30,7 @@ public class ALL_AntiGai implements ALLChatPremise {
         message.getEmotes().forEach(emote -> {
             String url = emote.getImageUrl();
             if (antis.contains(url)) {
-                message.delete();
+                message.delete().queue();
                 return;
             }
             try {
@@ -69,7 +69,8 @@ public class ALL_AntiGai implements ALLChatPremise {
                 }
 
                 if (matched) {
-                    message.delete();
+                    System.out.println("-> matched.");
+                    message.delete().queue();
                 }
             } catch (IOException e) {
                 Main.ExceptionReporter(channel, e);
