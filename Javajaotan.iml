@@ -39,5 +39,6 @@
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.12.2" level="project" />
     <orderEntry type="library" name="Maven: org.twitter4j:twitter4j-core:4.0.7" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.14" level="project" />
   </component>
 </module>
