@@ -320,9 +320,6 @@ public class Library {
                 return null;
             }
             return res;
-        } catch (UnsupportedEncodingException e) {
-            Main.ExceptionReporter(null, e);
-            return null;
         } catch (IOException e) {
             Main.ExceptionReporter(null, e);
             return null;
