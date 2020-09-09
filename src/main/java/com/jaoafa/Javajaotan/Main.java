@@ -10,6 +10,7 @@ import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
 import com.jaoafa.Javajaotan.Task.Task_AccountConnectChecker;
 import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
+import com.jaoafa.Javajaotan.Task.Task_MinecraftConnectedCheck;
 import com.jaoafa.Javajaotan.Task.Task_VerifiedCheck;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -183,10 +184,10 @@ public class Main {
                         }));
 
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new Task_VerifiedCheck(), 10000, 60000); // 1分
-        timer.scheduleAtFixedRate(new Task_MeetingVote(), 10000, 600000); // 10分
-        timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 10000, 1800000); // 30分
-
+        timer.scheduleAtFixedRate(new Task_VerifiedCheck(), 10000L, 60000L); // 1分
+        timer.scheduleAtFixedRate(new Task_MeetingVote(), 10000L, 600000L); // 10分
+        timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 10000L, 1800000L); // 30分
+        timer.scheduleAtFixedRate(new Task_MinecraftConnectedCheck(), 10000L, 1800000L); // 30分
 		/*
 		JavajaotanWatcher JavajaotanWatcher = new JavajaotanWatcher();
 		Timer timer = new Timer();
