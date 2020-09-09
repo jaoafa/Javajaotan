@@ -48,6 +48,9 @@ public class Task_MinecraftConnectedCheck extends TimerTask {
             // Sub Account : ok
             return;
         }
+        if (new Date().before(new Date(1599663600000L))) {
+            return;
+        }
         LocalDateTime joinTime = member.getTimeJoined().atZoneSameInstant(ZoneId.of("Asia/Tokyo")).toLocalDateTime();
         LocalDateTime now = LocalDateTime.now();
         long diffweeks = ChronoUnit.WEEKS.between(joinTime, now);
@@ -58,14 +61,11 @@ public class Task_MinecraftConnectedCheck extends TimerTask {
 
         System.out.println("[Task_MinecraftConnectedCheck] kick: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
                 + " | between: " + diffweeks + "week.");
-        if (new Date().before(new Date(1599663600000L))) {
-            return;
-        }/*
         guild.kick(member).queue(
                 success -> channel.sendMessage(String.format(":wave:Minecraftアカウントとの連携が3週間以上行われなかったため、ユーザー「%s」をキックしました。", member.getUser().getAsTag())).queue(),
                 failure -> Main.ReportChannel
                         .sendMessage(String.format("Task_MinecraftConnectedCheckにてチャットがないまま10分を経過したためユーザー「%s」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `%s | %s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
                         .queue()
-        );*/
+        );
     }
 }
