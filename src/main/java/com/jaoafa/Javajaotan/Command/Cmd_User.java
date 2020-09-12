@@ -6,7 +6,6 @@ import com.jaoafa.Javajaotan.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -25,32 +24,32 @@ public class Cmd_User implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         // player id, uuid, discord id, discord name + tag
-        if (args.length == 0) {
-            channel.sendMessage(member.getAsMention() + ", 引数が足りません。").queue();
-            return;
-        }
-        String arg = args[0];
-
         UserData userData = null;
-        // 32ff7cdc-a1b4-450a-aa7e-6af75fe8c37c
-        if (Library.isUUID(arg)) userData = fromUUID(UUID.fromString(arg));
-        // 221991565567066112
-        if (Library.isLong(arg) && userData == null) userData = fromDiscordID(arg);
-        // 0310
-        if (arg.length() == 4 && Library.isInt(arg) && userData == null)
-            userData = fromDiscriminator(Integer.parseInt(arg));
-        // #0310 -> 0310
-        if (arg.startsWith("#") && arg.substring(1).length() == 4 && Library.isInt(arg.substring(1)) && userData == null)
-            userData = fromDiscriminator(Integer.parseInt(arg));
-        // tomachi#0310
-        if (!arg.startsWith("#") && arg.contains("#") && userData == null) userData = fromDiscordTag(arg);
+        if (args.length == 0) {
+            userData = fromMinecraftID(member.getId());
+        } else {
+            String arg = String.join(" ", args);
 
-        // mine_book000
-        if (userData == null) userData = fromMinecraftID(arg);
-        // tomachi
-        if (userData == null) userData = fromDiscordName(arg);
-        // tomachi
-        if (userData == null) userData = fromDiscordNickName(arg);
+            // 32ff7cdc-a1b4-450a-aa7e-6af75fe8c37c
+            if (Library.isUUID(arg)) userData = fromUUID(UUID.fromString(arg));
+            // 221991565567066112
+            if (Library.isLong(arg) && userData == null) userData = fromDiscordID(arg);
+            // 0310
+            if (arg.length() == 4 && Library.isInt(arg) && userData == null)
+                userData = fromDiscriminator(Integer.parseInt(arg));
+            // #0310 -> 0310
+            if (arg.startsWith("#") && arg.substring(1).length() == 4 && Library.isInt(arg.substring(1)) && userData == null)
+                userData = fromDiscriminator(Integer.parseInt(arg));
+            // tomachi#0310
+            if (!arg.startsWith("#") && arg.contains("#") && userData == null) userData = fromDiscordTag(arg);
+
+            // mine_book000
+            if (userData == null) userData = fromMinecraftID(arg);
+            // tomachi
+            if (userData == null) userData = fromDiscordName(arg);
+            // tomachi
+            if (userData == null) userData = fromDiscordNickName(arg);
+        }
 
         if (userData == null) {
             channel.sendMessage(member.getAsMention() + ", 指定されたユーザー情報は見つかりませんでした。").queue();
@@ -163,7 +162,7 @@ public class Cmd_User implements CommandPremise {
 
             return userData;
         } catch (IOException e) {
-            return null;
+            return userData;
         }
     }
 
@@ -297,23 +296,19 @@ public class Cmd_User implements CommandPremise {
 
         public boolean addDiscordUserData(String discordID) {
             JDA jda = Main.getJDA();
-            try {
-                User user = jda.retrieveUserById(discordID).complete();
-                if (user == null) return false;
-                this.discordID = discordID;
-                this.discordName = user.getName();
-                this.discordDiscriminator = Integer.parseInt(user.getDiscriminator());
-                this.isFound = true;
+            User user = jda.retrieveUserById(discordID).complete();
+            if (user == null) return false;
+            this.discordID = discordID;
+            this.discordName = user.getName();
+            this.discordDiscriminator = Integer.parseInt(user.getDiscriminator());
+            this.isFound = true;
 
-                Guild guild = jda.getGuildById(597378876556967936L);
-                if (guild == null) return true;
-                Member member = guild.retrieveMemberById(discordID).complete();
-                if (member == null) return true;
-                this.discordNickname = member.getNickname() != null ? member.getNickname() : "null";
-                return true;
-            } catch (ErrorResponseException e) {
-                return false;
-            }
+            Guild guild = jda.getGuildById(597378876556967936L);
+            if (guild == null) return true;
+            Member member = guild.retrieveMemberById(discordID).complete();
+            if (member == null) return true;
+            this.discordNickname = member.getNickname() != null ? member.getNickname() : "null";
+            return true;
         }
     }
 }
