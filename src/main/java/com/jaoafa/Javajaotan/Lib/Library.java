@@ -422,4 +422,13 @@ public class Library {
         }
         return true;
     }
+
+    public static boolean isUUID(String s) {
+        try {
+            UUID.fromString(s);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 }
