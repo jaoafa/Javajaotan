@@ -31,6 +31,9 @@ public class Cmd_User implements CommandPremise {
         } else {
             String arg = String.join(" ", args);
 
+            // @tomachi#0310 (mention)
+            if (!message.getMentionedUsers().isEmpty())
+                userData = fromDiscordID(message.getMentionedUsers().get(0).getId());
             // 32ff7cdc-a1b4-450a-aa7e-6af75fe8c37c
             if (Library.isUUID(arg)) userData = fromUUID(UUID.fromString(arg));
             // 221991565567066112
@@ -40,7 +43,7 @@ public class Cmd_User implements CommandPremise {
                 userData = fromDiscriminator(arg);
             // #0310 -> 0310
             if (arg.startsWith("#") && arg.substring(1).length() == 4 && Library.isInt(arg.substring(1)) && userData == null)
-                userData = fromDiscriminator(arg);
+                userData = fromDiscriminator(arg.substring(1));
             // tomachi#0310
             if (!arg.startsWith("#") && arg.contains("#") && userData == null) userData = fromDiscordTag(arg);
 
