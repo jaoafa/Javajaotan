@@ -35,22 +35,22 @@ public class Cmd_User implements CommandPremise {
         // 32ff7cdc-a1b4-450a-aa7e-6af75fe8c37c
         if (Library.isUUID(arg)) userData = fromUUID(UUID.fromString(arg));
         // 221991565567066112
-        if (Library.isLong(arg) && userData != null) userData = fromDiscordID(arg);
+        if (Library.isLong(arg) && userData == null) userData = fromDiscordID(arg);
         // 0310
-        if (arg.length() == 4 && Library.isInt(arg) && userData != null)
+        if (arg.length() == 4 && Library.isInt(arg) && userData == null)
             userData = fromDiscriminator(Integer.parseInt(arg));
         // #0310 -> 0310
-        if (arg.startsWith("#") && arg.substring(1).length() == 4 && Library.isInt(arg.substring(1)) && userData != null)
+        if (arg.startsWith("#") && arg.substring(1).length() == 4 && Library.isInt(arg.substring(1)) && userData == null)
             userData = fromDiscriminator(Integer.parseInt(arg));
         // tomachi#0310
-        if (!arg.startsWith("#") && arg.contains("#") && userData != null) userData = fromDiscordTag(arg);
+        if (!arg.startsWith("#") && arg.contains("#") && userData == null) userData = fromDiscordTag(arg);
 
         // mine_book000
-        if (userData != null) userData = fromMinecraftID(arg);
+        if (userData == null) userData = fromMinecraftID(arg);
         // tomachi
-        if (userData != null) userData = fromDiscordName(arg);
+        if (userData == null) userData = fromDiscordName(arg);
         // tomachi
-        if (userData != null) userData = fromDiscordNickName(arg);
+        if (userData == null) userData = fromDiscordNickName(arg);
 
         if (userData == null) {
             channel.sendMessage(member.getAsMention() + ", 指定されたユーザー情報は見つかりませんでした。").queue();
