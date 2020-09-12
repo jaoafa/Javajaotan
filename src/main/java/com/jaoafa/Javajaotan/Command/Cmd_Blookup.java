@@ -29,6 +29,9 @@ public class Cmd_Blookup implements CommandPremise {
         }
         if (args.length == 1) {
             // /blookup <Player>
+            channel.sendMessage(member.getAsMention() + ", https://jaoafa.com/cp/?mcid=" + args[0]).queue();
+            return;
+            /*
             UUID uuid = getUUID(channel, member, args[0]);
             if (uuid == null) {
                 return;
@@ -38,6 +41,8 @@ public class Cmd_Blookup implements CommandPremise {
                 return;
             }
             processBlockLookup(jda, guild, channel, member, message, args[0], userid, -1, -1);
+            return;
+            */
         } else if (args.length == 2) {
             // /blookup <cp|lb> <Player>
             // /blookup <Player> <before　rowid>
