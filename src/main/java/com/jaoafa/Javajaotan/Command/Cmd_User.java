@@ -80,6 +80,8 @@ public class Cmd_User implements CommandPremise {
         if (!userData.discordID.equals("null"))
             builder.addField("DiscordUser", "https://discordapp.com/users/" + userData.discordID, false);
         if (!userData.minecraftUUID.equals("null"))
+            builder.addField("UserPage", "https://jaoafa.com/user/" + userData.minecraftUUID, false);
+        if (!userData.minecraftUUID.equals("null"))
             builder.setThumbnail("https://crafatar.com/renders/body/" + userData.minecraftUUID.replaceAll("-", ""));
 
         channel.sendMessage(builder.build()).append(member.getAsMention()).queue();
