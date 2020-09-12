@@ -36,10 +36,10 @@ public class Cmd_User implements CommandPremise {
             if (Library.isLong(arg) && userData == null) userData = fromDiscordID(arg);
             // 0310
             if (arg.length() == 4 && Library.isInt(arg) && userData == null)
-                userData = fromDiscriminator(Integer.parseInt(arg));
+                userData = fromDiscriminator(arg);
             // #0310 -> 0310
             if (arg.startsWith("#") && arg.substring(1).length() == 4 && Library.isInt(arg.substring(1)) && userData == null)
-                userData = fromDiscriminator(Integer.parseInt(arg));
+                userData = fromDiscriminator(arg);
             // tomachi#0310
             if (!arg.startsWith("#") && arg.contains("#") && userData == null) userData = fromDiscordTag(arg);
 
@@ -133,23 +133,23 @@ public class Cmd_User implements CommandPremise {
             Request request = new Request.Builder().url(url).get().build();
             Response response = client.newCall(request).execute();
             if (response.code() != 200) {
-                return null;
+                return userData;
             }
             ResponseBody body = response.body();
             if (body == null) {
-                return null;
+                return userData;
             }
             JSONObject json = new JSONObject(body.string());
             response.close();
 
             if (!json.has("status")) {
-                return null;
+                return userData;
             }
             if (!json.getBoolean("status")) {
-                return null;
+                return userData;
             }
             if (!json.has("data")) {
-                return null;
+                return userData;
             }
 
             JSONObject data = json.getJSONObject("data");
@@ -166,12 +166,12 @@ public class Cmd_User implements CommandPremise {
         }
     }
 
-    private UserData fromDiscriminator(int discriminator) {
+    private UserData fromDiscriminator(String discriminator) {
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L);
         if (guild == null) return null;
 
-        List<Member> members = guild.getMembers().stream().filter(member -> member.getUser().getDiscriminator().equals(String.valueOf(discriminator))).collect(Collectors.toList());
+        List<Member> members = guild.getMembers().stream().filter(member -> member.getUser().getDiscriminator().equals(discriminator)).collect(Collectors.toList());
         if (members.size() != 1) return null;
 
         Member member = members.get(0);
@@ -280,7 +280,7 @@ public class Cmd_User implements CommandPremise {
         public boolean discordConnected = false;
         public String discordID = "null";
         public String discordName = "null";
-        public int discordDiscriminator = -1;
+        public String discordDiscriminator = "null";
         public String discordNickname = "null";
 
         UserData() {
@@ -300,7 +300,7 @@ public class Cmd_User implements CommandPremise {
             if (user == null) return false;
             this.discordID = discordID;
             this.discordName = user.getName();
-            this.discordDiscriminator = Integer.parseInt(user.getDiscriminator());
+            this.discordDiscriminator = user.getDiscriminator();
             this.isFound = true;
 
             Guild guild = jda.getGuildById(597378876556967936L);
