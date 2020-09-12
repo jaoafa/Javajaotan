@@ -6,6 +6,7 @@ import com.jaoafa.Javajaotan.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -82,6 +83,7 @@ public class Cmd_User implements CommandPremise {
     }
 
     private UserData fromUUID(UUID uuid) {
+        System.out.println("Cmd_User.fromUUID(): " + uuid.toString());
         try {
             String url = "https://api.jaoafa.com/users/" + uuid.toString();
             OkHttpClient client = new OkHttpClient();
@@ -123,6 +125,7 @@ public class Cmd_User implements CommandPremise {
     }
 
     private UserData fromDiscordID(String discordId) {
+        System.out.println("Cmd_User.fromDiscordID(): " + discordId);
         UserData userData = new UserData();
         if (!userData.addDiscordUserData(discordId)) {
             return null;
@@ -167,6 +170,7 @@ public class Cmd_User implements CommandPremise {
     }
 
     private UserData fromDiscriminator(String discriminator) {
+        System.out.println("Cmd_User.fromDiscriminator(): " + discriminator);
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L);
         if (guild == null) return null;
@@ -179,6 +183,7 @@ public class Cmd_User implements CommandPremise {
     }
 
     private UserData fromDiscordTag(String tag) {
+        System.out.println("Cmd_User.fromDiscordTag(): " + tag);
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L);
         if (guild == null) return null;
@@ -191,6 +196,7 @@ public class Cmd_User implements CommandPremise {
     }
 
     private UserData fromMinecraftID(String mcid) {
+        System.out.println("Cmd_User.fromMinecraftID(): " + mcid);
         try {
             String url = "https://api.jaoafa.com/users/" + mcid;
             OkHttpClient client = new OkHttpClient();
@@ -232,6 +238,7 @@ public class Cmd_User implements CommandPremise {
     }
 
     private UserData fromDiscordName(String discordName) {
+        System.out.println("Cmd_User.fromDiscordName(): " + discordName);
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L);
         if (guild == null) return null;
@@ -244,6 +251,7 @@ public class Cmd_User implements CommandPremise {
     }
 
     private UserData fromDiscordNickName(String discordNickName) {
+        System.out.println("Cmd_User.fromDiscordNickName(): " + discordNickName);
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L);
         if (guild == null) return null;
@@ -296,19 +304,27 @@ public class Cmd_User implements CommandPremise {
 
         public boolean addDiscordUserData(String discordID) {
             JDA jda = Main.getJDA();
-            User user = jda.retrieveUserById(discordID).complete();
-            if (user == null) return false;
-            this.discordID = discordID;
-            this.discordName = user.getName();
-            this.discordDiscriminator = user.getDiscriminator();
-            this.isFound = true;
+            try {
+                User user = jda.retrieveUserById(discordID).complete();
+                if (user == null) return false;
+                this.discordID = discordID;
+                this.discordName = user.getName();
+                this.discordDiscriminator = user.getDiscriminator();
+                this.isFound = true;
+            } catch (ErrorResponseException e) {
+                return false;
+            }
 
-            Guild guild = jda.getGuildById(597378876556967936L);
-            if (guild == null) return true;
-            Member member = guild.retrieveMemberById(discordID).complete();
-            if (member == null) return true;
-            this.discordNickname = member.getNickname() != null ? member.getNickname() : "null";
-            return true;
+            try {
+                Guild guild = jda.getGuildById(597378876556967936L);
+                if (guild == null) return true;
+                Member member = guild.retrieveMemberById(discordID).complete();
+                if (member == null) return true;
+                this.discordNickname = member.getNickname() != null ? member.getNickname() : "null";
+                return true;
+            } catch (ErrorResponseException e) {
+                return true;
+            }
         }
     }
 }
