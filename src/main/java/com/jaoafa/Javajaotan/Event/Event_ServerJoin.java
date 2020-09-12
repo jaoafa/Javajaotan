@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 
 public class Event_ServerJoin {
-    long lastjoinuserid = -1;
 
     @SubscribeEvent
     public void onMemberJoinEvent(GuildMemberJoinEvent event) {
@@ -15,12 +14,6 @@ public class Event_ServerJoin {
             return; // jMS Gamers Clubのみ
         }
         User user = event.getUser();
-        long userid = user.getIdLong();
-
-        if (lastjoinuserid == userid) {
-            return;
-        }
-        lastjoinuserid = userid;
 
         TextChannel general = event.getGuild().getTextChannelById(597419057251090443L);
         TextChannel greeting = event.getGuild().getTextChannelById(603841992404893707L);
