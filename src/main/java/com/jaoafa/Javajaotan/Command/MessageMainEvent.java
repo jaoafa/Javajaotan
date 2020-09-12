@@ -109,6 +109,12 @@ public class MessageMainEvent {
                 return;
             }
 
+            if (channel.getIdLong() == 597423370589700098L || channel.getIdLong() == 597423407998435329L) {
+                // support or question channel
+                channel.sendMessage(member.getAsMention() + ", そのコマンドをこのチャンネルで使用することはできません。").queue();
+                return;
+            }
+
             if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
                 EmbedBuilder builder = new EmbedBuilder();
                 builder.setTitle("jaotan Command Help");
