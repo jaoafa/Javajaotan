@@ -1,6 +1,7 @@
 package com.jaoafa.Javajaotan.Command;
 
 import com.jaoafa.Javajaotan.CommandPremise;
+import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.SQLiteDBManager;
 import com.jaoafa.Javajaotan.Main;
 import net.dv8tion.jda.api.JDA;
@@ -20,6 +21,10 @@ public class Cmd_Setnickatama implements CommandPremise {
     @Override
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
+        if (!Library.isDenyToyCmd(channel)) {
+            channel.sendMessage(member.getAsMention() + ", このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
+            return;
+        }
         File sqliteFile = new File("pp_dic_preset.sqlite");
         if (!sqliteFile.exists()) {
             // nasa

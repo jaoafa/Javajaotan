@@ -14,6 +14,7 @@ import com.optimaize.langdetect.text.TextObject;
 import com.optimaize.langdetect.text.TextObjectFactory;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.Role;
 import okhttp3.*;
 import org.json.JSONArray;
@@ -187,6 +188,18 @@ public class Library {
         return member
                 .getRoles()
                 .stream().anyMatch(_role -> _role.getIdLong() == role.getIdLong());
+    }
+
+    public static boolean isDenyToyCmd(MessageChannel channel) {
+        List<Long> denyChannels = Arrays.asList(
+                597419057251090443L, // general
+                597420715129569310L, // freechat
+                597423370589700098L, // support
+                597423407998435329L, // question
+                597768169708322816L, // game
+                597768186007388170L  // anime
+        );
+        return denyChannels.contains(channel.getIdLong());
     }
 
     public static String sdfFormat(Date date) {
