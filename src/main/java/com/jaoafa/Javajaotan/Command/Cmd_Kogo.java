@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
-public class Cmd_kogo implements CommandPremise {
+public class Cmd_Kogo implements CommandPremise {
     @Override
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
