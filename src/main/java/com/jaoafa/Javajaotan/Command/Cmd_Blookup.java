@@ -29,7 +29,7 @@ public class Cmd_Blookup implements CommandPremise {
         }
         if (args.length == 1) {
             // /blookup <Player>
-            channel.sendMessage(member.getAsMention() + ", https://jaoafa.com/cp/?mcid=" + args[0]).queue();
+            channel.sendMessage(member.getAsMention() + ", https://jaoafa.com/cp/?mcid=" + args[0] + "\nhttps://jaoafa.com/lb/?mcid=" + args[0]).queue();
             return;
             /*
             UUID uuid = getUUID(channel, member, args[0]);
