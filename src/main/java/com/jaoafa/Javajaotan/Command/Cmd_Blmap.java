@@ -71,13 +71,10 @@ public class Cmd_Blmap implements CommandPremise {
                 response.close();
             } catch (IOException ex) {
                 channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
-                return;
             }
-            return;
         } catch (SQLException e) {
             channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
                     + "**Message**: `" + e.getMessage() + "`").queue();
-            return;
         }
     }
 
