@@ -15,15 +15,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SubAccount {
-    private final Set<SubAccount> subAccounts = new HashSet<>();
     private Guild jMSGuild = null;
     private boolean exists = true;
-    private boolean isSubAccount = false; // このアカウントがサブアカウント
     private User user = null;
-    private SubAccount mainAccount = null;
+    private long discordId;
 
     public SubAccount(long discordId) {
         try {
+            this.discordId = discordId;
             this.jMSGuild = Main.getJDA().getGuildById(597378876556967936L);
 
             MySQLDBManager manager = Main.MySQLDBManager;
@@ -33,29 +32,7 @@ public class SubAccount {
                 this.user = Main.getJDA().retrieveUserById(discordId).complete();
             } catch (ErrorResponseException e) {
                 exists = false;
-                return;
             }
-
-            // 自分がサブアカウントかどうかを取得する
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM subaccount WHERE disid = ?");
-            stmt.setLong(1, discordId);
-            ResultSet res = stmt.executeQuery();
-            if (res.next()) {
-                this.mainAccount = new SubAccount(res.getLong("main_disid"));
-            }
-            res.close();
-            stmt.close();
-
-            // すべてのサブアカウントを取得する
-            PreparedStatement stmt_sub = conn.prepareStatement("SELECT * FROM subaccount WHERE main_disid = ?");
-            stmt_sub.setLong(1, discordId);
-            ResultSet res_sub = stmt_sub.executeQuery();
-            while (res_sub.next()) {
-                subAccounts.add(new SubAccount(res_sub.getLong("disid")));
-            }
-            res_sub.close();
-            stmt_sub.close();
-            isSubAccount = !subAccounts.isEmpty();
         } catch (SQLException e) {
             e.printStackTrace();
             exists = false;
@@ -110,7 +87,7 @@ public class SubAccount {
     }
 
     public boolean isSubAccount() {
-        return isSubAccount;
+        return !getSubAccounts().isEmpty();
     }
 
     public User getUser() {
@@ -118,10 +95,40 @@ public class SubAccount {
     }
 
     public SubAccount getMainAccount() {
-        return mainAccount;
+        try {
+            MySQLDBManager manager = Main.MySQLDBManager;
+            Connection conn = manager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM subaccount WHERE disid = ?");
+            stmt.setLong(1, discordId);
+            ResultSet res = stmt.executeQuery();
+            SubAccount main = null;
+            if (res.next()) {
+                main = new SubAccount(res.getLong("main_disid"));
+            }
+            res.close();
+            stmt.close();
+            return main;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public Set<SubAccount> getSubAccounts() {
-        return subAccounts;
+        try {
+            MySQLDBManager manager = Main.MySQLDBManager;
+            Connection conn = manager.getConnection();
+            PreparedStatement stmt_sub = conn.prepareStatement("SELECT * FROM subaccount WHERE main_disid = ?");
+            stmt_sub.setLong(1, discordId);
+            ResultSet res_sub = stmt_sub.executeQuery();
+            final Set<SubAccount> subAccounts = new HashSet<>();
+            while (res_sub.next()) {
+                subAccounts.add(new SubAccount(res_sub.getLong("disid")));
+            }
+            res_sub.close();
+            stmt_sub.close();
+            return subAccounts;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }
