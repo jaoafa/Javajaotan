@@ -77,6 +77,22 @@ public class Cmd_Subaccount implements CommandPremise {
             return;
         }
 
+        Guild jMSGuild = Main.getJDA().getGuildById(597378876556967936L);
+        if (jMSGuild != null) {
+            Member _member = jMSGuild.getMember(main.getUser());
+            if (_member == null) {
+                channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントはjMS Gamers Clubに参加していません。").queue();
+                return;
+            }
+            if (_member.getRoles().stream().noneMatch(role -> role.getIdLong() == 604011598952136853L)) {
+                channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントはMinecraftアカウントとの接続が行われていません。`/link`によるアカウントの連携を指示してください。").queue();
+                return;
+            }
+        } else {
+            channel.sendMessage(member.getAsMention() + ", jMS Gamers Clubのデータ取得に失敗しました。").queue();
+            return;
+        }
+
         boolean bool = sub.setMainAccount(main);
         channel.sendMessage(member.getAsMention() + ", サブアカウントの設定に" + (bool ? "成功" : "失敗") + "しました。").queue();
     }
