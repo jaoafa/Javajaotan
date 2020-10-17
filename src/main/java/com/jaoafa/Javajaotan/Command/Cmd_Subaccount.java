@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -72,6 +73,10 @@ public class Cmd_Subaccount implements CommandPremise {
             channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントにはサブアカウントが存在します。").queue();
             return;
         }
+        if (!sub.isExists()) {
+            channel.sendMessage(member.getAsMention() + ", 指定されたサブアカウントが存在しません。").queue();
+            return;
+        }
         if (sub.getMainAccount() != null) {
             channel.sendMessage(member.getAsMention() + ", このサブアカウントには既にメインアカウント「" + sub.getMainAccount().getUser().getAsTag() + "」が設定されています。").queue();
             return;
@@ -79,9 +84,11 @@ public class Cmd_Subaccount implements CommandPremise {
 
         Guild jMSGuild = Main.getJDA().getGuildById(597378876556967936L);
         if (jMSGuild != null) {
-            Member _member = jMSGuild.getMember(main.getUser());
-            if (_member == null) {
-                channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントはjMS Gamers Clubに参加していません。").queue();
+            Member _member;
+            try {
+                _member = jMSGuild.retrieveMember(main.getUser()).complete();
+            } catch (ErrorResponseException e) {
+                channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントはjMS Gamers Clubに参加していない可能性があります: " + e.getMeaning()).queue();
                 return;
             }
             if (_member.getRoles().stream().noneMatch(role -> role.getIdLong() == 604011598952136853L)) {
