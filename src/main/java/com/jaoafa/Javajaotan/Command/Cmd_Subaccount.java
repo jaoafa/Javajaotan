@@ -59,8 +59,8 @@ public class Cmd_Subaccount implements CommandPremise {
             channel.sendMessage(member.getAsMention() + ", MainAccountにはメインアカウントのDiscordUserIDを指定してください。").queue();
             return;
         }
-        long subid = Long.parseLong(args[0]);
-        long mainid = Long.parseLong(args[1]);
+        long subid = Long.parseLong(args[1]);
+        long mainid = Long.parseLong(args[2]);
         SubAccount sub = new SubAccount(subid);
         SubAccount main = new SubAccount(mainid);
 
@@ -86,7 +86,7 @@ public class Cmd_Subaccount implements CommandPremise {
             channel.sendMessage(member.getAsMention() + ", MainAccountにはサブアカウントのDiscordUserIDを指定してください。").queue();
             return;
         }
-        long subid = Long.parseLong(args[0]);
+        long subid = Long.parseLong(args[1]);
         SubAccount sub = new SubAccount(subid);
 
         boolean bool = sub.removeMainAccount();
