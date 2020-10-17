@@ -51,7 +51,7 @@ public class SubAccount {
             stmt_sub.setLong(1, discordId);
             ResultSet res_sub = stmt_sub.executeQuery();
             while (res_sub.next()) {
-                subAccounts.add(new SubAccount(res.getLong("disid")));
+                subAccounts.add(new SubAccount(res_sub.getLong("disid")));
             }
             res_sub.close();
             stmt_sub.close();
