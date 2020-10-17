@@ -43,6 +43,8 @@ public class SubAccount {
             if (res.next()) {
                 this.mainAccount = new SubAccount(res.getLong("main_disid"));
             }
+            res.close();
+            stmt.close();
 
             // すべてのサブアカウントを取得する
             PreparedStatement stmt_sub = conn.prepareStatement("SELECT * FROM subaccount WHERE main_disid = ?");
@@ -51,8 +53,11 @@ public class SubAccount {
             while (res_sub.next()) {
                 subAccounts.add(new SubAccount(res.getLong("disid")));
             }
+            res_sub.close();
+            stmt_sub.close();
             isSubAccount = !subAccounts.isEmpty();
         } catch (SQLException e) {
+            e.printStackTrace();
             exists = false;
         }
     }
