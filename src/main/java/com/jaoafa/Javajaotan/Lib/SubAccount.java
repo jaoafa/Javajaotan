@@ -87,7 +87,7 @@ public class SubAccount {
     }
 
     public boolean isSubAccount() {
-        return !getSubAccounts().isEmpty();
+        return getMainAccount() != null;
     }
 
     public User getUser() {
