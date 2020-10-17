@@ -92,8 +92,6 @@ public class Task_AccountConnectChecker extends TimerTask {
                 // not found
                 isConnected = false;
             }
-            res.close();
-            statement.close();
 
             boolean isMinecraftConnected = member.getRoles().stream().anyMatch(role -> role != null && role.getIdLong() == MinecraftConnected.getIdLong());
             if (isMinecraftConnected && !isConnected) {
