@@ -34,14 +34,17 @@ public class Cmd_Subaccount implements CommandPremise {
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
                 onCommand_List(jda, guild, channel, member, message, args);
+                return;
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("remove")) {
                 onCommand_Remove(jda, guild, channel, member, message, args);
+                return;
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("add")) {
                 onCommand_Add(jda, guild, channel, member, message, args);
+                return;
             }
         }
         channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
