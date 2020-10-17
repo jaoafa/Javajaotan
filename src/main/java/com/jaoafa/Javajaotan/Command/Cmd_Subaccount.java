@@ -48,11 +48,11 @@ public class Cmd_Subaccount implements CommandPremise {
     }
 
     private void onCommand_Add(JDA jda, Guild guild, MessageChannel channel, Member member, Message message, String[] args) {
-        if (!Library.isLong(args[0])) {
-            channel.sendMessage(member.getAsMention() + ", MainAccountにはサブアカウントのDiscordUserIDを指定してください。").queue();
+        if (!Library.isLong(args[1])) {
+            channel.sendMessage(member.getAsMention() + ", SubAccountにはサブアカウントのDiscordUserIDを指定してください。").queue();
             return;
         }
-        if (!Library.isLong(args[1])) {
+        if (!Library.isLong(args[2])) {
             channel.sendMessage(member.getAsMention() + ", MainAccountにはメインアカウントのDiscordUserIDを指定してください。").queue();
             return;
         }
@@ -79,7 +79,7 @@ public class Cmd_Subaccount implements CommandPremise {
     }
 
     private void onCommand_Remove(JDA jda, Guild guild, MessageChannel channel, Member member, Message message, String[] args) {
-        if (!Library.isLong(args[0])) {
+        if (!Library.isLong(args[1])) {
             channel.sendMessage(member.getAsMention() + ", MainAccountにはサブアカウントのDiscordUserIDを指定してください。").queue();
             return;
         }
