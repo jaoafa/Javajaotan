@@ -92,7 +92,7 @@ public class Cmd_User implements CommandPremise {
                     "DiscordSubAccount",
                     sub.getSubAccounts().isEmpty() ?
                             "null" :
-                            sub.getSubAccounts().stream().map(account -> account.getUser().getAsMention()).collect(Collectors.joining(",")),
+                            sub.getSubAccounts().stream().map(account -> account.getUser().getAsMention()).collect(Collectors.joining(", ")),
                     false);
         }
 
