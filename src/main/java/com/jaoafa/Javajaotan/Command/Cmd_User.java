@@ -2,6 +2,7 @@ package com.jaoafa.Javajaotan.Command;
 
 import com.jaoafa.Javajaotan.CommandPremise;
 import com.jaoafa.Javajaotan.Lib.Library;
+import com.jaoafa.Javajaotan.Lib.SubAccount;
 import com.jaoafa.Javajaotan.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -83,6 +84,17 @@ public class Cmd_User implements CommandPremise {
             builder.addField("UserPage", "https://jaoafa.com/user/" + userData.minecraftUUID, false);
         if (!userData.minecraftUUID.equals("null"))
             builder.setThumbnail("https://crafatar.com/renders/body/" + userData.minecraftUUID.replaceAll("-", ""));
+
+        if (!userData.discordID.equals("null")) {
+            SubAccount sub = new SubAccount(Long.parseLong(userData.discordID));
+            builder.addField("DiscordMainAccount", sub.getMainAccount() != null ? sub.getMainAccount().getUser().getAsMention() : "null", false);
+            builder.addField(
+                    "DiscordSubAccount",
+                    sub.getSubAccounts().isEmpty() ?
+                            "null" :
+                            sub.getSubAccounts().stream().map(account -> account.getUser().getAsMention()).collect(Collectors.joining(",")),
+                    false);
+        }
 
         channel.sendMessage(builder.build()).append(member.getAsMention()).queue();
     }

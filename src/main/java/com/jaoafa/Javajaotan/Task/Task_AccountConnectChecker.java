@@ -92,6 +92,8 @@ public class Task_AccountConnectChecker extends TimerTask {
                 // not found
                 isConnected = false;
             }
+            res.close();
+            statement.close();
 
             boolean isMinecraftConnected = member.getRoles().stream().anyMatch(role -> role != null && role.getIdLong() == MinecraftConnected.getIdLong());
             if (isMinecraftConnected && !isConnected) {
@@ -284,7 +286,10 @@ public class Task_AccountConnectChecker extends TimerTask {
             if (!res.next()) {
                 return null;
             }
-            return res.getString("player");
+            String ret = res.getString("player");
+            res.close();
+            statement.close();
+            return ret;
         } catch (SQLException e) {
             return null;
         }

@@ -45,10 +45,14 @@ public class Cmd_Blmaplb implements CommandPremise {
 
             if (!res.next()) {
                 channel.sendMessage(member.getAsMention() + ", 指定されたユーザーは見つかりません。").queue();
+                res.close();
+                statement.close();
                 return;
             }
 
             String uuid = res.getString("uuid");
+            res.close();
+            statement.close();
 
             String url = "https://api.jaoafa.com/cities/getblockimg?uuid=" + uuid + "&source=lb";
 
