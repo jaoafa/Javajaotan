@@ -109,16 +109,18 @@ public class Cmd_Subaccount implements CommandPremise {
 
     @Override
     public String getDescription() {
-        return "サブアカウントに関する処理を実施します。";
+        return "サブアカウントに関する処理を実施します。(特定のチャンネルでのみ使用可能)";
     }
 
     @Override
     public String getUsage() {
-        return "/setnickatama [Count]";
+        return "/subaccount add <SubAccount> <MainAccount>\n" +
+                "/subaccount remove <SubAccount>\n" +
+                "/subaccount list";
     }
 
     @Override
     public boolean isjMSOnly() {
-        return false;
+        return true;
     }
 }
