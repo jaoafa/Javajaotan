@@ -2,6 +2,7 @@ package com.jaoafa.Javajaotan.Lib;
 
 import com.jaoafa.Javajaotan.Main;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -25,14 +26,27 @@ public class SubAccount {
             this.discordId = discordId;
             this.jMSGuild = Main.getJDA().getGuildById(597378876556967936L);
 
-            MySQLDBManager manager = Main.MySQLDBManager;
-            Connection conn = manager.getConnection();
+            Main.MySQLDBManager.getConnection();
 
             try {
                 this.user = Main.getJDA().retrieveUserById(discordId).complete();
             } catch (ErrorResponseException e) {
                 exists = false;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            exists = false;
+        }
+    }
+
+    public SubAccount(Member member) {
+        try {
+            this.discordId = member.getIdLong();
+            this.jMSGuild = Main.getJDA().getGuildById(597378876556967936L);
+
+            Main.MySQLDBManager.getConnection();
+
+            this.user = member.getUser();
         } catch (SQLException e) {
             e.printStackTrace();
             exists = false;

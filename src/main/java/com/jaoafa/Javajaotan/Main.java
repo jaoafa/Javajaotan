@@ -8,10 +8,7 @@ import com.jaoafa.Javajaotan.Lib.ChatManager;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
-import com.jaoafa.Javajaotan.Task.Task_AccountConnectChecker;
-import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
-import com.jaoafa.Javajaotan.Task.Task_MinecraftConnectedCheck;
-import com.jaoafa.Javajaotan.Task.Task_VerifiedCheck;
+import com.jaoafa.Javajaotan.Task.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -57,9 +54,6 @@ public class Main {
             try {
                 props.store(new FileOutputStream("conf.properties"), "Comments");
                 System.out.println("Please Config Token!");
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
-                return;
             } catch (IOException e1) {
                 e1.printStackTrace();
                 return;
@@ -179,15 +173,14 @@ public class Main {
 
         Runtime.getRuntime().addShutdownHook(
                 new Thread(
-                        () -> {
-                            System.out.println("Exit");
-                        }));
+                        () -> System.out.println("Exit")));
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new Task_VerifiedCheck(), 10000L, 60000L); // 1分
         timer.scheduleAtFixedRate(new Task_MeetingVote(), 10000L, 600000L); // 10分
         timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 10000L, 1800000L); // 30分
         timer.scheduleAtFixedRate(new Task_MinecraftConnectedCheck(), 10000L, 1800000L); // 30分
+        timer.scheduleAtFixedRate(new Task_SubAccountCheck(), 10000L, 1800000L); // 30分
 		/*
 		JavajaotanWatcher JavajaotanWatcher = new JavajaotanWatcher();
 		Timer timer = new Timer();
@@ -212,12 +205,6 @@ public class Main {
             System.out.println("DiscordExceptionError did not work properly!");
             return;
         }
-        if (clazz == null) {
-            throw new NullPointerException("Class<?> clazz is null!");
-        }
-        if (exception == null) {
-            throw new NullPointerException("DiscordException exception is null!");
-        }
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         exception.printStackTrace(pw);
@@ -241,9 +228,6 @@ public class Main {
             System.out.println("ExceptionReporter did not work properly!");
             return;
         }
-        if (exception == null) {
-            throw new NullPointerException("Throwable exception is null!");
-        }
         exception.printStackTrace();
 
         StringWriter sw = new StringWriter();
@@ -258,7 +242,7 @@ public class Main {
             builder.addField("Message", "```" + exception.getMessage() + "```", false);
             builder.addField("Cause", "```" + exception.getCause() + "```", false);
             builder.setTimestamp(Instant.now());
-            channel.sendMessage(builder.build()).queue();
+            Objects.requireNonNull(channel).sendMessage(builder.build()).queue();
         } catch (Exception e) {
             String text = "javajaotan Error Reporter (" + Library.sdfFormat(new Date()) + ")\n"
                     + "---------- StackTrace ----------\n"
@@ -277,9 +261,9 @@ public class Main {
         String version = null;
         try {
             InputStream is = ClassLoader.getSystemResourceAsStream("version");
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
             version = br.readLine();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
         return version;
     }
