@@ -27,6 +27,9 @@ public class ALL_AntiGai implements ALLChatPremise {
         if (message.getEmotes().isEmpty()) {
             return;
         }
+        if (guild.getIdLong() != 597378876556967936L) {
+            return;
+        }
         message.getEmotes().forEach(emote -> {
             String url = emote.getImageUrl();
             if (antis.contains(url)) {
