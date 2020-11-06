@@ -509,6 +509,7 @@ public class Task_MeetingVote extends TimerTask {
             statement_update.setInt(1, -1);
             statement_update.setInt(2, id);
             statement_update.executeUpdate();
+            statement_update.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -619,6 +620,7 @@ public class Task_MeetingVote extends TimerTask {
             statement_update.setInt(1, -1);
             statement_update.setInt(2, id);
             statement_update.executeUpdate();
+            statement_update.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

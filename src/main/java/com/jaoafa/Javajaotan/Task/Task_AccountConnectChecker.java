@@ -114,6 +114,8 @@ public class Task_AccountConnectChecker extends TimerTask {
                 // 連携されていない。(MinecraftConnectedロールも付与されていない)
                 // -> VerifiedとRegularの付与確認だけして終了
                 removePermissionRoles(member);
+                res.close();
+                statement.close();
                 return;
             }
             // MinecraftConnectedロールが付与されていて、連携されている。
@@ -282,6 +284,8 @@ public class Task_AccountConnectChecker extends TimerTask {
             statement.setString(1, uuid.toString());
             ResultSet res = statement.executeQuery();
             if (!res.next()) {
+                res.close();
+                statement.close();
                 return null;
             }
             String ret = res.getString("player");

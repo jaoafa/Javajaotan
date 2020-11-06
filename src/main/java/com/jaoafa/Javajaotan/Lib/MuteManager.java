@@ -44,6 +44,8 @@ public class MuteManager {
                 }
                 mutes.add(res.getString("userid"));
             }
+            res.close();
+            statement.close();
             conn.close();
         } catch (SQLException e) {
             Main.ExceptionReporter(null, e);
@@ -71,7 +73,9 @@ public class MuteManager {
                 PreparedStatement statement_insert = conn.prepareStatement("insert into users values(?);");
                 statement_insert.setString(1, userid);
                 statement_insert.executeUpdate();
+                statement_insert.close();
             }
+            statement_delete.close();
             conn.close();
         } catch (SQLException e) {
             Main.ExceptionReporter(null, e);
