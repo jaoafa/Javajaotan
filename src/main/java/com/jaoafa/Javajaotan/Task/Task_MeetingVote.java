@@ -54,6 +54,10 @@ public class Task_MeetingVote extends TimerTask {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
         TextChannel channel = jda.getTextChannelById(597423974816808970L);
+        if (channel == null) {
+            System.out.println("getTextChannelById(#meeting_vote) == null.");
+            return;
+        }
         List<Message> messages = channel.retrievePinnedMessages().complete();
         for (Message message : messages) {
             String content = message.getContentDisplay();
@@ -265,7 +269,12 @@ public class Task_MeetingVote extends TimerTask {
                 i++;
             }
 
-            Main.getJDA().getTextChannelById(597423467796758529L).sendMessage(
+            TextChannel meeting = Main.getJDA().getTextChannelById(597423467796758529L);
+            if (meeting == null) {
+                System.out.println("[autoGood_CHANGE_CORNERS] getTextChannelById(#meeting) == null");
+                return;
+            }
+            meeting.sendMessage(
                     "**自治体「`" + cities_name + "`」の新規登録申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。**\n"
                             + String.join("\n", approvalflows))
                     .queue();
@@ -300,6 +309,8 @@ public class Task_MeetingVote extends TimerTask {
 
             if (!res.next()) {
                 System.out.println("autoGood_CHANGE_CORNERS(): res.next false");
+                res.close();
+                statement.close();
                 return;
             }
 
@@ -336,7 +347,12 @@ public class Task_MeetingVote extends TimerTask {
                 i++;
             }
 
-            Main.getJDA().getTextChannelById(597423467796758529L).sendMessage(
+            TextChannel meeting = Main.getJDA().getTextChannelById(597423467796758529L);
+            if (meeting == null) {
+                System.out.println("[autoGood_CHANGE_CORNERS] getTextChannelById(#meeting) == null");
+                return;
+            }
+            meeting.sendMessage(
                     "**自治体「`" + cities_name + "`」の範囲変更申請が承認されました。これに伴い、運営利用者は以下の作業を順に実施してください。**\n"
                             + String.join("\n", approvalflows))
                     .queue();
@@ -371,6 +387,8 @@ public class Task_MeetingVote extends TimerTask {
 
             if (!res.next()) {
                 System.out.println("autoGood_CHANGE_OTHER(): res.next false");
+                res.close();
+                statement.close();
                 return;
             }
 
@@ -412,7 +430,12 @@ public class Task_MeetingVote extends TimerTask {
             String discord_userid = getDiscordUserID(conn, cities_id);
             String cities_name = getCitiesName(conn, cities_id);
 
-            Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
+            TextChannel city_request = Main.getJDA().getTextChannelById(709008822043148340L);
+            if (city_request == null) {
+                System.out.println("[autoGood_CHANGE_OTHER] getTextChannelById(#city_request) == null");
+                return;
+            }
+            city_request.sendMessage("<@" + discord_userid + "> 自治体「`"
                     + cities_name + "` (" + cities_id + ")」の自治体情報変更申請を**承認**しました。(リクエストID: " + reqid + ")").queue();
 
             PreparedStatement statement_update = conn
@@ -473,7 +496,12 @@ public class Task_MeetingVote extends TimerTask {
             res.close();
             statement.close();
 
-            Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
+            TextChannel city_request = Main.getJDA().getTextChannelById(709008822043148340L);
+            if (city_request == null) {
+                System.out.println("[autoBad_CREATE_WAITING] getTextChannelById(#city_request) == null");
+                return;
+            }
+            city_request.sendMessage("<@" + discord_userid + "> 自治体「`"
                     + cities_name + "`」の自治体新規登録申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
             PreparedStatement statement_update = conn
@@ -523,7 +551,12 @@ public class Task_MeetingVote extends TimerTask {
             String discord_userid = getDiscordUserID(conn, cities_id);
             String cities_name = getCitiesName(conn, cities_id);
 
-            Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
+            TextChannel city_request = Main.getJDA().getTextChannelById(709008822043148340L);
+            if (city_request == null) {
+                System.out.println("[autoBad_CHANGE_CORNERS] getTextChannelById(#city_request) == null");
+                return;
+            }
+            city_request.sendMessage("<@" + discord_userid + "> 自治体「`"
                     + cities_name + "` (" + cities_id + ")」の自治体範囲変更申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
             PreparedStatement statement_update = conn
@@ -573,7 +606,12 @@ public class Task_MeetingVote extends TimerTask {
             String discord_userid = getDiscordUserID(conn, cities_id);
             String cities_name = getCitiesName(conn, cities_id);
 
-            Main.getJDA().getTextChannelById(709008822043148340L).sendMessage("<@" + discord_userid + "> 自治体「`"
+            TextChannel city_request = Main.getJDA().getTextChannelById(709008822043148340L);
+            if (city_request == null) {
+                System.out.println("[autoBad_CHANGE_OTHER] getTextChannelById(#city_request) == null");
+                return;
+            }
+            city_request.sendMessage("<@" + discord_userid + "> 自治体「`"
                     + cities_name + "` (" + cities_id + ")」の自治体情報変更申請を**否認**しました。(リクエストID: " + reqid + ")").queue();
 
             PreparedStatement statement_update = conn
@@ -594,6 +632,8 @@ public class Task_MeetingVote extends TimerTask {
             ResultSet res = statement.executeQuery();
 
             if (!res.next()) {
+                res.close();
+                statement.close();
                 return null;
             }
 
@@ -615,6 +655,8 @@ public class Task_MeetingVote extends TimerTask {
             ResultSet res = statement.executeQuery();
 
             if (!res.next()) {
+                res.close();
+                statement.close();
                 return null;
             }
 
@@ -636,6 +678,8 @@ public class Task_MeetingVote extends TimerTask {
             ResultSet res = statement.executeQuery();
 
             if (!res.next()) {
+                res.close();
+                statement.close();
                 return null;
             }
 
