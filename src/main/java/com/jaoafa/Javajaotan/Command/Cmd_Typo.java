@@ -25,7 +25,7 @@ public class Cmd_Typo implements CommandPremise {
             return;
         }
         String original = String.join(" ", args);
-        String json = getRunCommand(message, "php", "/var/jaoafa/Javajaotan/extcmds/typo.php", original);
+        String json = getRunCommand(message, "php", "/home/server/ZakuroHat/Javajaotan/extcmds/typo.php", original);
         JSONArray array = new JSONArray(json);
         LinkedList<String> words = new LinkedList<>();
         for (int i = 0; i < array.length(); i++) {
@@ -49,7 +49,7 @@ public class Cmd_Typo implements CommandPremise {
         try {
             ProcessBuilder builder = new ProcessBuilder();
             builder.command(command);
-            builder.directory(new File("/var/jaoafa/Javajaotan/"));
+            builder.directory(new File("/home/server/ZakuroHat/Javajaotan/"));
             builder.redirectErrorStream(true);
             p = builder.start();
             p.waitFor(10, TimeUnit.MINUTES);

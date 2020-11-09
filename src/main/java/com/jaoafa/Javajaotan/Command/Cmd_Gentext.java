@@ -23,11 +23,11 @@ public class Cmd_Gentext implements CommandPremise {
         }
         String json;
         if (args.length == 1 && args[0].startsWith("news")) {
-            json = getRunCommand(message, "php", "/var/jaoafa/Javajaotan/extcmds/gentext.php", "news");
+            json = getRunCommand(message, "php", "/home/server/ZakuroHat/Javajaotan/extcmds/gentext.php", "news");
         } else if (args.length == 1 && args[0].startsWith("rasyoumon")) {
-            json = getRunCommand(message, "php", "/var/jaoafa/Javajaotan/extcmds/gentext.php", "rasyoumon");
+            json = getRunCommand(message, "php", "/home/server/ZakuroHat/Javajaotan/extcmds/gentext.php", "rasyoumon");
         } else {
-            json = getRunCommand(message, "php", "/var/jaoafa/Javajaotan/extcmds/gentext.php");
+            json = getRunCommand(message, "php", "/home/server/ZakuroHat/Javajaotan/extcmds/gentext.php");
         }
         JSONObject obj = new JSONObject(json);
         channel.sendMessage(member.getAsMention() + ", ```" + obj.optString("output", "null") + "```").queue();
@@ -39,7 +39,7 @@ public class Cmd_Gentext implements CommandPremise {
         try {
             ProcessBuilder builder = new ProcessBuilder();
             builder.command(command);
-            builder.directory(new File("/var/jaoafa/Javajaotan/"));
+            builder.directory(new File("/home/server/ZakuroHat/Javajaotan/"));
             builder.redirectErrorStream(true);
             p = builder.start();
             p.waitFor(10, TimeUnit.MINUTES);

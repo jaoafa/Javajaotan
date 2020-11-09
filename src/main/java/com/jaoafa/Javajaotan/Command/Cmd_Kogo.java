@@ -21,7 +21,7 @@ public class Cmd_Kogo implements CommandPremise {
             return;
         }
         String original = String.join(" ", args);
-        String json = getRunCommand(message, "node", "/var/jaoafa/Javajaotan/extcmds/kogo/run.js", original);
+        String json = getRunCommand(message, "node", "/home/server/ZakuroHat/Javajaotan/extcmds/kogo/run.js", original);
         JSONObject obj = new JSONObject(json);
         channel.sendMessage(member.getAsMention() + ", ```" + obj.optString("output", "null") + "```").queue();
     }
@@ -32,7 +32,7 @@ public class Cmd_Kogo implements CommandPremise {
         try {
             ProcessBuilder builder = new ProcessBuilder();
             builder.command(command);
-            builder.directory(new File("/var/jaoafa/Javajaotan/"));
+            builder.directory(new File("/home/server/ZakuroHat/Javajaotan/"));
             builder.redirectErrorStream(true);
             p = builder.start();
             p.waitFor(10, TimeUnit.MINUTES);
