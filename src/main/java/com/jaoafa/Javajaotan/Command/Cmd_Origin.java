@@ -7,20 +7,17 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.apache.commons.lang.math.NumberUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.regex.Pattern;
 
 public class Cmd_Origin implements CommandPremise {
-    Pattern title_pattern = Pattern.compile("<TD nowarp><FONT.+>(.+?)</FONT>");
-    Pattern text_pattern = Pattern.compile("<p.*?>([\\s\\S]+?)</p>");
+    //Pattern title_pattern = Pattern.compile("<TD nowarp><FONT.+>(.+?)</FONT>");
+    //Pattern text_pattern = Pattern.compile("<p.*?>([\\s\\S]+?)</p>");
 
     @Override
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
@@ -34,6 +31,28 @@ public class Cmd_Origin implements CommandPremise {
             channel.sendMessage(member.getAsMention() + ", 数値を指定してください。").queue();
             return;
         }
+        try {
+            String url = Main.originAPIUrl + "?id=" + num;
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(url).get().build();
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200) {
+                channel.sendMessage(member.getAsMention() + ", 取得処理に失敗しました。").queue();
+                return;
+            }
+            JSONObject json = new JSONObject(response.body().string());
+            response.close();
+            if (!json.getBoolean("status")) {
+                channel.sendMessage(member.getAsMention() + ", 取得処理に失敗しました。(`" + json.optString("message", "null") + "`)").queue();
+                return;
+            }
+            channel.sendMessage(String.format("%s```%s```", json.optString("title", "null"), json.optString("text", "null"))).queue();
+        } catch (IOException e) {
+            channel.sendMessage(member.getAsMention() + ", 取得処理に失敗しました。(IOException: `" + e.getMessage() + "`)").queue();
+        }
+
+        /*
         try {
 
             Path path = Paths.get("/var/jaoafa/discord/kinenbi.json");
@@ -50,6 +69,7 @@ public class Cmd_Origin implements CommandPremise {
         } catch (IOException | JSONException e) {
             Main.ExceptionReporter(channel, e);
         }
+        */
     }
 
     @Override

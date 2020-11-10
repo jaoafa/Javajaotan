@@ -30,6 +30,7 @@ public class Main {
     public static TextChannel ReportChannel = null;
     public static MySQLDBManager MySQLDBManager = null;
     public static String translateGAS = null;
+    public static String originAPIUrl = null;
     public static List<PriconeCharacter> pricone_Characters = new ArrayList<>();
     private static JDA jda = null;
     private static ChatManager chatManager = null;
@@ -51,6 +52,7 @@ public class Main {
             props.setProperty("sqluser", "PLEASE");
             props.setProperty("sqlpassword", "PLEASE");
             props.setProperty("translateGAS", "PLEASE");
+            props.setProperty("originAPIUrl", "PLEASE");
             try {
                 props.store(new FileOutputStream("conf.properties"), "Comments");
                 System.out.println("Please Config Token!");
@@ -85,6 +87,10 @@ public class Main {
             return;
         }
         translateGAS = props.getProperty("translateGAS");
+        if (translateGAS.equalsIgnoreCase("PLEASE")) {
+            translateGAS = null;
+        }
+        originAPIUrl = props.getProperty("originAPIUrl");
         if (translateGAS.equalsIgnoreCase("PLEASE")) {
             translateGAS = null;
         }
