@@ -20,6 +20,10 @@ public class Cmd_Tweet implements CommandPremise {
             channel.sendMessage(member.getAsMention() + ", あなたの権限ではこのコマンドは使用できません。").queue();
             return;
         }
+        if (args.length == 0) {
+            channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+            return;
+        }
         Twitter twitter = TwitterFactory.getSingleton();
         try {
             Status status = twitter.updateStatus(String.join(" ", args) + " #jaoafa");
