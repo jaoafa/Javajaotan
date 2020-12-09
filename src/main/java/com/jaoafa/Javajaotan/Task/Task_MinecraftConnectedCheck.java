@@ -25,17 +25,19 @@ public class Task_MinecraftConnectedCheck extends TimerTask {
         }
         Role MinecraftConnectedRole = guild.getRoleById(604011598952136853L);
         Role SubAccountRole = guild.getRoleById(753047225751568474L);
+        Role NeedSupportRole = jda.getRoleById(786110419470254102L);
         TextChannel channel = guild.getTextChannelById(597419057251090443L); // new general
         if (channel == null) {
             System.out.println("[MinecraftConnectedCheck] general(597419057251090443) channel is not found.");
             return;
         }
-        guild.loadMembers().onSuccess(members -> members.forEach(member -> check(guild, MinecraftConnectedRole, SubAccountRole, channel, member)));
+        guild.loadMembers().onSuccess(members -> members.forEach(member -> check(guild, MinecraftConnectedRole, SubAccountRole, NeedSupportRole, channel, member)));
     }
 
-    private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, TextChannel channel, Member member) {
+    private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, Role NeedSupportRole, TextChannel channel, Member member) {
         boolean isMinecraftConnected = member.getRoles().stream().anyMatch(_role -> _role.getIdLong() == MinecraftConnectedRole.getIdLong());
         boolean isSubAccount = member.getRoles().stream().anyMatch(_role -> _role.getIdLong() == SubAccountRole.getIdLong());
+        boolean isNeedSupport = member.getRoles().stream().anyMatch(_role -> _role.getIdLong() == NeedSupportRole.getIdLong());
         if (member.getUser().isBot()) {
             // bot
             return;
@@ -54,10 +56,15 @@ public class Task_MinecraftConnectedCheck extends TimerTask {
         LocalDateTime joinTime = member.getTimeJoined().atZoneSameInstant(ZoneId.of("Asia/Tokyo")).toLocalDateTime();
         LocalDateTime now = LocalDateTime.now();
         long diffweeks = ChronoUnit.WEEKS.between(joinTime, now);
-        if (diffweeks <= 3) {
-            // 3週間以内
+        if (diffweeks <= 1) {
+            // 1週間以内
             return;
         }
+        if (isNeedSupport && diffweeks <= 3) {
+            // NeedSupport権限がついていてかつ3週間以内
+            return;
+        }
+
 
         System.out.println("[Task_MinecraftConnectedCheck] kick: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
                 + " | between: " + diffweeks + "week.");
