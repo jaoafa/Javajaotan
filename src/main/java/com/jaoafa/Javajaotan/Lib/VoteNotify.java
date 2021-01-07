@@ -65,10 +65,10 @@ public class VoteNotify {
     }
 
     public void enable(String service, int time, String type) throws SQLException {
-        if (checkService(service)) {
+        if (!checkService(service)) {
             throw new IllegalArgumentException("service");
         }
-        if (checkType(type)) {
+        if (!checkType(type)) {
             throw new IllegalArgumentException("type");
         }
         MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
@@ -104,7 +104,7 @@ public class VoteNotify {
     }
 
     public void disable(String service) throws SQLException {
-        if (checkService(service)) {
+        if (!checkService(service)) {
             throw new IllegalArgumentException("service");
         }
         MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
