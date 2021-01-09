@@ -49,7 +49,7 @@ public class ALLChatMainEvent {
                 allchat.run(jda, guild, channel, member, user, message, false);
             }
         } catch (Exception e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
         }
     }
 
@@ -95,7 +95,7 @@ public class ALLChatMainEvent {
                 allchat.run(jda, guild, channel, member, user, message, true);
             }
         } catch (Exception e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
         }
     }
 }

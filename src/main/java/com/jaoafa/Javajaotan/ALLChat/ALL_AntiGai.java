@@ -76,7 +76,7 @@ public class ALL_AntiGai implements ALLChatPremise {
                     message.delete().queue();
                 }
             } catch (IOException e) {
-                Main.ExceptionReporter(channel, e);
+                Main.ExceptionReporter(message, e);
             }
         });
     }

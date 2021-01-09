@@ -51,7 +51,7 @@ public class ChannelMainEvent {
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException e) {
             // error
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
         }
     }
 
@@ -95,7 +95,7 @@ public class ChannelMainEvent {
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException e) {
             // error
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
         }
     }
 }
