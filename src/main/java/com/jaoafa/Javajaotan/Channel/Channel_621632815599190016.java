@@ -4,7 +4,8 @@ import com.jaoafa.Javajaotan.ChannelPremise;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 
-import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 public class Channel_621632815599190016 implements ChannelPremise {
     // #659
@@ -14,7 +15,7 @@ public class Channel_621632815599190016 implements ChannelPremise {
         if (message.getType() != MessageType.DEFAULT) {
             return;
         }
-        message.reply(message.getTimeCreated().toLocalDateTime().atZone(ZoneId.of("Asia/Tokyo")).toString().replace("T", " ")).queue();
+        message.reply(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS").format(message.getTimeCreated().withOffsetSameInstant(ZoneOffset.ofHours(9)))).queue();
     }
 
     @Override
