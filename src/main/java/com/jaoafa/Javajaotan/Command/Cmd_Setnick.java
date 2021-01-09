@@ -13,7 +13,7 @@ public class Cmd_Setnick implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (args.length == 0) {
-            channel.sendMessage(String.format("%s, このコマンドを実行するには、1つ以上の引数が必要です。", member.getAsMention())).queue();
+            message.reply("%s, このコマンドを実行するには、1つ以上の引数が必要です。").queue();
             return;
         }
         Member jaotan = guild.getMember(jda.getSelfUser());
@@ -26,10 +26,10 @@ public class Cmd_Setnick implements CommandPremise {
             oldnick = "null";
         jaotan.modifyNickname(String.join(" ", args)).queue(
                 null,
-                failure -> Main.DiscordExceptionError(getClass(), channel, failure)
+                failure -> Main.DiscordExceptionError(getClass(), message, failure)
         );
-        channel.sendMessage(
-                String.format("%s, jaotan nickname | `%s` -> `%s`", member.getAsMention(), oldnick, String.join(" ", args)))
+        message.reply(
+                String.format("jaotan nickname | `%s` -> `%s`", oldnick, String.join(" ", args)))
                 .queue();
     }
 

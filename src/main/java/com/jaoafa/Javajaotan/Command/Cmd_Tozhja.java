@@ -28,7 +28,7 @@ public class Cmd_Tozhja implements CommandPremise {
         List<String> texts = Arrays.stream(args).filter(
                 arg -> arg != null && !arg.startsWith("from:") && !arg.startsWith("to:")).collect(Collectors.toList());
         if (texts.size() == 0) {
-            channel.sendMessage(member.getAsMention() + ", 引数が適切ではありません。").queue();
+            message.reply("引数が適切ではありません。").queue();
             return;
         }
 
@@ -45,7 +45,7 @@ public class Cmd_Tozhja implements CommandPremise {
                     from = "auto";
                 }
             } catch (IOException e) {
-                Main.ExceptionReporter(channel, e);
+                Main.ExceptionReporter(message, e);
                 from = "auto";
             }
         }
@@ -59,7 +59,7 @@ public class Cmd_Tozhja implements CommandPremise {
             source = "GoogleTranslateGAS";
         }
         if (res == null) {
-            channel.sendMessage(member.getAsMention() + ", 翻訳に失敗しました。").queue();
+            message.reply("翻訳に失敗しました。").queue();
             return;
         }
 
@@ -72,14 +72,8 @@ public class Cmd_Tozhja implements CommandPremise {
             source2 = "GoogleTranslateGAS";
         }
 
-        final String _res = res;
-        final String _res2 = res2;
-        final String _from = from;
-        final String _to = to;
-        final String _source = source;
-        final String _source2 = source2;
-        channel.sendMessage(member.getAsMention() + ", ```" + String.join(" ", texts) + "```↓```" + _res + "```↓```"
-                + _res2 + "```(`" + _from + "` -> `" + _to + "` -> `ja` | SOURCE: `" + _source + " | " + _source2
+        message.reply("```" + String.join(" ", texts) + "```↓```" + res + "```↓```"
+                + res2 + "```(`" + from + "` -> `" + to + "` -> `ja` | SOURCE: `" + source + " | " + source2
                 + "`)").queue();
     }
 

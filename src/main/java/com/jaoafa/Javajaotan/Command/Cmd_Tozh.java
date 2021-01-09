@@ -28,7 +28,7 @@ public class Cmd_Tozh implements CommandPremise {
         List<String> texts = Arrays.stream(args).filter(
                 arg -> arg != null && !arg.startsWith("from:") && !arg.startsWith("to:")).collect(Collectors.toList());
         if (texts.size() == 0) {
-            channel.sendMessage(member.getAsMention() + ", 引数が適切ではありません。").queue();
+            message.reply("引数が適切ではありません。").queue();
             return;
         }
 
@@ -45,7 +45,7 @@ public class Cmd_Tozh implements CommandPremise {
                     from = "auto";
                 }
             } catch (IOException e) {
-                Main.ExceptionReporter(channel, e);
+                Main.ExceptionReporter(message, e);
                 from = "auto";
             }
         }
@@ -59,15 +59,11 @@ public class Cmd_Tozh implements CommandPremise {
             source = "GoogleTranslateGAS";
         }
         if (res == null) {
-            channel.sendMessage(member.getAsMention() + ", 翻訳に失敗しました。").queue();
+            message.reply("翻訳に失敗しました。").queue();
             return;
         }
-        final String _res = res;
-        final String _from = from;
-        final String _to = to;
-        final String _source = source;
-        channel.sendMessage(member.getAsMention() + ", ```" + String.join(" ", texts) + "```↓```" + _res + "```(`"
-                + _from + "` -> `" + _to + "` | SOURCE: `" + _source + "`)").queue();
+        message.reply("```" + String.join(" ", texts) + "```↓```" + res + "```(`"
+                + from + "` -> `" + to + "` | SOURCE: `" + source + "`)").queue();
     }
 
     @Override

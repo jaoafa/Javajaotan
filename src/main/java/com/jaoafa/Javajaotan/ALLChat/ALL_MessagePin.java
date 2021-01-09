@@ -28,7 +28,7 @@ public class ALL_MessagePin implements ALLChatPremise {
                                         if (!bool) {
                                             return;
                                         }
-                                        channel.sendMessage(member.getAsMention() + ", メッセージをピン止めするのに失敗しました。```" + failure.getMessage() + "```")
+                                        message.reply("メッセージをピン止めするのに失敗しました。```" + failure.getMessage() + "```")
                                                 .queue();
                                     }
                             )
@@ -36,7 +36,7 @@ public class ALL_MessagePin implements ALLChatPremise {
                 }
             });
 
-            message.addReaction("📌").queue(null, failure -> Main.DiscordExceptionError(getClass(), channel, failure));
+            message.addReaction("📌").queue(null, failure -> Main.DiscordExceptionError(getClass(), message, failure));
         }
     }
 

@@ -21,16 +21,14 @@ public class Cmd_Link implements CommandPremise {
                           Message message, String[] args) {
         MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
         if (MySQLDBManager == null) {
-            channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。(`MySQLDBManager null`)")
-                    .queue();
+            message.reply("データベースサーバに接続できません。時間をおいて再度お試しください。(`MySQLDBManager null`)").queue();
             return;
         }
         try {
             Connection conn = MySQLDBManager.getConnection();
             String authkey = getAuthKey(conn);
             if (authkey == null) {
-                channel.sendMessage(member.getAsMention() + ", AuthKeyを生成できませんでした。時間をおいて再度お試しください。")
-                        .queue();
+                message.reply("AuthKeyを生成できませんでした。時間をおいて再度お試しください。").queue();
                 return;
             }
             String name = member.getUser().getName();
@@ -48,18 +46,14 @@ public class Cmd_Link implements CommandPremise {
                 dm.sendMessage("このメッセージはjao Minecraft Server Discordのアカウント認証メッセージです。\n"
                         + "**jao Minecraft Serverに入り**、以下コマンドを実行してください。").queue();
                 dm.sendMessage("```/discordlink " + authkey + "```").queue();
-            }, failure -> {
-                channel.sendMessage(member.getAsMention() + ", 個人メッセージへの送信に失敗しました: `" + failure.getMessage() + "`")
-                        .queue();
-            });
-            channel.sendMessage(member.getAsMention() + ", 個人メッセージに送信されたメッセージを確認し、指定された行動を行って下さい。\n"
+            }, failure -> message.reply("個人メッセージへの送信に失敗しました: `" + failure.getMessage() + "`")
+                    .queue());
+            message.reply("個人メッセージに送信されたメッセージを確認し、指定された行動を行って下さい。\n"
                     + "メッセージが送信されてきませんか？jaotanからのDM受信設定(フレンドへの追加・サーバメンバーからのDM許可等)を確認の上、何度か実行し直して正常動作しなければ開発部にお問い合わせをお願いします！")
                     .queue();
-            return;
         } catch (SQLException e) {
-            channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
+            message.reply("データベースサーバに接続できません。時間をおいて再度お試しください。\n"
                     + "**Message**: `" + e.getMessage() + "`").queue();
-            return;
         }
     }
 
@@ -74,7 +68,7 @@ public class Cmd_Link implements CommandPremise {
     }
 
     String getAuthKey(Connection conn) throws SQLException {
-        String authkey = null;
+        String authkey;
         while (true) {
             authkey = RandomStringUtils.randomAlphabetic(10);
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM discordlink_waiting WHERE authkey = ?");

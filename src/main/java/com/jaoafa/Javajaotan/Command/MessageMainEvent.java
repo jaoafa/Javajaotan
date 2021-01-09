@@ -111,7 +111,7 @@ public class MessageMainEvent {
 
             if (channel.getIdLong() == 597423370589700098L || channel.getIdLong() == 597423407998435329L) {
                 // support or question channel
-                channel.sendMessage(member.getAsMention() + ", そのコマンドをこのチャンネルで使用することはできません。").queue();
+                message.reply("そのコマンドをこのチャンネルで使用することはできません。").queue();
                 return;
             }
 
@@ -143,7 +143,7 @@ public class MessageMainEvent {
             // not found
         } catch (Exception e) {
             // error
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
         }
     }
 }

@@ -27,11 +27,11 @@ public class ALL_ReplyTojaotan implements ALLChatPremise {
 
         String ret = ChatManager.getReplyMessage(user, content);
         if (ret == null) {
-            channel.sendMessage(member.getAsMention() + ", 返信メッセージの取得に失敗しました。").queue();
+            message.reply("返信メッセージの取得に失敗しました。").queue();
             return;
         }
         System.out.println("[ReplyTojaotan] " + content + " -> " + ret);
-        channel.sendMessage(member.getAsMention() + ", " + ret).queue();
+        message.reply(ret).queue();
     }
 
     @Override

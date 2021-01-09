@@ -18,19 +18,19 @@ public class Cmd_Mcbans implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (args.length == 0) {
-            channel.sendMessage(member.getAsMention() + ", 引数が足りません。").queue();
+            message.reply("引数が足りません。").queue();
             return;
         }
         MCBans mcbans;
         try {
             mcbans = new MCBans(args[0]);
         } catch (IOException e) {
-            channel.sendMessage(member.getAsMention() + ", 取得に失敗しました。(IOException : " + e.getMessage() + ")").queue();
+            message.reply("取得に失敗しました。(IOException : " + e.getMessage() + ")").queue();
             return;
         }
 
         if (!mcbans.isFound()) {
-            channel.sendMessage(member.getAsMention() + ", 取得に失敗しました。該当するプレイヤー情報が見つかりません。").queue();
+            message.reply("取得に失敗しました。該当するプレイヤー情報が見つかりません。").queue();
             return;
         }
 
@@ -72,7 +72,7 @@ public class Cmd_Mcbans implements CommandPremise {
             }
         }
 
-        channel.sendMessage(embed.build()).queue();
+        message.reply(embed.build()).queue();
     }
 
     @Override

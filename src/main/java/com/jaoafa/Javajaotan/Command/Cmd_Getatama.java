@@ -24,13 +24,13 @@ public class Cmd_Getatama implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (Library.isDenyToyCmd(channel)) {
-            channel.sendMessage(member.getAsMention() + ", このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
+            message.reply("このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
             return;
         }
         File sqliteFile = new File("pp_dic_preset.sqlite");
         if (!sqliteFile.exists()) {
             // nasa
-            channel.sendMessage(member.getAsMention() + ", 動作に必要なファイルが見つかりません。開発部にお問い合わせください。\n"
+            message.reply("動作に必要なファイルが見つかりません。開発部にお問い合わせください。\n"
                     + "Reason: " + sqliteFile.getAbsolutePath() + " not found").queue();
             return;
         }
@@ -39,9 +39,9 @@ public class Cmd_Getatama implements CommandPremise {
             SQLiteDBManager sqlite = new SQLiteDBManager(sqliteFile);
             conn = sqlite.getConnection();
         } catch (ClassNotFoundException | IOException | SQLException e) {
-            channel.sendMessage(member.getAsMention() + ", 処理に失敗しました。時間を置いてもう一度お試しください。\nReason: " + e.getMessage())
+            message.reply("処理に失敗しました。時間を置いてもう一度お試しください。\nReason: " + e.getMessage())
                     .queue();
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return;
         }
 
@@ -49,13 +49,13 @@ public class Cmd_Getatama implements CommandPremise {
         if (args.length == 1) {
             if (!Library.isInt(args[0])) {
                 // not is int
-                channel.sendMessage(member.getAsMention() + ", 数値を指定してください。").queue();
+                message.reply("数値を指定してください。").queue();
                 return;
             }
             count = Integer.parseInt(args[0]);
             if (count > 100) {
                 // count > 100 | 101↑ x
-                channel.sendMessage(member.getAsMention() + ", 100以下で指定してください。").queue();
+                message.reply("100以下で指定してください。").queue();
                 return;
             }
         }
@@ -87,12 +87,12 @@ public class Cmd_Getatama implements CommandPremise {
                 list.set(row, list.get(row) + res_suffix.getString("word"));
             }
         } catch (SQLException e) {
-            channel.sendMessage(member.getAsMention() + ", 処理に失敗しました。時間を置いてもう一度お試しください。\n**Reason**: " + e.getMessage())
+            message.reply("処理に失敗しました。時間を置いてもう一度お試しください。\n**Reason**: " + e.getMessage())
                     .queue();
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return;
         }
-        channel.sendMessage(member.getAsMention() + ", ```" + String.join("\n", list) + "```").queue();
+        message.reply("```" + String.join("\n", list) + "```").queue();
     }
 
     @Override

@@ -62,7 +62,7 @@ public class Channel_597423974816808970 implements ChannelPremise {
 			builder.addField("ピン留めエラーメッセージ", pinerr, false);
 		}*/
         builder.setColor(Color.YELLOW);
-        channel.sendMessage(builder.build()).queue();
+        message.reply(builder.build()).queue();
     }
 
     String getBlocks(String content) {

@@ -17,33 +17,33 @@ public class Cmd_Mute implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (channel.getIdLong() != 597423467796758529L) {
-            channel.sendMessage(String.format("%s, このチャンネルではこのコマンドを使用することはできません。", member.getAsMention())).queue();
+            message.reply("このチャンネルではこのコマンドを使用することはできません。").queue();
             return; // #meeting以外
         }
         if (args.length == 0) {
             HashSet<String> muteList = MuteManager.refreshMuteList();
             if (muteList == null) {
-                channel.sendMessage(member.getAsMention() + ", ミュートリストをリフレッシュできませんでした。").queue();
+                message.reply("ミュートリストをリフレッシュできませんでした。").queue();
                 return;
             }
             List<String> replys = muteList.stream().map(s -> "<@" + s + ">")
                     .collect(Collectors.toList());
-            channel.sendMessage(String.format("ミュート中: %s", String.join(", ", replys))).queue();
+            message.reply(String.format("ミュート中: %s", String.join(", ", replys))).queue();
             return;
         }
 
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("add")) {
                 MuteManager.addMuteList(args[1]);
-                channel.sendMessage(member.getAsMention() + ", <@" + args[1] + ">をミュートしました。").queue();
+                message.reply("<@" + args[1] + ">をミュートしました。").queue();
                 return;
             } else if (args[0].equalsIgnoreCase("remove")) {
                 MuteManager.removeMuteList(args[1]);
-                channel.sendMessage(member.getAsMention() + ", <@" + args[1] + ">のミュートを解除しました。").queue();
+                message.reply("<@" + args[1] + ">のミュートを解除しました。").queue();
                 return;
             }
         }
-        channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+        message.reply("" + getUsage()).queue();
     }
 
     @Override

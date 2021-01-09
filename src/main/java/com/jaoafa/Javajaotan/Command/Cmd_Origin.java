@@ -23,12 +23,12 @@ public class Cmd_Origin implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (args.length != 1) {
-            channel.sendMessage(member.getAsMention() + ", このコマンドを実行するには、1つの引数が必要です。").queue();
+            message.reply("このコマンドを実行するには、1つの引数が必要です。").queue();
             return;
         }
         String num = args[0];
         if (!NumberUtils.isDigits(num)) {
-            channel.sendMessage(member.getAsMention() + ", 数値を指定してください。").queue();
+            message.reply("数値を指定してください。").queue();
             return;
         }
         try {
@@ -38,18 +38,18 @@ public class Cmd_Origin implements CommandPremise {
             Request request = new Request.Builder().url(url).get().build();
             Response response = client.newCall(request).execute();
             if (response.code() != 200) {
-                channel.sendMessage(member.getAsMention() + ", 取得処理に失敗しました。").queue();
+                message.reply("取得処理に失敗しました。").queue();
                 return;
             }
             JSONObject json = new JSONObject(response.body().string());
             response.close();
             if (!json.getBoolean("status")) {
-                channel.sendMessage(member.getAsMention() + ", 取得処理に失敗しました。(`" + json.optString("message", "null") + "`)").queue();
+                message.reply("取得処理に失敗しました。(`" + json.optString("message", "null") + "`)").queue();
                 return;
             }
             channel.sendMessage(String.format("%s```%s```", json.optString("title", "null"), json.optString("text", "null"))).queue();
         } catch (IOException e) {
-            channel.sendMessage(member.getAsMention() + ", 取得処理に失敗しました。(IOException: `" + e.getMessage() + "`)").queue();
+            message.reply("取得処理に失敗しました。(IOException: `" + e.getMessage() + "`)").queue();
         }
 
         /*
@@ -59,7 +59,7 @@ public class Cmd_Origin implements CommandPremise {
             List<String> datas = Files.readAllLines(path);
             JSONObject json = new JSONObject(String.join("\n", datas));
             if (!json.has(num)) {
-                channel.sendMessage(member.getAsMention() + ", 指定された記念日ナンバーの記念日が見つかりませんでした。").queue();
+                message.reply("指定された記念日ナンバーの記念日が見つかりませんでした。").queue();
                 return;
             }
             JSONObject obj = json.getJSONObject(num);

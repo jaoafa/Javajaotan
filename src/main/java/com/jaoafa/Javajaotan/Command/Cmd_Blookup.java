@@ -24,12 +24,12 @@ public class Cmd_Blookup implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (channel.getIdLong() != 597423444501463040L) {
-            channel.sendMessage(member.getAsMention() + ", このチャンネルでは使用できません。").queue();
+            message.reply("このチャンネルでは使用できません。").queue();
             return;
         }
         if (args.length == 1) {
             // /blookup <Player>
-            channel.sendMessage(member.getAsMention() + ", https://jaoafa.com/cp/?mcid=" + args[0] + "\nhttps://jaoafa.com/lb/?mcid=" + args[0]).queue();
+            message.reply("https://jaoafa.com/cp/?mcid=" + args[0] + "\nhttps://jaoafa.com/lb/?mcid=" + args[0]).queue();
             return;
             /*
             UUID uuid = getUUID(channel, member, args[0]);
@@ -48,36 +48,35 @@ public class Cmd_Blookup implements CommandPremise {
             // /blookup <Player> <before　rowid>
             if (args[0].equalsIgnoreCase("cp")) {
                 // /blookup <cp> <Player>
-                UUID uuid = getUUID(channel, member, args[1]);
+                UUID uuid = getUUID(message, args[1]);
                 if (uuid == null) {
                     return;
                 }
-                int userid = getUserID(channel, member, uuid);
+                int userid = getUserID(message, uuid);
                 if (userid == -1) {
                     return;
                 }
-                processBlockLookup(jda, guild, channel, member, message, args[1], userid, -1, -1);
+                processBlockLookup(message, args[1], userid, -1, -1);
                 return;
             } else if (args[0].equalsIgnoreCase("lb")) {
                 // /blookup <lb> <Player>
-                channel.sendMessage(member.getAsMention() + ", Unimplemented").queue();
+                message.reply("Unimplemented").queue();
                 return;
             } else {
                 // /blookup <Player> <before　rowid>
-                UUID uuid = getUUID(channel, member, args[0]);
+                UUID uuid = getUUID(message, args[0]);
                 if (uuid == null) {
                     return;
                 }
-                int userid = getUserID(channel, member, uuid);
+                int userid = getUserID(message, uuid);
                 if (userid == -1) {
                     return;
                 }
                 if (!Library.isInt(args[1])) {
-                    channel.sendMessage(member.getAsMention() + ", `<before rowid>`には数値を指定してください。");
+                    message.reply("`<before rowid>`には数値を指定してください。");
                     return;
                 }
-                processBlockLookup(jda, guild, channel, member, message, args[0], userid, Integer.parseInt(args[1]),
-                        -1);
+                processBlockLookup(message, args[0], userid, Integer.parseInt(args[1]), -1);
                 return;
             }
         } else if (args.length == 3) {
@@ -92,14 +91,13 @@ public class Cmd_Blookup implements CommandPremise {
         }
     }
 
-    void processBlockLookup(JDA jda, Guild guild, MessageChannel channel, Member member,
-                            Message message, String inputPlayerName, int userid, int before, int after) {
+    void processBlockLookup(Message message, String inputPlayerName, int userid, int before, int after) {
         LinkedList<String> retMessages = new LinkedList<>();
 
         retMessages.add("__**Blookup - `" + inputPlayerName + "` (" + userid + ")**__");
         retMessages.add("```");
 
-        JSONObject response = getLookup(channel, member, userid, before, after);
+        JSONObject response = getLookup(message, userid, before, after);
         for (int i = 0; i < response.getJSONArray("data").length(); i++) {
             JSONObject d = response.getJSONArray("data").getJSONObject(i);
 
@@ -129,10 +127,10 @@ public class Cmd_Blookup implements CommandPremise {
                 inputPlayerName, response.getInt("prevId"),
                 inputPlayerName, response.getInt("nextId")));
 
-        channel.sendMessage(member.getAsMention() + ", " + String.join("\n", retMessages)).queue();
+        message.reply("" + String.join("\n", retMessages)).queue();
     }
 
-    UUID getUUID(MessageChannel channel, Member member, String str) {
+    UUID getUUID(Message message, String str) {
         if (isUUID(str)) {
             return UUID.fromString(str);
         }
@@ -147,7 +145,7 @@ public class Cmd_Blookup implements CommandPremise {
 
             Response response = client.newCall(request).execute();
             if (response.code() != 200 && response.code() != 302) {
-                channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + response.code() + " "
+                message.reply("APIサーバへの接続に失敗: " + response.code() + " "
                         + response.body().string()).queue();
                 response.close();
                 return null;
@@ -156,7 +154,7 @@ public class Cmd_Blookup implements CommandPremise {
             JSONObject json = new JSONObject(response.body().string());
             response.close();
             if (!json.getBoolean("status")) {
-                channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: UUIDの取得に失敗しました。\n```"
+                message.reply("APIサーバへの接続に失敗: UUIDの取得に失敗しました。\n```"
                         + json.optString("message", "null") + "```").queue();
                 return null;
             }
@@ -164,12 +162,12 @@ public class Cmd_Blookup implements CommandPremise {
             String uuidStr = json.getJSONObject("data").getString("uuid");
             return UUID.fromString(uuidStr);
         } catch (IOException ex) {
-            channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
+            message.reply("APIサーバへの接続に失敗: " + ex.getMessage()).queue();
             return null;
         }
     }
 
-    int getUserID(MessageChannel channel, Member member, UUID uuid) {
+    int getUserID(Message message, UUID uuid) {
         String url = "https://api.jaoafa.com/world/coreprotect/" + uuid.toString();
 
         try {
@@ -181,7 +179,7 @@ public class Cmd_Blookup implements CommandPremise {
 
             Response response = client.newCall(request).execute();
             if (response.code() != 200 && response.code() != 302) {
-                channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + response.code() + " "
+                message.reply("APIサーバへの接続に失敗: " + response.code() + " "
                         + response.body().string()).queue();
                 response.close();
                 return -1;
@@ -190,19 +188,19 @@ public class Cmd_Blookup implements CommandPremise {
             JSONObject json = new JSONObject(response.body().string());
             response.close();
             if (!json.getBoolean("status")) {
-                channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: ユーザーIDの取得に失敗しました。\n```"
+                message.reply("APIサーバへの接続に失敗: ユーザーIDの取得に失敗しました。\n```"
                         + json.optString("message", "null") + "```").queue();
                 return -1;
             }
 
             return json.getJSONObject("data").getInt("userid");
         } catch (IOException ex) {
-            channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
+            message.reply("APIサーバへの接続に失敗: " + ex.getMessage()).queue();
             return -1;
         }
     }
 
-    JSONObject getLookup(MessageChannel channel, Member member, int userid, int before, int after) {
+    JSONObject getLookup(Message message, int userid, int before, int after) {
         String url = "https://api.jaoafa.com/world/coreprotect/lookup/" + userid + "?";
 
         if (before != -1) {
@@ -220,7 +218,7 @@ public class Cmd_Blookup implements CommandPremise {
 
             Response response = client.newCall(request).execute();
             if (response.code() != 200 && response.code() != 302) {
-                channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + response.code() + " "
+                message.reply("APIサーバへの接続に失敗: " + response.code() + " "
                         + response.body().string()).queue();
                 response.close();
                 return null;
@@ -229,14 +227,14 @@ public class Cmd_Blookup implements CommandPremise {
             JSONObject json = new JSONObject(response.body().string());
             response.close();
             if (!json.getBoolean("status")) {
-                channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: ブロックデータの取得に失敗しました。\n```"
+                message.reply("APIサーバへの接続に失敗: ブロックデータの取得に失敗しました。\n```"
                         + json.optString("message", "null") + "```").queue();
                 return null;
             }
 
             return json;
         } catch (IOException ex) {
-            channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
+            message.reply("APIサーバへの接続に失敗: " + ex.getMessage()).queue();
             return null;
         }
     }

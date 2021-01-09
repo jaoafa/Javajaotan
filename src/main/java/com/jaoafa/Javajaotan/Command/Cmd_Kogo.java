@@ -17,13 +17,13 @@ public class Cmd_Kogo implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (args.length == 0) {
-            channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+            message.reply(getUsage()).queue();
             return;
         }
         String original = String.join(" ", args);
         String json = getRunCommand(message, "node", "/home/server/ZakuroHat/Javajaotan/extcmds/kogo/run.js", original);
         JSONObject obj = new JSONObject(json);
-        channel.sendMessage(member.getAsMention() + ", ```" + obj.optString("output", "null") + "```").queue();
+        message.reply("```" + obj.optString("output", "null") + "```").queue();
     }
 
     private String getRunCommand(Message message, String... command) {
@@ -37,10 +37,10 @@ public class Cmd_Kogo implements CommandPremise {
             p = builder.start();
             p.waitFor(10, TimeUnit.MINUTES);
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null IOException";
         } catch (InterruptedException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null InterruptedException";
         }
         InputStream is = p.getInputStream();
@@ -58,7 +58,7 @@ public class Cmd_Kogo implements CommandPremise {
             br.close();
             is.close();
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null IOException";
         }
         return text.toString();

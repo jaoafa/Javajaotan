@@ -25,16 +25,15 @@ public class Cmd_Blmaplb implements CommandPremise {
                           Message message, String[] args) {
         MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
         if (MySQLDBManager == null) {
-            channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。(`MySQLDBManager null`)")
-                    .queue();
+            message.reply("データベースサーバに接続できません。時間をおいて再度お試しください。(`MySQLDBManager null`)").queue();
             return;
         }
         if (channel.getIdLong() != 597423444501463040L) {
-            channel.sendMessage(member.getAsMention() + ", このチャンネルでは使用できません。").queue();
+            message.reply("このチャンネルでは使用できません。").queue();
             return;
         }
         if (args.length == 0) {
-            channel.sendMessage(member.getAsMention() + ", 引数が足りません。\n" + getUsage()).queue();
+            message.reply("引数が足りません。\n" + getUsage()).queue();
             return;
         }
         try {
@@ -44,7 +43,7 @@ public class Cmd_Blmaplb implements CommandPremise {
             ResultSet res = statement.executeQuery();
 
             if (!res.next()) {
-                channel.sendMessage(member.getAsMention() + ", 指定されたユーザーは見つかりません。").queue();
+                message.reply("指定されたユーザーは見つかりません。").queue();
                 res.close();
                 statement.close();
                 return;
@@ -65,7 +64,7 @@ public class Cmd_Blmaplb implements CommandPremise {
 
                 Response response = client.newCall(request).execute();
                 if (response.code() != 200 && response.code() != 302) {
-                    channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + response.code() + " "
+                    message.reply("APIサーバへの接続に失敗: " + response.code() + " "
                             + response.body().string()).queue();
                     response.close();
                     return;
@@ -74,10 +73,10 @@ public class Cmd_Blmaplb implements CommandPremise {
                 channel.sendFile(response.body().byteStream(), uuid + ".png").append(member.getAsMention()).complete();
                 response.close();
             } catch (IOException ex) {
-                channel.sendMessage(member.getAsMention() + ", APIサーバへの接続に失敗: " + ex.getMessage()).queue();
+                message.reply("APIサーバへの接続に失敗: " + ex.getMessage()).queue();
             }
         } catch (SQLException e) {
-            channel.sendMessage(member.getAsMention() + ", データベースサーバに接続できません。時間をおいて再度お試しください。\n"
+            message.reply("データベースサーバに接続できません。時間をおいて再度お試しください。\n"
                     + "**Message**: `" + e.getMessage() + "`").queue();
         }
     }

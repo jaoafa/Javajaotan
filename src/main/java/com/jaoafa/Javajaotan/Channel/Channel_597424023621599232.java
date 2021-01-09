@@ -14,7 +14,7 @@ public class Channel_597424023621599232 implements ChannelPremise {
         }
         message.pin().queue(success -> message.addReaction("🆕").queue(), failure -> {
             message.addReaction("❌").queue();
-            channel.sendMessage("ピンエラー: `" + failure.getClass().getName() + " | " + failure.getMessage() + "`").queue();
+            message.reply("ピンエラー: `" + failure.getClass().getName() + " | " + failure.getMessage() + "`").queue();
         });
     }
 

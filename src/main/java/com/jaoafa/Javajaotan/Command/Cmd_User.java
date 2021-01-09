@@ -57,12 +57,12 @@ public class Cmd_User implements CommandPremise {
         }
 
         if (userData == null) {
-            channel.sendMessage(member.getAsMention() + ", 指定されたユーザー情報は見つかりませんでした。").queue();
+            message.reply("指定されたユーザー情報は見つかりませんでした。").queue();
             return;
         }
 
         if (!userData.isFound) {
-            channel.sendMessage(member.getAsMention() + ", 指定されたユーザー情報は見つかりませんでした。(2)").queue();
+            message.reply("指定されたユーザー情報は見つかりませんでした。(2)").queue();
             return;
         }
 
@@ -96,7 +96,7 @@ public class Cmd_User implements CommandPremise {
                     false);
         }
 
-        channel.sendMessage(builder.build()).append(member.getAsMention()).queue();
+        message.reply(builder.build()).append(member.getAsMention()).queue();
     }
 
     private UserData fromUUID(UUID uuid) {

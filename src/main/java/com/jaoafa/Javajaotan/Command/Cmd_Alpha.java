@@ -13,7 +13,7 @@ public class Cmd_Alpha implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (Library.isDenyToyCmd(channel)) {
-            channel.sendMessage(member.getAsMention() + ", このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
+            message.reply("このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
             return;
         }
         String msg = String.format(

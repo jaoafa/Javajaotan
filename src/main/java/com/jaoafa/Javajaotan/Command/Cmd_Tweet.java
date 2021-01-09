@@ -17,24 +17,24 @@ public class Cmd_Tweet implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (!Library.hasAdminModeratorRole(guild, member)) {
-            channel.sendMessage(member.getAsMention() + ", あなたの権限ではこのコマンドは使用できません。").queue();
+            message.reply("あなたの権限ではこのコマンドは使用できません。").queue();
             return;
         }
         if (args.length == 0) {
-            channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+            message.reply("" + getUsage()).queue();
             return;
         }
         Twitter twitter = TwitterFactory.getSingleton();
         try {
             Status status = twitter.updateStatus(String.join(" ", args) + " #jaoafa");
             if (status == null) {
-                channel.sendMessage(member.getAsMention() + ", ツイートの送信に失敗しました: `status is null.`").queue();
+                message.reply("ツイートの送信に失敗しました: `status is null.`").queue();
                 return;
             }
-            channel.sendMessage(member.getAsMention() + ", ツイートの送信に成功しました: https://twitter.com/"
+            message.reply("ツイートの送信に成功しました: https://twitter.com/"
                     + status.getUser().getScreenName() + "/status/" + status.getId()).queue();
         } catch (TwitterException e) {
-            channel.sendMessage(member.getAsMention() + ", ツイートの送信に失敗しました: `" + e.getMessage() + " (" + e.getErrorCode()
+            message.reply("ツイートの送信に失敗しました: `" + e.getMessage() + " (" + e.getErrorCode()
                     + " / " + e.getStatusCode() + ")`").queue();
         }
     }

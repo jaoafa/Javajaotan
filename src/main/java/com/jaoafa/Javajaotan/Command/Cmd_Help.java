@@ -50,9 +50,9 @@ public class Cmd_Help implements CommandPremise {
                     cmdList.add(field);
                 }
             } catch (Exception e) { // ClassFinder.findClassesがそもそもException出すので仕方ないという判断で。
-                channel.sendMessage("処理に失敗しました。時間を置いてもう一度お試しください。\n"
+                message.reply("処理に失敗しました。時間を置いてもう一度お試しください。\n"
                         + "**Message**: `" + e.getMessage() + "`").queue();
-                Main.ExceptionReporter(channel, e);
+                Main.ExceptionReporter(message, e);
                 return;
             }
             // todo: /help 2など対応、文字数計算・自動的に切ってページネーションする
@@ -63,7 +63,7 @@ public class Cmd_Help implements CommandPremise {
             if (allcmdcount % 10 != 0)
                 allpage++;
             final int pagestart = nowpage * 10;
-            final int pageend = nowpage * 10 + 10;
+            final int pageend = 10;
 
             EmbedBuilder builder = new EmbedBuilder();
             builder.setTitle("jaotan Commands (" + (nowpage + 1) + " / " + allpage + ")");
@@ -76,13 +76,13 @@ public class Cmd_Help implements CommandPremise {
                 builder.setFooter("Javajaotan v" + version);
             }
             for (int i = pagestart; i < pageend; i++) {
-                if (i < 0 || i >= cmdList.size()) {
+                if (i >= cmdList.size()) {
                     break;
                 }
                 EmbedField field = cmdList.get(i);
                 builder.addField("/" + field.getTitle(), field.getContent(), true);
             }
-            channel.sendMessage(builder.build()).queue();
+            message.reply(builder.build()).queue();
             return;
         } else if (args.length == 1 && NumberUtils.isDigits(args[0])) {
             // /help 1,2,3...
@@ -112,14 +112,14 @@ public class Cmd_Help implements CommandPremise {
                     cmdList.add(field);
                 }
             } catch (Exception e) { // ClassFinder.findClassesがそもそもException出すので仕方ないという判断で。
-                channel.sendMessage("処理に失敗しました。時間を置いてもう一度お試しください。\n"
+                message.reply("処理に失敗しました。時間を置いてもう一度お試しください。\n"
                         + "**Message**: `" + e.getMessage() + "`").queue();
-                Main.ExceptionReporter(channel, e);
+                Main.ExceptionReporter(message, e);
                 return;
             }
             // todo: /help 2など対応、文字数計算・自動的に切ってページネーションする
             // 10コマンドづつページ分割
-            final int nowpage = Integer.valueOf(args[0]) - 1; // 1ページ = 0
+            final int nowpage = Integer.parseInt(args[0]) - 1; // 1ページ = 0
             final int allcmdcount = cmdList.size();
             int allpage = allcmdcount / 10;
             if (allcmdcount % 10 != 0)
@@ -146,7 +146,7 @@ public class Cmd_Help implements CommandPremise {
                 builder.addField("/" + field.getTitle(), field.getContent(), true);
             }
 
-            channel.sendMessage(builder.build()).queue();
+            message.reply(builder.build()).queue();
             return;
         }
         try {
@@ -178,8 +178,7 @@ public class Cmd_Help implements CommandPremise {
             String version = Main.getVersion();
             builder.setFooter("Javajaotan v" + version);
 
-            channel.sendMessage(builder.build()).queue();
-            return;
+            message.reply(builder.build()).queue();
         } catch (ClassNotFoundException e) {
             EmbedBuilder builder = new EmbedBuilder();
             builder.setTitle("jaotan Command Help");
@@ -189,13 +188,12 @@ public class Cmd_Help implements CommandPremise {
             String version = Main.getVersion();
             builder.setFooter("Javajaotan v" + version);
 
-            channel.sendMessage(builder.build()).queue();
-            return;
+            message.reply(builder.build()).queue();
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException e) {
-            channel.sendMessage("処理に失敗しました。時間を置いてもう一度お試しください。\n"
+            message.reply("処理に失敗しました。時間を置いてもう一度お試しください。\n"
                     + "**Message**: `" + e.getMessage() + "`").queue();
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
         }
     }
 

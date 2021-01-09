@@ -27,7 +27,7 @@ public class Channel_597768445601382400 implements ChannelPremise {
             } catch (MalformedURLException e) {
                 continue;
             }
-            channel.sendMessage(user.getAsMention() + ", スポイラーの設定がされていないファイルは投稿できません。").queue();
+            message.reply("スポイラーの設定がされていないファイルは投稿できません。").queue();
             message.delete().queue();
             return;
         }

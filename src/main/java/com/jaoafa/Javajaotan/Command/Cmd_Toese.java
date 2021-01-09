@@ -121,14 +121,14 @@ public class Cmd_Toese implements CommandPremise {
             }
         };
         if (args.length == 0) {
-            channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+            message.reply(getUsage()).queue();
             return;
         }
         String content = String.join(" ", args);
         for (Entry<String, String> entry : map.entrySet()) {
             content = content.replaceAll(Pattern.quote(entry.getKey()), entry.getValue());
         }
-        channel.sendMessage(member.getAsMention() + ", ```" + content + "```").queue();
+        message.reply("```" + content + "```").queue();
     }
 
     @Override

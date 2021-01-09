@@ -17,21 +17,15 @@ public class ALL_Calledjaotan implements ALLChatPremise {
             return;
         }
         if (text.equals("jaotan")) {
-            channel.sendMessage(
-                    member.getAsMention() + ", はいっ！お呼びですか？").queue();
+            message.reply("はいっ！お呼びですか？").queue();
         }
         if (text.equals("Jaotan")) {
-            channel.sendMessage(
-                    member.getAsMention()
-                            + ", はいっ！お呼びで…はい？\njaotanは``jaotan``であって``Jaotan``じゃないです！人の名前を間違えるなんてひどい！人間のCrime！")
+            message.reply("はいっ！お呼びで…はい？\njaotanは``jaotan``であって``Jaotan``じゃないです！人の名前を間違えるなんてひどい！人間のCrime！")
                     .queue();
         }
         if (!text.equals("jaotan") && !text.equals("Jaotan") && text.equalsIgnoreCase("jaotan")) {
             // 「jaotan」でもなく「Jaotan」でもないjaotan。つまりjAotanとかjaoTanとか。
-            channel.sendMessage(
-                    member.getAsMention()
-                            + ", はいっ！お呼びで…。ああ、論外です。御帰り願います。")
-                    .queue();
+            message.reply("はいっ！お呼びで…。ああ、論外です。御帰り願います。").queue();
         }
 		/*
 		if (!text.equalsIgnoreCase("jaotan") && text.contains("jaotan")) {

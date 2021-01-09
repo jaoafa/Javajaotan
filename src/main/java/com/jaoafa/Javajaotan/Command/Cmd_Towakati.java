@@ -23,7 +23,7 @@ public class Cmd_Towakati implements CommandPremise {
         String original = String.join(" ", args);
         String json = getRunCommand(message, "php", "/home/server/ZakuroHat/Javajaotan/extcmds/towakati.php", original);
         JSONObject obj = new JSONObject(json);
-        channel.sendMessage(member.getAsMention() + ", ```" + obj.optString("output", "null") + "```").queue();
+        message.reply(member.getAsMention() + ", ```" + obj.optString("output", "null") + "```").queue();
     }
 
     private String getRunCommand(Message message, String... command) {
@@ -37,10 +37,10 @@ public class Cmd_Towakati implements CommandPremise {
             p = builder.start();
             p.waitFor(10, TimeUnit.MINUTES);
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null IOException";
         } catch (InterruptedException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null InterruptedException";
         }
         InputStream is = p.getInputStream();
@@ -58,7 +58,7 @@ public class Cmd_Towakati implements CommandPremise {
             br.close();
             is.close();
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null IOException";
         }
         return text;

@@ -38,7 +38,7 @@ public class Cmd_Tokanji implements CommandPremise {
         try {
             original = URLEncoder.encode(original, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return;
         }
 
@@ -60,9 +60,9 @@ public class Cmd_Tokanji implements CommandPremise {
                 }
             }
 
-            channel.sendMessage(member.getAsMention() + ", ```" + builder.toString() + "```").queue();
+            message.reply(member.getAsMention() + ", ```" + builder.toString() + "```").queue();
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
         }
     }
 

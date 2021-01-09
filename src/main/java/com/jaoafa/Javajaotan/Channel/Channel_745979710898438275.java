@@ -16,11 +16,11 @@ public class Channel_745979710898438275 implements ChannelPremise {
         String content = message.getContentRaw();
         String ret = ChatManager.getReplyMessage(user, content);
         if (ret == null) {
-            channel.sendMessage(member.getAsMention() + ", 返信メッセージの取得に失敗しました。").queue();
+            message.reply("返信メッセージの取得に失敗しました。").queue();
             return;
         }
         System.out.println("[jaoChat] " + content + " -> " + ret);
-        channel.sendMessage(member.getAsMention() + ", " + ret).queue();
+        message.reply(ret).queue();
     }
 
     @Override

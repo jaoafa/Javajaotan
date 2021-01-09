@@ -9,11 +9,11 @@ public class Cmd_Listening implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (args.length == 0) {
-            channel.sendMessage(member.getAsMention() + ", このコマンドを実行するには、1つ以上の引数が必要です。").queue();
+            message.reply("このコマンドを実行するには、1つ以上の引数が必要です。").queue();
             return;
         }
         jda.getPresence().setActivity(Activity.listening(String.join(" ", args)));
-        channel.sendMessage(member.getAsMention() + ", NowListeningを更新しました。").queue();
+        message.reply("NowListeningを更新しました。").queue();
     }
 
     @Override

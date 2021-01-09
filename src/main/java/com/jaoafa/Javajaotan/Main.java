@@ -12,6 +12,7 @@ import com.jaoafa.Javajaotan.Task.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
@@ -202,15 +203,27 @@ public class Main {
         Main.jda = jda;
     }
 
-    public static void DiscordExceptionError(@NotNull Class<?> clazz, @Nullable MessageChannel channel,
+    public static void DiscordExceptionError(@NotNull Class<?> clazz, @Nullable Message message,
                                              @NotNull Throwable exception) {
-        if (channel == null && Main.ReportChannel != null) {
-            channel = Main.ReportChannel;
-        } else if (channel == null) {
-            System.out.println("DiscordExceptionError: channel == null and Javajaotan.ReportChannel == null.");
-            System.out.println("DiscordExceptionError did not work properly!");
-            return;
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        exception.printStackTrace(pw);
+        pw.flush();
+        InputStream is = new ByteArrayInputStream(sw.toString().getBytes(StandardCharsets.UTF_8));
+        if (message != null) {
+            message.reply(":pencil:おっと！Javajaotanでなにか問題が発生したようです！ <@221991565567066112>\n**ErrorMsg**: `"
+                    + exception.getMessage()
+                    + "`\n**Class**: `" + clazz.getName() + " (" + exception.getClass().getName() + ")`").queue();
+        } else {
+            Main.ReportChannel.sendMessage(":pencil:おっと！Javajaotanでなにか問題が発生したようです！ <@221991565567066112>\n**ErrorMsg**: `"
+                    + exception.getMessage()
+                    + "`\n**Class**: `" + clazz.getName() + " (" + exception.getClass().getName() + ")`").queue();
         }
+        Main.ReportChannel.sendFile(is, "stacktrace.txt").queue();
+    }
+
+    public static void DiscordExceptionError(@NotNull Class<?> clazz, @NotNull MessageChannel channel,
+                                             @NotNull Throwable exception) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         exception.printStackTrace(pw);
@@ -219,12 +232,12 @@ public class Main {
         channel.sendMessage(":pencil:おっと！Javajaotanでなにか問題が発生したようです！ <@221991565567066112>\n**ErrorMsg**: `"
                 + exception.getMessage()
                 + "`\n**Class**: `" + clazz.getName() + " (" + exception.getClass().getName() + ")`").queue();
-        channel.sendFile(is, "stacktrace.txt").queue();
+        Main.ReportChannel.sendFile(is, "stacktrace.txt").queue();
     }
 
-    public static void ExceptionReporter(@Nullable MessageChannel channel, @NotNull Throwable exception) {
-        if (channel != null) {
-            channel.sendMessage(
+    public static void ExceptionReporter(@Nullable Message message, @NotNull Throwable exception) {
+        if (message != null) {
+            message.reply(
                     ":pencil:おっと！Javajaotanでなにか問題が発生したようです！ <@221991565567066112>\n**Throwable Class**: `"
                             + exception.getClass().getName() + "`")
                     .queue();
@@ -248,7 +261,7 @@ public class Main {
             builder.addField("Message", "```" + exception.getMessage() + "```", false);
             builder.addField("Cause", "```" + exception.getCause() + "```", false);
             builder.setTimestamp(Instant.now());
-            Objects.requireNonNull(channel).sendMessage(builder.build()).queue();
+            Main.ReportChannel.sendMessage(builder.build()).queue();
         } catch (Exception e) {
             String text = "javajaotan Error Reporter (" + Library.sdfFormat(new Date()) + ")\n"
                     + "---------- StackTrace ----------\n"

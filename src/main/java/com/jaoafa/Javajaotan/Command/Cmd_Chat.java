@@ -27,14 +27,14 @@ public class Cmd_Chat implements CommandPremise {
                     System.out.println("Library.isLong(args[0]): " + args[0]);
                     long channelID = Long.parseLong(args[0]);
                     if (jda.getTextChannelById(channelID) == null) {
-                        channel.sendMessage(member.getAsMention() + ", 指定されたチャンネルが見つかりません。(ID指定)").queue();
+                        message.reply("指定されたチャンネルが見つかりません。(ID指定)").queue();
                         return;
                     }
                     sendToChannel = jda.getTextChannelById(channelID);
                 } else {
                     System.out.println("!Library.isLong(args[0]): " + args[0]);
                     if (jda.getTextChannelsByName(args[0], false).isEmpty()) {
-                        channel.sendMessage(member.getAsMention() + ", 指定されたチャンネルが見つかりません。(チャンネル名指定)").queue();
+                        message.reply("指定されたチャンネルが見つかりません。(チャンネル名指定)").queue();
                         return;
                     }
                     sendToChannel = jda.getTextChannelsByName(args[0], false).get(0);

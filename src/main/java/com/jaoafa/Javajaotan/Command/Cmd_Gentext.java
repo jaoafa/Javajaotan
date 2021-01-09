@@ -18,7 +18,7 @@ public class Cmd_Gentext implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (Library.isDenyToyCmd(channel)) {
-            channel.sendMessage(member.getAsMention() + ", このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
+            message.reply("このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
             return;
         }
         String json;
@@ -30,7 +30,7 @@ public class Cmd_Gentext implements CommandPremise {
             json = getRunCommand(message, "php", "/home/server/ZakuroHat/Javajaotan/extcmds/gentext.php");
         }
         JSONObject obj = new JSONObject(json);
-        channel.sendMessage(member.getAsMention() + ", ```" + obj.optString("output", "null") + "```").queue();
+        message.reply("```" + obj.optString("output", "null") + "```").queue();
     }
 
     private String getRunCommand(Message message, String... command) {
@@ -44,10 +44,10 @@ public class Cmd_Gentext implements CommandPremise {
             p = builder.start();
             p.waitFor(10, TimeUnit.MINUTES);
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null IOException";
         } catch (InterruptedException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null InterruptedException";
         }
         InputStream is = p.getInputStream();
@@ -65,7 +65,7 @@ public class Cmd_Gentext implements CommandPremise {
             br.close();
             is.close();
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null IOException";
         }
         return text.toString();

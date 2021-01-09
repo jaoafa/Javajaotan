@@ -22,13 +22,13 @@ public class Cmd_Setnickatama implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (Library.isDenyToyCmd(channel)) {
-            channel.sendMessage(member.getAsMention() + ", このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
+            message.reply("このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
             return;
         }
         File sqliteFile = new File("pp_dic_preset.sqlite");
         if (!sqliteFile.exists()) {
             // nasa
-            channel.sendMessage(member.getAsMention() + ", 動作に必要なファイルが見つかりません。開発部にお問い合わせください。\n"
+            message.reply("動作に必要なファイルが見つかりません。開発部にお問い合わせください。\n"
                     + "Reason: " + sqliteFile.getAbsolutePath() + " not found").queue();
             return;
         }
@@ -37,9 +37,9 @@ public class Cmd_Setnickatama implements CommandPremise {
             SQLiteDBManager sqlite = new SQLiteDBManager(sqliteFile);
             conn = sqlite.getConnection();
         } catch (ClassNotFoundException | IOException | SQLException e) {
-            channel.sendMessage(member.getAsMention() + ", 処理に失敗しました。時間を置いてもう一度お試しください。\nReason: " + e.getMessage())
+            message.reply("処理に失敗しました。時間を置いてもう一度お試しください。\nReason: " + e.getMessage())
                     .queue();
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return;
         }
         StringBuilder builder = new StringBuilder();
@@ -53,7 +53,7 @@ public class Cmd_Setnickatama implements CommandPremise {
             }
 
             PreparedStatement statement_middle = conn
-                    .prepareStatement("SELECT word FROM word_middle ORDER BY RANDOM() LIMIT ?;");
+                    .prepareStatement("SELECT word FROM word_middle ORDER BY RANDOM() LIMIT ?;create table word_middle(	word int null);");
             statement_middle.setInt(1, 1);
             ResultSet res_middle = statement_middle.executeQuery();
             while (res_middle.next()) {
@@ -69,16 +69,16 @@ public class Cmd_Setnickatama implements CommandPremise {
             }
             conn.close();
         } catch (SQLException e) {
-            channel.sendMessage(member.getAsMention() + ", 処理に失敗しました。時間を置いてもう一度お試しください。\nReason: " + e.getMessage())
+            message.reply("処理に失敗しました。時間を置いてもう一度お試しください。\nReason: " + e.getMessage())
                     .queue();
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return;
         }
         String oldnick = member.getNickname();
         if (oldnick == null)
             oldnick = "null";
-        member.modifyNickname(builder.toString()).queue(null, failure -> Main.DiscordExceptionError(getClass(), channel, failure));
-        channel.sendMessage(member.getAsMention() + ", `" + oldnick + "` -> `" + builder.toString() + "`").queue();
+        member.modifyNickname(builder.toString()).queue(null, failure -> Main.DiscordExceptionError(getClass(), message, failure));
+        message.reply("`" + oldnick + "` -> `" + builder.toString() + "`").queue();
     }
 
     @Override

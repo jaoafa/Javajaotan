@@ -17,7 +17,7 @@ public class Cmd_Dice implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (Library.isDenyToyCmd(channel)) {
-            channel.sendMessage(member.getAsMention() + ", このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
+            message.reply("このチャンネルではこのコマンドを利用できません。<#616995424154157080>などで実行してください。").queue();
             return;
         }
         List<String> list = new ArrayList<>();
@@ -33,7 +33,7 @@ public class Cmd_Dice implements CommandPremise {
         String firstSelect = list.get(0);
         Message post_message = channel.sendMessage(firstSelect + " `[-1]`").complete();
         if (post_message == null) {
-            channel.sendMessage(member.getAsMention() + ", コマンドを実行できませんでした。").queue();
+            message.reply("コマンドを実行できませんでした。").queue();
             return;
         }
 

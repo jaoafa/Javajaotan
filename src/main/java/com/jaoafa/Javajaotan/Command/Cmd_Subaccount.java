@@ -24,7 +24,7 @@ public class Cmd_Subaccount implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (channel.getIdLong() != 597423467796758529L) {
-            channel.sendMessage(member.getAsMention() + ", このチャンネルではこのコマンドを使用できません。").queue();
+            message.reply("このチャンネルではこのコマンドを使用できません。").queue();
             return;
         }
         // /subaccount add <SubAccount> <MainAccount>
@@ -48,16 +48,16 @@ public class Cmd_Subaccount implements CommandPremise {
                 return;
             }
         }
-        channel.sendMessage(member.getAsMention() + ", " + getUsage()).queue();
+        message.reply("" + getUsage()).queue();
     }
 
     private void onCommand_Add(JDA jda, Guild guild, MessageChannel channel, Member member, Message message, String[] args) {
         if (!Library.isLong(args[1])) {
-            channel.sendMessage(member.getAsMention() + ", SubAccountにはサブアカウントのDiscordUserIDを指定してください。").queue();
+            message.reply("SubAccountにはサブアカウントのDiscordUserIDを指定してください。").queue();
             return;
         }
         if (!Library.isLong(args[2])) {
-            channel.sendMessage(member.getAsMention() + ", MainAccountにはメインアカウントのDiscordUserIDを指定してください。").queue();
+            message.reply("MainAccountにはメインアカウントのDiscordUserIDを指定してください。").queue();
             return;
         }
         long subid = Long.parseLong(args[1]);
@@ -66,19 +66,19 @@ public class Cmd_Subaccount implements CommandPremise {
         SubAccount main = new SubAccount(mainid);
 
         if (!main.isExists()) {
-            channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントが存在しません。").queue();
+            message.reply("指定されたメインアカウントが存在しません。").queue();
             return;
         }
         if (main.isSubAccount()) {
-            channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントにはサブアカウントが存在します。").queue();
+            message.reply("指定されたメインアカウントにはサブアカウントが存在します。").queue();
             return;
         }
         if (!sub.isExists()) {
-            channel.sendMessage(member.getAsMention() + ", 指定されたサブアカウントが存在しません。").queue();
+            message.reply("指定されたサブアカウントが存在しません。").queue();
             return;
         }
         if (sub.getMainAccount() != null) {
-            channel.sendMessage(member.getAsMention() + ", このサブアカウントには既にメインアカウント「" + sub.getMainAccount().getUser().getAsTag() + "」が設定されています。").queue();
+            message.reply("このサブアカウントには既にメインアカウント「" + sub.getMainAccount().getUser().getAsTag() + "」が設定されています。").queue();
             return;
         }
 
@@ -88,32 +88,32 @@ public class Cmd_Subaccount implements CommandPremise {
             try {
                 _member = jMSGuild.retrieveMember(main.getUser()).complete();
             } catch (ErrorResponseException e) {
-                channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントはjMS Gamers Clubに参加していない可能性があります: " + e.getMeaning()).queue();
+                message.reply("指定されたメインアカウントはjMS Gamers Clubに参加していない可能性があります: " + e.getMeaning()).queue();
                 return;
             }
             if (_member.getRoles().stream().noneMatch(role -> role.getIdLong() == 604011598952136853L)) {
-                channel.sendMessage(member.getAsMention() + ", 指定されたメインアカウントはMinecraftアカウントとの接続が行われていません。`/link`によるアカウントの連携を指示してください。").queue();
+                message.reply("指定されたメインアカウントはMinecraftアカウントとの接続が行われていません。`/link`によるアカウントの連携を指示してください。").queue();
                 return;
             }
         } else {
-            channel.sendMessage(member.getAsMention() + ", jMS Gamers Clubのデータ取得に失敗しました。").queue();
+            message.reply("jMS Gamers Clubのデータ取得に失敗しました。").queue();
             return;
         }
 
         boolean bool = sub.setMainAccount(main);
-        channel.sendMessage(member.getAsMention() + ", サブアカウントの設定に" + (bool ? "成功" : "失敗") + "しました。").queue();
+        message.reply("サブアカウントの設定に" + (bool ? "成功" : "失敗") + "しました。").queue();
     }
 
     private void onCommand_Remove(JDA jda, Guild guild, MessageChannel channel, Member member, Message message, String[] args) {
         if (!Library.isLong(args[1])) {
-            channel.sendMessage(member.getAsMention() + ", MainAccountにはサブアカウントのDiscordUserIDを指定してください。").queue();
+            message.reply("MainAccountにはサブアカウントのDiscordUserIDを指定してください。").queue();
             return;
         }
         long subid = Long.parseLong(args[1]);
         SubAccount sub = new SubAccount(subid);
 
         boolean bool = sub.removeMainAccount();
-        channel.sendMessage(member.getAsMention() + ", 指定されたサブアカウントとメインアカウントの接続を解除" + (bool ? "しました。" : "できませんでした。")).queue();
+        message.reply("指定されたサブアカウントとメインアカウントの接続を解除" + (bool ? "しました。" : "できませんでした。")).queue();
     }
 
     private void onCommand_List(JDA jda, Guild guild, MessageChannel channel, Member member, Message message, String[] args) {
@@ -127,9 +127,9 @@ public class Cmd_Subaccount implements CommandPremise {
             while (res.next()) {
                 list.add(String.format("%s#%s -> %s#%s", res.getString("name"), res.getString("discriminator"), res.getString("main_name"), res.getString("main_discriminator")));
             }
-            channel.sendMessage(member.getAsMention() + ", SubAccount list / data size: " + list.size() + "```" + String.join("\n", list) + "```").queue();
+            message.reply("SubAccount list / data size: " + list.size() + "```" + String.join("\n", list) + "```").queue();
         } catch (SQLException e) {
-            channel.sendMessage(member.getAsMention() + ", データの取得に失敗しました。").queue();
+            message.reply("データの取得に失敗しました。").queue();
         }
     }
 

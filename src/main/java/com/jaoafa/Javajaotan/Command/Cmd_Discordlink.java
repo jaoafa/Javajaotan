@@ -11,8 +11,7 @@ public class Cmd_Discordlink implements CommandPremise {
     @Override
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
-        channel.sendMessage(member.getAsMention()
-                + ", discordlinkコマンドはDiscordではなくjao Minecraft ServerのMinecraftサーバ内で実行してね！そうしないとあなたのMinecraftアカウントがわからないからね！")
+        message.reply("discordlinkコマンドはDiscordではなくjao Minecraft ServerのMinecraftサーバ内で実行してね！そうしないとあなたのMinecraftアカウントがわからないからね！")
                 .queue();
     }
 

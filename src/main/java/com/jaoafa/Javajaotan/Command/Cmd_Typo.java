@@ -40,7 +40,7 @@ public class Cmd_Typo implements CommandPremise {
             word = word.charAt(0) + String.join("", split) + word.substring(word.length() - 1);
             words.add(word);
         }
-        channel.sendMessage(member.getAsMention() + ", ```" + String.join(" ", words) + "```").queue();
+        message.reply(member.getAsMention() + ", ```" + String.join(" ", words) + "```").queue();
     }
 
     private String getRunCommand(Message message, String... command) {
@@ -54,10 +54,10 @@ public class Cmd_Typo implements CommandPremise {
             p = builder.start();
             p.waitFor(10, TimeUnit.MINUTES);
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null IOException";
         } catch (InterruptedException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null InterruptedException";
         }
         InputStream is = p.getInputStream();
@@ -75,7 +75,7 @@ public class Cmd_Typo implements CommandPremise {
             br.close();
             is.close();
         } catch (IOException e) {
-            Main.ExceptionReporter(channel, e);
+            Main.ExceptionReporter(message, e);
             return "null IOException";
         }
         return text;
