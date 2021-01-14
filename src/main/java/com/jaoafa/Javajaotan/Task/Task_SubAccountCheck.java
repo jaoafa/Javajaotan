@@ -32,9 +32,9 @@ public class Task_SubAccountCheck extends TimerTask {
             System.out.println("SubAccountRole not found.");
             return;
         }
-        TextChannel channel = guild.getTextChannelById(769505014569500695L); // LOGGER#javajaotan_notice
+        TextChannel channel = guild.getTextChannelById(799275935445549068L); // LOGGER#javajaotan-notice
         if (channel == null) {
-            System.out.println("[SubAccountCheck] LOGGER#javajaotan_notice(769505014569500695) channel is not found.");
+            System.out.println("[SubAccountCheck] LOGGER#javajaotan-notice(799275935445549068) channel is not found.");
             return;
         }
         Set<Member> MinecraftConnecteds = new HashSet<>(guild.getMembersWithRoles(MinecraftConnectedRole));
