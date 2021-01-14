@@ -188,6 +188,7 @@ public class Main {
         timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 10000L, 1800000L); // 30分
         timer.scheduleAtFixedRate(new Task_MinecraftConnectedCheck(), 10000L, 1800000L); // 30分
         timer.scheduleAtFixedRate(new Task_SubAccountCheck(), 10000L, 1800000L); // 30分
+        timer.scheduleAtFixedRate(new Task_3MonthCheck(), 10000L, 1800000L);
 		/*
 		JavajaotanWatcher JavajaotanWatcher = new JavajaotanWatcher();
 		Timer timer = new Timer();
