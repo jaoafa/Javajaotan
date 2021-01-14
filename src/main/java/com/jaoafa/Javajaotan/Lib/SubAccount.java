@@ -104,6 +104,10 @@ public class SubAccount {
         return getMainAccount() != null;
     }
 
+    public long getDiscordId() {
+        return discordId;
+    }
+
     public User getUser() {
         return user;
     }
