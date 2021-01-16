@@ -63,10 +63,11 @@ public class Task_3MonthCheck extends TimerTask {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        guild.loadMembers().onSuccess(members -> members.forEach(member -> check(guild, MinecraftConnectedRole, SubAccountRole, connections, channel, member)));
+        guild.loadMembers().onSuccess(members -> members.forEach(member ->
+                check(guild, MinecraftConnectedRole, SubAccountRole, connections.stream().filter(conn -> conn.getDiscordUserID().equals(member.getId())).findFirst(), channel, member)));
     }
 
-    private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, List<MinecraftDiscordConnection> connections, TextChannel channel, Member member) {
+    private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, Optional<MinecraftDiscordConnection> connection, TextChannel channel, Member member) {
         boolean isSubAccount = member.getRoles().stream().anyMatch(_role -> _role.getIdLong() == SubAccountRole.getIdLong());
         if (member.getUser().isBot()) {
             // bot
@@ -76,7 +77,6 @@ public class Task_3MonthCheck extends TimerTask {
             // Sub Account : ok
             return;
         }
-        Optional<MinecraftDiscordConnection> connection = connections.stream().filter(conn -> conn.getDiscordUserID().equals(member.getId())).findFirst();
         if (!connection.isPresent()) {
             return;
         }
