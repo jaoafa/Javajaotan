@@ -184,11 +184,11 @@ public class Main {
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new Task_VerifiedCheck(), 10000L, 60000L); // 1分
-        timer.scheduleAtFixedRate(new Task_MeetingVote(), 10000L, 600000L); // 10分
-        timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 10000L, 1800000L); // 30分
-        timer.scheduleAtFixedRate(new Task_MinecraftConnectedCheck(), 10000L, 1800000L); // 30分
-        timer.scheduleAtFixedRate(new Task_SubAccountCheck(), 10000L, 1800000L); // 30分
-        timer.scheduleAtFixedRate(new Task_3MonthCheck(), 10000L, 1800000L);
+        timer.scheduleAtFixedRate(new Task_MeetingVote(), 20000L, 600000L); // 10分
+        timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 30000L, 1800000L); // 30分
+        timer.scheduleAtFixedRate(new Task_MinecraftConnectedCheck(), 40000L, 1800000L); // 30分
+        timer.scheduleAtFixedRate(new Task_SubAccountCheck(), 50000L, 1800000L); // 30分
+        timer.scheduleAtFixedRate(new Task_3MonthCheck(), 60000L, 1800000L);
 		/*
 		JavajaotanWatcher JavajaotanWatcher = new JavajaotanWatcher();
 		Timer timer = new Timer();

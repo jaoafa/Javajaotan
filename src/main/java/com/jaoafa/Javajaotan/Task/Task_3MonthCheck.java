@@ -63,11 +63,20 @@ public class Task_3MonthCheck extends TimerTask {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        guild.loadMembers().onSuccess(members -> members.forEach(member ->
-                check(guild, MinecraftConnectedRole, SubAccountRole, connections.stream().filter(conn -> conn.getDiscordUserID().equals(member.getId())).findFirst(), channel, member)));
+        guild.loadMembers().onSuccess(members -> members.forEach(member -> {
+            Optional<MinecraftDiscordConnection> connection = connections.stream().filter(conn -> conn.getDiscordUserID().equals(member.getId())).findFirst();
+            if (!connection.isPresent()) {
+                return;
+            }
+            check(guild, MinecraftConnectedRole, SubAccountRole, connection.get(), channel, member);
+        }))
+                .onError(err -> {
+                    System.out.println("[Task_3MonthCheck] Error: " + err.getClass().getName());
+                    err.printStackTrace();
+                });
     }
 
-    private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, Optional<MinecraftDiscordConnection> connection, TextChannel channel, Member member) {
+    private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, MinecraftDiscordConnection connection, TextChannel channel, Member member) {
         boolean isSubAccount = member.getRoles().stream().anyMatch(_role -> _role.getIdLong() == SubAccountRole.getIdLong());
         if (member.getUser().isBot()) {
             // bot
@@ -77,10 +86,7 @@ public class Task_3MonthCheck extends TimerTask {
             // Sub Account : ok
             return;
         }
-        if (!connection.isPresent()) {
-            return;
-        }
-        LocalDateTime joinTime = LocalDateTime.ofInstant(connection.get().getLoginDate().toInstant(), ZoneId.systemDefault());
+        LocalDateTime joinTime = LocalDateTime.ofInstant(connection.getLoginDate().toInstant(), ZoneId.systemDefault());
         LocalDateTime now = LocalDateTime.now();
         long diffDays = ChronoUnit.DAYS.between(joinTime, now);
         if (diffDays <= 90) {
@@ -88,7 +94,7 @@ public class Task_3MonthCheck extends TimerTask {
             return;
         }
 
-        System.out.println("[3MonthCheck] kick: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
+        System.out.println("[3MonthCheck] Remove Link: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
                 + " | between: " + diffDays + "days.");
 
         if (new Date().before(new Date(1611068400000L))) { // 2021-01-20 00:00:00
@@ -107,7 +113,7 @@ public class Task_3MonthCheck extends TimerTask {
         }
 
         guild.removeRoleFromMember(member, MinecraftConnectedRole).queue(
-                success -> channel.sendMessage(":bangbang:あなたのDiscordアカウントに接続されていたMinecraftアカウント「" + connection.get().getPlayerName() + "」が最終ログインから3ヶ月経過致しました。\nサーバルール及び個別規約により、建築物や自治体の所有権がなくなり、Minecraftアカウントとの接続が自動的に切断されました。").queue(),
+                success -> channel.sendMessage(":bangbang:あなたのDiscordアカウントに接続されていたMinecraftアカウント「" + connection.getPlayerName() + "」が最終ログインから3ヶ月経過致しました。\nサーバルール及び個別規約により、建築物や自治体の所有権がなくなり、Minecraftアカウントとの接続が自動的に切断されました。").queue(),
                 failure -> Main.ReportChannel
                         .sendMessage(String.format("3MonthCheckにて最終ログインから3か月を経過したためユーザー「%s」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `%s | %s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
                         .queue()
