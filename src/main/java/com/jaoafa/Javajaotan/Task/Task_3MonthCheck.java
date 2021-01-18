@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -97,7 +98,11 @@ public class Task_3MonthCheck extends TimerTask {
             return;
         }
         System.out.println("Task_3MonthCheck().check(): Checked isSubAccount");
-        LocalDateTime joinTime = LocalDateTime.ofInstant(connection.getLoginDate().toInstant(), ZoneId.systemDefault());
+        Instant instant = connection.getLoginDate().toInstant();
+        System.out.println("Task_3MonthCheck().check(): Created instant");
+        ZoneId zone = ZoneId.systemDefault();
+        System.out.println("Task_3MonthCheck().check(): Created zone");
+        LocalDateTime joinTime = LocalDateTime.ofInstant(instant, zone);
         System.out.println("Task_3MonthCheck().check(): joinTime " + joinTime.toString());
         LocalDateTime now = LocalDateTime.now();
         System.out.println("Task_3MonthCheck().check(): now " + joinTime.toString());
