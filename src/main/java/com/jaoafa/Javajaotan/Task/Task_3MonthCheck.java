@@ -20,6 +20,7 @@ import java.util.*;
 public class Task_3MonthCheck extends TimerTask {
     @Override
     public void run() {
+        System.out.println("Task_3MonthCheck().run()");
         // MinecraftConnected
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L); // new jMS Gamers Club

@@ -21,6 +21,7 @@ public class Task_JavajaotanWatcher extends TimerTask {
 
     @Override
     public void run() {
+        System.out.println("Task_JavajaotanWatcher().run()");
         String path = Library.getCurrentpath();
         File file = new File(path);
         long length = file.length();

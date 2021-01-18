@@ -16,6 +16,7 @@ import java.util.TimerTask;
 public class Task_MinecraftConnectedCheck extends TimerTask {
     @Override
     public void run() {
+        System.out.println("Task_MinecraftConnectedCheck().run()");
         // MinecraftConnected
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L); // new jMS Gamers Club

@@ -43,6 +43,7 @@ public class Task_MeetingVote extends TimerTask {
 
     @Override
     public void run() {
+        System.out.println("Task_MeetingVote().run()");
         JDA jda = Main.getJDA();
 
         double divided = TeamJaoCount / 2;

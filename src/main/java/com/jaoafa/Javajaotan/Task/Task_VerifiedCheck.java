@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class Task_VerifiedCheck extends TimerTask {
     @Override
     public void run() {
+        System.out.println("Task_VerifiedCheck().run()");
         // 参加から10分以内に発言がなかったら蹴る
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L); // new jMS Gamers Club

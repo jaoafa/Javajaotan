@@ -15,6 +15,7 @@ import java.util.TimerTask;
 public class Task_SubAccountCheck extends TimerTask {
     @Override
     public void run() {
+        System.out.println("Task_SubAccountCheck().run()");
         // MinecraftConnected
         JDA jda = Main.getJDA();
         Guild guild = jda.getGuildById(597378876556967936L); // new jMS Gamers Club

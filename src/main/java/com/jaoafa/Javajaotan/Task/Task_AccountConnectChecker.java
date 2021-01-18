@@ -26,6 +26,7 @@ public class Task_AccountConnectChecker extends TimerTask {
 
     @Override
     public void run() {
+        System.out.println("Task_AccountConnectChecker().run()");
         JDA jda = Main.getJDA();
         MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
         if (MySQLDBManager == null) {
