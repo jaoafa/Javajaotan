@@ -67,11 +67,9 @@ public class Task_3MonthCheck extends TimerTask {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Task_3MonthCheck().run(): size " + connections.size());
         guild.loadMembers().onSuccess(members -> members.forEach(member -> {
             Optional<MinecraftDiscordConnection> connection = connections.stream().filter(conn -> conn.getDiscordUserID().equals(member.getId())).findFirst();
             if (!connection.isPresent()) {
-                System.out.println("Task_3MonthCheck().run(): isNotPresent " + member.getUser().getAsTag());
                 return;
             }
             check(guild, MinecraftConnectedRole, SubAccountRole, connection.get(), channel, member);
@@ -83,32 +81,20 @@ public class Task_3MonthCheck extends TimerTask {
     }
 
     private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, MinecraftDiscordConnection connection, TextChannel channel, Member member) {
-        System.out.println("Task_3MonthCheck().check(): " + member.getUser().getAsTag());
         boolean isSubAccount = member.getRoles().stream().anyMatch(_role -> _role.getIdLong() == SubAccountRole.getIdLong());
-        System.out.println("Task_3MonthCheck().check(): Got isSubAccount");
         if (member.getUser().isBot()) {
             // bot
-            System.out.println("Task_3MonthCheck().check(): isBot");
             return;
         }
-        System.out.println("Task_3MonthCheck().check(): Checked isNotBot");
         if (isSubAccount) {
             // Sub Account : ok
-            System.out.println("Task_3MonthCheck().check(): isSubAccount");
             return;
         }
-        System.out.println("Task_3MonthCheck().check(): Checked isSubAccount");
-        System.out.println("Task_3MonthCheck().check(): getLoginDate " + connection.getLoginDate());
         Instant instant = Instant.ofEpochMilli(connection.getLoginDate().getTime());
-        System.out.println("Task_3MonthCheck().check(): Created instant");
         ZoneId zone = ZoneId.systemDefault();
-        System.out.println("Task_3MonthCheck().check(): Created zone");
         LocalDateTime joinTime = LocalDateTime.ofInstant(instant, zone);
-        System.out.println("Task_3MonthCheck().check(): joinTime " + joinTime.toString());
         LocalDateTime now = LocalDateTime.now();
-        System.out.println("Task_3MonthCheck().check(): now " + joinTime.toString());
         long diffDays = ChronoUnit.DAYS.between(joinTime, now);
-        System.out.println("Task_3MonthCheck().check(): " + diffDays + " / 90");
         if (diffDays <= 90) {
             // 90日(3か月)以内
             return;
