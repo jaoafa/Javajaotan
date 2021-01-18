@@ -90,11 +90,13 @@ public class Task_3MonthCheck extends TimerTask {
             System.out.println("Task_3MonthCheck().check(): isBot");
             return;
         }
+        System.out.println("Task_3MonthCheck().check(): Checked isNotBot");
         if (isSubAccount) {
             // Sub Account : ok
             System.out.println("Task_3MonthCheck().check(): isSubAccount");
             return;
         }
+        System.out.println("Task_3MonthCheck().check(): Checked isSubAccount");
         LocalDateTime joinTime = LocalDateTime.ofInstant(connection.getLoginDate().toInstant(), ZoneId.systemDefault());
         LocalDateTime now = LocalDateTime.now();
         long diffDays = ChronoUnit.DAYS.between(joinTime, now);
