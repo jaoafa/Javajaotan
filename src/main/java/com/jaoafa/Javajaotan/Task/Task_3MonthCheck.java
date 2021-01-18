@@ -98,7 +98,9 @@ public class Task_3MonthCheck extends TimerTask {
         }
         System.out.println("Task_3MonthCheck().check(): Checked isSubAccount");
         LocalDateTime joinTime = LocalDateTime.ofInstant(connection.getLoginDate().toInstant(), ZoneId.systemDefault());
+        System.out.println("Task_3MonthCheck().check(): joinTime " + joinTime.toString());
         LocalDateTime now = LocalDateTime.now();
+        System.out.println("Task_3MonthCheck().check(): now " + joinTime.toString());
         long diffDays = ChronoUnit.DAYS.between(joinTime, now);
         System.out.println("Task_3MonthCheck().check(): " + diffDays + " / 90");
         if (diffDays <= 90) {
