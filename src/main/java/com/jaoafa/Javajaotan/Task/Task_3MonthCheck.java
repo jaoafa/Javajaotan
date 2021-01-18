@@ -98,6 +98,7 @@ public class Task_3MonthCheck extends TimerTask {
             return;
         }
         System.out.println("Task_3MonthCheck().check(): Checked isSubAccount");
+        System.out.println("Task_3MonthCheck().check(): getLoginDate " + connection.getLoginDate());
         Instant instant = connection.getLoginDate().toInstant();
         System.out.println("Task_3MonthCheck().check(): Created instant");
         ZoneId zone = ZoneId.systemDefault();
