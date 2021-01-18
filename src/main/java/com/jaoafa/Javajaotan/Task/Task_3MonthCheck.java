@@ -58,12 +58,15 @@ public class Task_3MonthCheck extends TimerTask {
                         res.getString("discriminator"),
                         loginDate
                 ));
+                result.close();
             }
+            stmt.close();
             res.close();
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Task_3MonthCheck().run(): size " + connections.size());
         guild.loadMembers().onSuccess(members -> members.forEach(member -> {
             Optional<MinecraftDiscordConnection> connection = connections.stream().filter(conn -> conn.getDiscordUserID().equals(member.getId())).findFirst();
             if (!connection.isPresent()) {
@@ -78,18 +81,22 @@ public class Task_3MonthCheck extends TimerTask {
     }
 
     private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, MinecraftDiscordConnection connection, TextChannel channel, Member member) {
+        System.out.println("Task_3MonthCheck().check(): " + member.getUser().getAsTag());
         boolean isSubAccount = member.getRoles().stream().anyMatch(_role -> _role.getIdLong() == SubAccountRole.getIdLong());
         if (member.getUser().isBot()) {
             // bot
+            System.out.println("Task_3MonthCheck().check(): isBot");
             return;
         }
         if (isSubAccount) {
             // Sub Account : ok
+            System.out.println("Task_3MonthCheck().check(): isSubAccount");
             return;
         }
         LocalDateTime joinTime = LocalDateTime.ofInstant(connection.getLoginDate().toInstant(), ZoneId.systemDefault());
         LocalDateTime now = LocalDateTime.now();
         long diffDays = ChronoUnit.DAYS.between(joinTime, now);
+        System.out.println("Task_3MonthCheck().check(): " + diffDays + " / 90");
         if (diffDays <= 90) {
             // 90日(3か月)以内
             return;
