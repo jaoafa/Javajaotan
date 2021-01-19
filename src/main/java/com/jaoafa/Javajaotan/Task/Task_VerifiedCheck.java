@@ -79,9 +79,9 @@ public class Task_VerifiedCheck extends TimerTask {
         System.out.println("[Task_VerifiedCheck] kick: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
                 + " | between: " + diffmin + "min.");
         guild.kick(member).queue(
-                success -> channel.sendMessage(String.format(":wave:チャットがないまま10分を経過したため、ユーザー「%s」をキックしました。", member.getUser().getAsTag())).queue(),
+                success -> channel.sendMessage(String.format(":wave:チャットがないまま10分を経過したため、ユーザー「`%s`」をキックしました。", member.getUser().getAsTag())).queue(),
                 failure -> Main.ReportChannel
-                        .sendMessage(String.format("Task_VerifiedCheckにてチャットがないまま10分を経過したためユーザー「%s」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `%s | %s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
+                        .sendMessage(String.format("Task_VerifiedCheckにてチャットがないまま10分を経過したためユーザー「`%s`」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `%s | %s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
                         .queue()
         );
     }

@@ -119,7 +119,7 @@ public class Task_3MonthCheck extends TimerTask {
         }
 
         guild.removeRoleFromMember(member, MinecraftConnectedRole).queue(
-                success -> channel.sendMessage(":bangbang:あなたのDiscordアカウントに接続されていたMinecraftアカウント「" + connection.getPlayerName() + "」が最終ログインから3ヶ月経過致しました。\nサーバルール及び個別規約により、建築物や自治体の所有権がなくなり、Minecraftアカウントとの接続が自動的に切断されました。").queue(),
+                success -> channel.sendMessage(member.getAsMention() + ", :bangbang:あなたのDiscordアカウントに接続されていたMinecraftアカウント「`" + connection.getPlayerName() + "`」が最終ログインから3ヶ月経過致しました。\nサーバルール及び個別規約により、建築物や自治体の所有権がなくなり、Minecraftアカウントとの接続が自動的に切断されました。").queue(),
                 failure -> Main.ReportChannel
                         .sendMessage(String.format("3MonthCheckにて最終ログインから3か月を経過したためユーザー「%s」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `%s | %s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
                         .queue()
