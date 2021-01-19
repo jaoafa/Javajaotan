@@ -1,6 +1,5 @@
 package com.jaoafa.Javajaotan.Task;
 
-import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Main;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -8,10 +7,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -56,24 +51,6 @@ public class Task_VerifiedCheck extends TimerTask {
         if (diffmin <= 10) {
             // 10分以内
             return;
-        }
-
-        try {
-            MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
-            Connection conn = MySQLDBManager.getConnection();
-            PreparedStatement statement = conn
-                    .prepareStatement("SELECT * FROM discordlink WHERE disid = ?");
-            statement.setLong(1, member.getIdLong());
-            ResultSet res = statement.executeQuery();
-            if (res.next()) {
-                res.close();
-                statement.close();
-                return;
-            }
-            res.close();
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         System.out.println("[Task_VerifiedCheck] kick: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
