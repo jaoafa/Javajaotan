@@ -19,7 +19,7 @@ public class Event_ServerLeave {
             return;
         }
         general.sendMessage(
-                ":wave:" + user.getName() + "#" + user.getDiscriminator() + "がjMS Gamers Clubから退出しました。")
+                String.format(":wave:%s#%s(<@%s>)がjMS Gamers Clubから退出しました。", user.getName(), user.getDiscriminator(), user.getId()))
                 .queue(
                         null,
                         failure -> Main.DiscordExceptionError(getClass(), general, failure)

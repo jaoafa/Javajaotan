@@ -17,6 +17,6 @@ public class Event_ServerBanned {
             System.out.println("general channel not found.");
             return;
         }
-        general.sendMessage(String.format(":no_pedestrians:%s#%sがjMS Gamers ClubからBanされました。", user.getName(), user.getDiscriminator())).queue();
+        general.sendMessage(String.format(":no_pedestrians:%s#%s(<@%s>)がjMS Gamers ClubからBanされました。", user.getName(), user.getDiscriminator(), user.getId())).queue();
     }
 }
