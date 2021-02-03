@@ -105,7 +105,7 @@ public class Task_3MonthCheck extends TimerTask {
         System.out.println("[3MonthCheck] Remove Link: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
                 + " | between: " + diffDays + "days. | expired_date: " + connection.getLinkExpiredDate());
 
-        if (new Date().before(new Date(1612364400000L))) { // 2021-02-04 00:00:00
+        if (new Date().before(new Date(1612407600000L))) { // 2021-02-04 00:00:00
             return;
         }
         try {
@@ -191,7 +191,7 @@ public class Task_3MonthCheck extends TimerTask {
 
         public boolean isLinkExpired() {
             if (link_expired_date == null) return true;
-            return link_expired_date.after(Timestamp.from(Instant.now()));
+            return link_expired_date.before(Timestamp.from(Instant.now()));
         }
 
         public void setLink_expired_date(Timestamp link_expired_date) {
