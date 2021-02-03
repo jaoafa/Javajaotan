@@ -8,14 +8,12 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.*;
 
 public class Task_3MonthCheck extends TimerTask {
@@ -57,7 +55,8 @@ public class Task_3MonthCheck extends TimerTask {
                         UUID.fromString(res.getString("uuid")),
                         res.getString("disid"),
                         res.getString("discriminator"),
-                        loginDate
+                        loginDate,
+                        res.getTimestamp("expired_date")
                 ));
                 result.close();
             }
@@ -99,6 +98,9 @@ public class Task_3MonthCheck extends TimerTask {
             // 90日(3か月)以内
             return;
         }
+        if (!connection.isLinkExpired()) {
+            return; // 期限前の場合除外。期限が設けられていない(通常)の場合必ずtrueになるので、ここは通らない。
+        }
 
         System.out.println("[3MonthCheck] Remove Link: " + member.getUser().getName() + "#" + member.getUser().getDiscriminator()
                 + " | between: " + diffDays + "days.");
@@ -121,7 +123,7 @@ public class Task_3MonthCheck extends TimerTask {
         guild.removeRoleFromMember(member, MinecraftConnectedRole).queue(
                 success -> channel.sendMessage(member.getAsMention() + ", :bangbang:あなたのDiscordアカウントに接続されていたMinecraftアカウント「`" + connection.getPlayerName() + "`」が最終ログインから3ヶ月経過致しました。\nサーバルール及び個別規約により、建築物や自治体の所有権がなくなり、Minecraftアカウントとの接続が自動的に切断されました。").queue(),
                 failure -> Main.ReportChannel
-                        .sendMessage(String.format("3MonthCheckにて最終ログインから3か月を経過したためユーザー「%s」をキックしようとしましたが正常に実行できませんでした！\n**Message**: `%s | %s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
+                        .sendMessage(String.format("3MonthCheckにて最終ログインから3か月を経過したためユーザー「%s」のロールを解除しようとしましたが正常に実行できませんでした！\n**Message**: `%s | %s`", member.getUser().getAsTag(), failure.getClass().getName(), failure.getMessage()))
                         .queue()
         );
     }
@@ -132,13 +134,15 @@ public class Task_3MonthCheck extends TimerTask {
         private String disid;
         private String discriminator;
         private Date loginDate;
+        private Timestamp link_expired_date;
 
-        public MinecraftDiscordConnection(String player, UUID uuid, String disid, String discriminator, Date loginDate) {
+        public MinecraftDiscordConnection(String player, UUID uuid, String disid, String discriminator, Date loginDate, Timestamp link_expired_date) {
             this.player = player;
             this.uuid = uuid;
             this.disid = disid;
             this.discriminator = discriminator;
             this.loginDate = loginDate;
+            this.link_expired_date = link_expired_date;
         }
 
         public String getPlayerName() {
@@ -179,6 +183,19 @@ public class Task_3MonthCheck extends TimerTask {
 
         public void setLoginDate(Date loginDate) {
             this.loginDate = loginDate;
+        }
+
+        public Timestamp getLinkExpiredDate() {
+            return link_expired_date;
+        }
+
+        public boolean isLinkExpired() {
+            if (link_expired_date == null) return true;
+            return link_expired_date.after(Timestamp.from(Instant.now()));
+        }
+
+        public void setLink_expired_date(Timestamp link_expired_date) {
+            this.link_expired_date = link_expired_date;
         }
     }
 }
