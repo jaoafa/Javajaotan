@@ -11,7 +11,7 @@ public class Event_TodoCheck {
     @SubscribeEvent
     public void onReactionAddEvent(MessageReactionAddEvent event) {
         MessageChannel channel = event.getChannel();
-        if (channel.getIdLong() != 597424023621599232L && channel.getIdLong() != 626727474922913792L) {
+        if (channel.getIdLong() != 597424023621599232L) {
             return;
         }
 
@@ -38,8 +38,8 @@ public class Event_TodoCheck {
         if (message.getType() == MessageType.DEFAULT) {
             return;
         }
-        // #todo | #develop_todo
-        if (channel.getIdLong() != 597424023621599232L && channel.getIdLong() != 626727474922913792L) {
+        // #todo
+        if (channel.getIdLong() != 597424023621599232L) {
             return;
         }
         // jaotan
