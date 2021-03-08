@@ -4,12 +4,7 @@ import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Main;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -299,36 +294,23 @@ public class Task_AccountConnectChecker extends TimerTask {
     }
 
     private String getPermissionGroup(UUID uuid) {
-        // from API
         try {
-            String url = "https://api.jaoafa.com/users/" + uuid.toString();
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(url).get().build();
-            Response response = client.newCall(request).execute();
-            if (response.code() != 200) {
-                return null;
+            MySQLDBManager MySQLDBManager = Main.MySQLDBManager;
+            Connection conn = MySQLDBManager.getConnection();
+            PreparedStatement statement = conn
+                    .prepareStatement("SELECT * FROM permissions WHERE uuid = ? LIMIT 1");
+            statement.setString(1, uuid.toString());
+            ResultSet res = statement.executeQuery();
+            if (!res.next()) {
+                res.close();
+                statement.close();
+                return "default";
             }
-            if (response.body() == null) {
-                return null;
-            }
-            JSONObject json = new JSONObject(response.body().string());
-            if (!json.has("status")) {
-                return null;
-            }
-            if (!json.getBoolean("status")) {
-                return null;
-            }
-
-            if (!json.has("data")) {
-                return null;
-            }
-
-            JSONObject data = json.getJSONObject("data");
-
-            return data.optString("permission");
-        } catch (IOException e) {
-            System.out
-                    .println("[Task_AccountConnectChecker|getPermissionGroup] Threw IOException: " + e.getMessage());
+            String ret = res.getString("permission");
+            res.close();
+            statement.close();
+            return ret;
+        } catch (SQLException e) {
             return null;
         }
     }
