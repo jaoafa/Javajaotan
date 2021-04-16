@@ -81,7 +81,7 @@ public class Cmd_User implements CommandPremise {
         if (!userData.discordID.equals("null"))
             builder.addField("DiscordUser", "https://discordapp.com/users/" + userData.discordID, false);
         if (!userData.minecraftUUID.equals("null"))
-            builder.addField("UserPage", "https://jaoafa.com/user/" + userData.minecraftUUID, false);
+            builder.addField("UserPage", "https://users.jaoafa.com/" + userData.minecraftUUID, false);
         if (!userData.minecraftUUID.equals("null"))
             builder.setThumbnail("https://crafatar.com/renders/body/" + userData.minecraftUUID.replaceAll("-", ""));
 
@@ -102,7 +102,7 @@ public class Cmd_User implements CommandPremise {
     private UserData fromUUID(UUID uuid) {
         System.out.println("Cmd_User.fromUUID(): " + uuid.toString());
         try {
-            String url = "https://api.jaoafa.com/users/" + uuid.toString();
+            String url = "https://api.jaoafa.com/users/" + uuid;
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder().url(url).get().build();
             Response response = client.newCall(request).execute();
