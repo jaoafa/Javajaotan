@@ -31,7 +31,12 @@ public class Task_VerifiedCheck extends TimerTask {
             System.out.println("[VerifiedError] general(597419057251090443) channel is not found.");
             return;
         }
-        guild.loadMembers().onSuccess(members -> members.forEach(member -> check(guild, role, channel, member)));
+        guild.loadMembers()
+            .onSuccess(members -> members.forEach(member -> check(guild, role, channel, member)))
+            .onError(err -> {
+                System.out.println("[Task_VerifiedCheck] Error: " + err.getClass().getName());
+                err.printStackTrace();
+            });
     }
 
     private void check(Guild guild, Role role, TextChannel channel, Member member) {

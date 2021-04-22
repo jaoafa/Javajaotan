@@ -37,7 +37,12 @@ public class Task_MinecraftConnectedCheck extends TimerTask {
             System.out.println("[MinecraftConnectedCheck] general(597419057251090443) channel is not found.");
             return;
         }
-        guild.loadMembers().onSuccess(members -> members.forEach(member -> check(guild, MinecraftConnectedRole, SubAccountRole, NeedSupportRole, channel, member)));
+        guild.loadMembers()
+            .onSuccess(members -> members.forEach(member -> check(guild, MinecraftConnectedRole, SubAccountRole, NeedSupportRole, channel, member)))
+            .onError(err -> {
+                System.out.println("[Task_MinecraftConnectedCheck] Error: " + err.getClass().getName());
+                err.printStackTrace();
+            });
     }
 
     private void check(Guild guild, Role MinecraftConnectedRole, Role SubAccountRole, Role NeedSupportRole, TextChannel channel, Member member) {
