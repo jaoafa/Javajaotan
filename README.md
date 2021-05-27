@@ -6,6 +6,10 @@
 
 公式Discordサーバ「jMS Gamers Club」で動作するBot「jaotan」のプロジェクトです。
 
+## DEPRECATED
+
+Version changed: https://github.com/jaoafa/Javajaotan2
+
 ## ライセンス
 
 ライセンスは**独自のライセンスである[jaoLicense](https://github.com/jaoafa/jao-Minecraft-Server/blob/master/jaoLICENSE.md)を適用**します。  
