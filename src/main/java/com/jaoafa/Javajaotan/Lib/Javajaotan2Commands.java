@@ -6,12 +6,13 @@ import okhttp3.Response;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class Javajaotan2Commands {
-    static List<String> commands;
+    static List<String> commands = new ArrayList<>();
     static long fetchTime = -1L;
 
     public static void fetch() {
