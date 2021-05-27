@@ -1,6 +1,7 @@
 package com.jaoafa.Javajaotan.Command;
 
 import com.jaoafa.Javajaotan.CommandPremise;
+import com.jaoafa.Javajaotan.Lib.Javajaotan2Commands;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MuteManager;
 import com.jaoafa.Javajaotan.Main;
@@ -102,10 +103,15 @@ public class MessageMainEvent {
             Class.forName("com.jaoafa.Javajaotan.Command.Cmd_" + className);
             // クラスがない場合これ以降進まない
             Constructor<?> construct = Class.forName("com.jaoafa.Javajaotan.Command.Cmd_" + className)
-                    .getConstructor();
+                .getConstructor();
             CommandPremise cmd = (CommandPremise) construct.newInstance();
 
             if (cmd.isjMSOnly() && guild.getIdLong() != 597378876556967936L) {
+                return;
+            }
+
+            if (Javajaotan2Commands.isImplemented(cmdname.toLowerCase())) {
+                System.out.println(cmdname + " is implemented in Javajaotan2");
                 return;
             }
 

@@ -126,15 +126,17 @@ public class Main {
         }
         chatManager = new ChatManager(nobyAPIKey, userlocalAPIKey, A3RTAPIKey, ChaplusAPIKey);
 
+        // Javajaotan2移行対応
+
         // 分けてイベント自動登録できるように？
         // 全部JDA移行
         try {
             JDABuilder jdabuilder = JDABuilder.createDefault(token)
-                    .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES,
-                            GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_TYPING)
-                    .setAutoReconnect(true)
-                    .setBulkDeleteSplittingEnabled(false)
-                    .setContextEnabled(false)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES,
+                    GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_TYPING)
+                .setAutoReconnect(true)
+                .setBulkDeleteSplittingEnabled(false)
+                .setContextEnabled(false)
                     .setEventManager(new AnnotatedEventManager());
 
             jdabuilder.addEventListeners(new MessageMainEvent());
@@ -258,21 +260,21 @@ public class Main {
             EmbedBuilder builder = new EmbedBuilder();
             builder.setTitle("javajaotan Error Reporter");
             builder.setColor(Color.RED);
-            builder.addField("StackTrace", "```" + sw.toString() + "```", false);
+            builder.addField("StackTrace", "```" + sw + "```", false);
             builder.addField("Message", "```" + exception.getMessage() + "```", false);
             builder.addField("Cause", "```" + exception.getCause() + "```", false);
             builder.setTimestamp(Instant.now());
             Main.ReportChannel.sendMessage(builder.build()).queue();
         } catch (Exception e) {
             String text = "javajaotan Error Reporter (" + Library.sdfFormat(new Date()) + ")\n"
-                    + "---------- StackTrace ----------\n"
-                    + sw.toString() + "\n"
-                    + "---------- Message ----------\n"
-                    + exception.getMessage() + "\n"
-                    + "---------- Cause ----------\n"
-                    + exception.getCause();
+                + "---------- StackTrace ----------\n"
+                + sw + "\n"
+                + "---------- Message ----------\n"
+                + exception.getMessage() + "\n"
+                + "---------- Cause ----------\n"
+                + exception.getCause();
             InputStream stream = new ByteArrayInputStream(
-                    text.getBytes(StandardCharsets.UTF_8));
+                text.getBytes(StandardCharsets.UTF_8));
             Main.ReportChannel.sendFile(stream, "Javajaotanreport" + System.currentTimeMillis() + ".txt").queue();
         }
     }
