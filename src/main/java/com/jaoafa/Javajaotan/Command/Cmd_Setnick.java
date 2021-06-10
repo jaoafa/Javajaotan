@@ -13,7 +13,7 @@ public class Cmd_Setnick implements CommandPremise {
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
         if (args.length == 0) {
-            message.reply("%s, このコマンドを実行するには、1つ以上の引数が必要です。").queue();
+            message.reply("このコマンドを実行するには、1つ以上の引数が必要です。").queue();
             return;
         }
         Member jaotan = guild.getMember(jda.getSelfUser());

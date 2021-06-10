@@ -9,6 +9,9 @@ import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
 import com.jaoafa.Javajaotan.Task.*;
+import com.julienvey.trello.Trello;
+import com.julienvey.trello.impl.TrelloImpl;
+import com.julienvey.trello.impl.http.JDKTrelloHttpClient;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -35,6 +38,7 @@ public class Main {
     public static List<PriconeCharacter> pricone_Characters = new ArrayList<>();
     private static JDA jda = null;
     private static ChatManager chatManager = null;
+    private static Trello trello = null;
 
     public static void main(String[] args) {
         File f = new File("conf.properties");
@@ -54,6 +58,8 @@ public class Main {
             props.setProperty("sqlpassword", "PLEASE");
             props.setProperty("translateGAS", "PLEASE");
             props.setProperty("originAPIUrl", "PLEASE");
+            props.setProperty("trelloKey", "PLEASE");
+            props.setProperty("trelloAccessToken", "PLEASE");
             try {
                 props.store(new FileOutputStream("conf.properties"), "Comments");
                 System.out.println("Please Config Token!");
@@ -126,7 +132,15 @@ public class Main {
         }
         chatManager = new ChatManager(nobyAPIKey, userlocalAPIKey, A3RTAPIKey, ChaplusAPIKey);
 
-        // Javajaotan2移行対応
+        if (props.containsKey("trelloKey") &&
+            props.getProperty("trelloKey").equalsIgnoreCase("PLEASE") &&
+            props.containsKey("trelloAccessToken") &&
+            props.getProperty("trelloAccessToken").equalsIgnoreCase("PLEASE")) {
+            trello = new TrelloImpl(
+                props.getProperty("trelloKey"),
+                props.getProperty("trelloAccessToken"),
+                new JDKTrelloHttpClient());
+        }
 
         // 分けてイベント自動登録できるように？
         // 全部JDA移行
@@ -292,5 +306,10 @@ public class Main {
 
     public static ChatManager getChatManager() {
         return chatManager;
+    }
+
+    @Nullable
+    public static Trello getTrello() {
+        return trello;
     }
 }
