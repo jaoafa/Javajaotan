@@ -16,10 +16,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Cmd_Report implements CommandPremise {
@@ -49,7 +46,17 @@ public class Cmd_Report implements CommandPremise {
 
         String inputMessage = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
         String suffixMessage = MessageFormat.format("reportコマンドによって{0}から報告されました。", member.getUser().getAsTag());
-        String cardMessage = inputMessage + (placeBreakCounter != null ? "\n" + placeBreakCounter : "") + "\n\n" + suffixMessage;
+        LinkedList<String> cardMessages = new LinkedList<>();
+        cardMessages.add(inputMessage);
+        cardMessages.add("");
+        if (placeBreakCounter != null) {
+            cardMessages.add("---");
+            cardMessages.add("");
+            cardMessages.add("- " + placeBreakCounter);
+        }
+        cardMessages.add("- " + suffixMessage);
+
+        String cardMessage = String.join("\n", cardMessages);
 
         Trello trello = Main.getTrello();
         if (trello == null) {
