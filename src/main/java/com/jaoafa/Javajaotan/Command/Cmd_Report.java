@@ -19,11 +19,17 @@ public class Cmd_Report implements CommandPremise {
     @Override
     public void onCommand(JDA jda, Guild guild, MessageChannel channel, Member member,
                           Message message, String[] args) {
-        if(args.length <= 1) {
+        if (args.length <= 1) {
             // 引数が0もしくは1の場合
             message.reply("このコマンドを実行するには、2つ以上の引数が必要です。").queue();
             return;
         }
+
+        if (channel.getIdLong() != 597423444501463040L) {
+            message.reply("このコマンドはこのチャンネルでは利用できません。").queue();
+            return;
+        }
+
         String minecraftId = args[0];
         String inputMessage = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
         String suffixMessage = MessageFormat.format("reportコマンドによって{0}から報告されました。", member.getUser().getAsTag());
