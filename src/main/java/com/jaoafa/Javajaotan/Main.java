@@ -133,9 +133,9 @@ public class Main {
         chatManager = new ChatManager(nobyAPIKey, userlocalAPIKey, A3RTAPIKey, ChaplusAPIKey);
 
         if (props.containsKey("trelloKey") &&
-            props.getProperty("trelloKey").equalsIgnoreCase("PLEASE") &&
+            !props.getProperty("trelloKey").equalsIgnoreCase("PLEASE") &&
             props.containsKey("trelloAccessToken") &&
-            props.getProperty("trelloAccessToken").equalsIgnoreCase("PLEASE")) {
+            !props.getProperty("trelloAccessToken").equalsIgnoreCase("PLEASE")) {
             trello = new TrelloImpl(
                 props.getProperty("trelloKey"),
                 props.getProperty("trelloAccessToken"),
