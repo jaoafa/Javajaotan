@@ -4,8 +4,6 @@ import com.jaoafa.Javajaotan.CommandPremise;
 import com.jaoafa.Javajaotan.Main;
 import com.julienvey.trello.Trello;
 import com.julienvey.trello.domain.Card;
-import com.julienvey.trello.impl.TrelloImpl;
-import com.julienvey.trello.impl.http.JDKTrelloHttpClient;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -31,12 +29,13 @@ public class Cmd_Report implements CommandPremise {
         String cardMessage = inputMessage + "\n\n" + suffixMessage;
 
         Trello trello = Main.getTrello();
-        if(trello == null){
+        if (trello == null) {
             return;
         }
 
         Card card = new Card();
-        // TODO: カードデータ挿入
+        card.setName(minecraftId);
+        card.setDesc(cardMessage);
         trello.createCard("60816a7e6791dc5c605fb4e4", card);
     }
 
