@@ -161,7 +161,6 @@ public class Main {
             jdabuilder.addEventListeners(new Event_ServerBanned());
             jdabuilder.addEventListeners(new Event_ReactionAddEvent());
             jdabuilder.addEventListeners(new Event_TodoCheck());
-            jdabuilder.addEventListeners(new Event_TomachiEmojis());
 
             jda = jdabuilder.build().awaitReady();
         } catch (Exception e) {
