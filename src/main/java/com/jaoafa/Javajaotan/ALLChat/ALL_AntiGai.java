@@ -70,6 +70,11 @@ public class ALL_AntiGai implements ALLChatPremise {
                     matched = true;
                     antis.add(url);
                 }
+                if (hex.equals("d09504f583f667a6b7654f96d7d8e74c7d913347")) {
+                    // 847024717042679818.png
+                    matched = true;
+                    antis.add(url);
+                }
 
                 if (matched) {
                     System.out.println("-> matched.");
