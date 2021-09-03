@@ -42,8 +42,13 @@ public class ChannelMainEvent {
             Class.forName("com.jaoafa.Javajaotan.Channel.Channel_" + className);
             // クラスがない場合これ以降進まない
             Constructor<?> construct = Class
-                    .forName("com.jaoafa.Javajaotan.Channel.Channel_" + className).getConstructor();
+                .forName("com.jaoafa.Javajaotan.Channel.Channel_" + className).getConstructor();
             ChannelPremise cmd = (ChannelPremise) construct.newInstance();
+
+            if (Main.getImplementeds().contains("Channel_" + className)) {
+                System.out.println("Channel_" + className + " is implemented in Javajaotan2 (Channel)");
+                return;
+            }
 
             cmd.run(jda, guild, channel, member, user, message, false);
         } catch (ClassNotFoundException e) {

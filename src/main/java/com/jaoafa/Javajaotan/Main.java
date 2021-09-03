@@ -22,10 +22,13 @@ import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
 
 import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 import java.util.*;
@@ -39,6 +42,7 @@ public class Main {
     private static JDA jda = null;
     private static ChatManager chatManager = null;
     private static Trello trello = null;
+    private static final Set<String> implementeds = new HashSet<>();
 
     public static void main(String[] args) {
         File f = new File("conf.properties");
@@ -142,6 +146,18 @@ public class Main {
                 new JDKTrelloHttpClient());
         }
 
+        try {
+            if (Files.exists(Path.of("implemented.json"))) {
+                JSONArray implemented = new JSONArray(Files.readString(Path.of("implemented.json")));
+                for (int i = 0; i < implemented.length(); i++) {
+                    implementeds.add(implemented.getString(i));
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // 分けてイベント自動登録できるように？
         // 全部JDA移行
         try {
@@ -151,16 +167,17 @@ public class Main {
                 .setAutoReconnect(true)
                 .setBulkDeleteSplittingEnabled(false)
                 .setContextEnabled(false)
-                    .setEventManager(new AnnotatedEventManager());
+                .setEventManager(new AnnotatedEventManager());
 
-            jdabuilder.addEventListeners(new MessageMainEvent());
-            jdabuilder.addEventListeners(new ChannelMainEvent());
-            jdabuilder.addEventListeners(new ALLChatMainEvent());
-            jdabuilder.addEventListeners(new Event_ServerJoin());
-            jdabuilder.addEventListeners(new Event_ServerLeave());
-            jdabuilder.addEventListeners(new Event_ServerBanned());
-            jdabuilder.addEventListeners(new Event_ReactionAddEvent());
-            jdabuilder.addEventListeners(new Event_TodoCheck());
+            if (!implementeds.contains("MessageMainEvent")) jdabuilder.addEventListeners(new MessageMainEvent());
+            if (!implementeds.contains("ChannelMainEvent")) jdabuilder.addEventListeners(new ChannelMainEvent());
+            if (!implementeds.contains("ALLChatMainEvent")) jdabuilder.addEventListeners(new ALLChatMainEvent());
+            if (!implementeds.contains("Event_ServerJoin")) jdabuilder.addEventListeners(new Event_ServerJoin());
+            if (!implementeds.contains("Event_ServerLeave")) jdabuilder.addEventListeners(new Event_ServerLeave());
+            if (!implementeds.contains("Event_ServerBanned")) jdabuilder.addEventListeners(new Event_ServerBanned());
+            if (!implementeds.contains("Event_ReactionAddEvent"))
+                jdabuilder.addEventListeners(new Event_ReactionAddEvent());
+            if (!implementeds.contains("Event_TodoCheck")) jdabuilder.addEventListeners(new Event_TodoCheck());
 
             jda = jdabuilder.build().awaitReady();
         } catch (Exception e) {
@@ -310,5 +327,9 @@ public class Main {
     @Nullable
     public static Trello getTrello() {
         return trello;
+    }
+
+    public static Set<String> getImplementeds() {
+        return implementeds;
     }
 }

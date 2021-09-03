@@ -44,6 +44,11 @@ public class ALLChatMainEvent {
                 if (!clazz.getName().startsWith("com.jaoafa.Javajaotan.ALLChat.ALL_")) {
                     continue;
                 }
+                String clazzName = clazz.getName().substring("com.jaoafa.Javajaotan.ALLChat.".length());
+                if (Main.getImplementeds().contains(clazzName)) {
+                    System.out.println(clazzName + " is implemented in Javajaotan2 (ALLChat)");
+                    return;
+                }
                 Constructor<?> construct = clazz.getConstructor();
                 ALLChatPremise allchat = (ALLChatPremise) construct.newInstance();
                 allchat.run(jda, guild, channel, member, user, message, false);
