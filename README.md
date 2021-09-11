@@ -10,6 +10,8 @@
 
 Version changed: https://github.com/jaoafa/Javajaotan2
 
+Updates in this repository only include bug fixes and minor additional fixes.
+
 ## ライセンス
 
 ライセンスは**独自のライセンスである[jaoLicense](https://github.com/jaoafa/jao-Minecraft-Server/blob/master/jaoLICENSE.md)を適用**します。  
