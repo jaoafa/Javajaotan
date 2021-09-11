@@ -103,9 +103,11 @@ public class Task_MeetingVote extends TimerTask {
                 builder.setDescription("@here :thumbsup:投票が承認されたことをお知らせします。");
                 builder.addField("賛成 / 反対 / 白票", good_count + " / " + bad_count + " / " + white_count, false);
                 builder.addField("決議ボーダー", String.valueOf(_VoteBorder), false);
+                builder.addField("メンバー", "賛成: " + good.stream().map(User::getAsTag).collect(Collectors.joining(", ")) + "\n" +
+                    "反対: " + bad.stream().map(User::getAsTag).collect(Collectors.joining(", ")), false);
                 builder.addField("内容", content, false);
                 builder.addField("対象メッセージURL", "https://discord.com/channels/" + message.getGuild().getId()
-                        + "/" + message.getChannel().getId() + "/" + message.getId(), false);
+                    + "/" + message.getChannel().getId() + "/" + message.getId(), false);
                 builder.addField("投票開始日時", dtf.format(timestamp), false);
                 builder.setColor(Color.GREEN);
                 channel.sendMessage(builder.build()).queue();
@@ -118,9 +120,11 @@ public class Task_MeetingVote extends TimerTask {
                 builder.setDescription("@here :thumbsdown:投票が否認されたことをお知らせします。");
                 builder.addField("賛成 / 反対 / 白票", good_count + " / " + bad_count + " / " + white_count, false);
                 builder.addField("決議ボーダー", String.valueOf(_VoteBorder), false);
+                builder.addField("メンバー", "賛成: " + good.stream().map(User::getAsTag).collect(Collectors.joining(", ")) + "\n" +
+                    "反対: " + bad.stream().map(User::getAsTag).collect(Collectors.joining(", ")), false);
                 builder.addField("内容", content, false);
                 builder.addField("対象メッセージURL", "https://discord.com/channels/" + message.getGuild().getId()
-                        + "/" + message.getChannel().getId() + "/" + message.getId(), false);
+                    + "/" + message.getChannel().getId() + "/" + message.getId(), false);
                 builder.addField("投票開始日時", dtf.format(timestamp), false);
                 builder.setColor(Color.RED);
                 channel.sendMessage(builder.build()).queue();
@@ -177,15 +181,17 @@ public class Task_MeetingVote extends TimerTask {
                 builder.setDescription("@here :wave:有効会議期限を過ぎたため、投票が否認されたことをお知らせします。");
                 builder.addField("賛成 / 反対 / 白票", good_count + " / " + bad_count + " / " + white_count, false);
                 builder.addField("決議ボーダー", String.valueOf(_VoteBorder), false);
+                builder.addField("メンバー", "賛成: " + good.stream().map(User::getAsTag).collect(Collectors.joining(", ")) + "\n" +
+                    "反対: " + bad.stream().map(User::getAsTag).collect(Collectors.joining(", ")), false);
                 builder.addField("内容", content, false);
                 builder.addField("対象メッセージURL", "https://discord.com/channels/" + message.getGuild().getId()
-                        + "/" + message.getChannel().getId() + "/" + message.getId(), false);
+                    + "/" + message.getChannel().getId() + "/" + message.getId(), false);
                 builder.addField("投票開始日時",
-                        dtf.format(timestamp) + " (" + timestamp.toEpochSecond() + ")",
-                        false);
+                    dtf.format(timestamp) + " (" + timestamp.toEpochSecond() + ")",
+                    false);
                 builder.addField("有効会議期限",
-                        sdf.format(cal.getTime()) + " (" + TimeUnit.MILLISECONDS.toSeconds(cal.getTimeInMillis()) + ")",
-                        false);
+                    sdf.format(cal.getTime()) + " (" + TimeUnit.MILLISECONDS.toSeconds(cal.getTimeInMillis()) + ")",
+                    false);
                 builder.addField("現在時刻",
                         sdf.format(new Date(TimeUnit.SECONDS.toMillis(now))) + " (" + now + ")",
                         false);
@@ -425,7 +431,7 @@ public class Task_MeetingVote extends TimerTask {
                 i++;
             }
             statement_cities_update.setInt(i, cities_id);
-            System.out.println("SQL: " + statement_cities_update.toString());
+            System.out.println("SQL: " + statement_cities_update);
             statement_cities_update.executeUpdate();
 
             String discord_userid = getDiscordUserID(conn, cities_id);
