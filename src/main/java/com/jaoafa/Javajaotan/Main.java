@@ -8,7 +8,8 @@ import com.jaoafa.Javajaotan.Lib.ChatManager;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
-import com.jaoafa.Javajaotan.Task.*;
+import com.jaoafa.Javajaotan.Task.Task_AccountConnectChecker;
+import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
 import com.julienvey.trello.Trello;
 import com.julienvey.trello.impl.TrelloImpl;
 import com.julienvey.trello.impl.http.JDKTrelloHttpClient;
@@ -211,16 +212,16 @@ public class Main {
 		}*/
 
         Runtime.getRuntime().addShutdownHook(
-                new Thread(
-                        () -> System.out.println("Exit")));
+            new Thread(
+                () -> System.out.println("Exit")));
 
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new Task_VerifiedCheck(), 10000L, 60000L); // 1分
+        // timer.scheduleAtFixedRate(new Task_VerifiedCheck(), 10000L, 60000L); // 1分
         timer.scheduleAtFixedRate(new Task_MeetingVote(), 20000L, 600000L); // 10分
         timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 30000L, 600000L); // 10分
-        timer.scheduleAtFixedRate(new Task_MinecraftConnectedCheck(), 40000L, 1800000L); // 30分
-        timer.scheduleAtFixedRate(new Task_SubAccountCheck(), 50000L, 1800000L); // 30分
-        timer.scheduleAtFixedRate(new Task_3MonthCheck(), 60000L, 1800000L);
+        // timer.scheduleAtFixedRate(new Task_MinecraftConnectedCheck(), 40000L, 1800000L); // 30分
+        // timer.scheduleAtFixedRate(new Task_SubAccountCheck(), 50000L, 1800000L); // 30分
+        // timer.scheduleAtFixedRate(new Task_3MonthCheck(), 60000L, 1800000L);
 		/*
 		JavajaotanWatcher JavajaotanWatcher = new JavajaotanWatcher();
 		Timer timer = new Timer();
