@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Task_MeetingVote extends TimerTask {
-    int TeamJaoCount = 9; // Admin + Moderator
+    int TeamJaoCount = 10; // Admin + Moderator
     Pattern p = Pattern.compile("\\[Border:([0-9]+)]");
     boolean debugMode = false;
 
