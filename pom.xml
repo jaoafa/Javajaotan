@@ -94,7 +94,7 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.10.1</version>
+            <version>0.10.2</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.3.0_335</version>
+            <version>4.3.0_346</version>
             <exclusions>
                 <exclusion>
                     <groupId>club.minnced</groupId>
