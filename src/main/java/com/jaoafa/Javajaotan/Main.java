@@ -3,13 +3,14 @@ package com.jaoafa.Javajaotan;
 import com.jaoafa.Javajaotan.ALLChat.ALLChatMainEvent;
 import com.jaoafa.Javajaotan.Channel.ChannelMainEvent;
 import com.jaoafa.Javajaotan.Command.MessageMainEvent;
-import com.jaoafa.Javajaotan.Event.*;
+import com.jaoafa.Javajaotan.Event.Event_ServerBanned;
+import com.jaoafa.Javajaotan.Event.Event_ServerJoin;
+import com.jaoafa.Javajaotan.Event.Event_ServerLeave;
+import com.jaoafa.Javajaotan.Event.Event_TodoCheck;
 import com.jaoafa.Javajaotan.Lib.ChatManager;
 import com.jaoafa.Javajaotan.Lib.Library;
 import com.jaoafa.Javajaotan.Lib.MySQLDBManager;
 import com.jaoafa.Javajaotan.Lib.PriconeCharacter;
-import com.jaoafa.Javajaotan.Task.Task_AccountConnectChecker;
-import com.jaoafa.Javajaotan.Task.Task_MeetingVote;
 import com.julienvey.trello.Trello;
 import com.julienvey.trello.impl.TrelloImpl;
 import com.julienvey.trello.impl.http.JDKTrelloHttpClient;
@@ -176,8 +177,8 @@ public class Main {
             if (!implementeds.contains("Event_ServerJoin")) jdabuilder.addEventListeners(new Event_ServerJoin());
             if (!implementeds.contains("Event_ServerLeave")) jdabuilder.addEventListeners(new Event_ServerLeave());
             if (!implementeds.contains("Event_ServerBanned")) jdabuilder.addEventListeners(new Event_ServerBanned());
-            if (!implementeds.contains("Event_ReactionAddEvent"))
-                jdabuilder.addEventListeners(new Event_ReactionAddEvent());
+            // if (!implementeds.contains("Event_ReactionAddEvent"))
+            //    jdabuilder.addEventListeners(new Event_ReactionAddEvent());
             if (!implementeds.contains("Event_TodoCheck")) jdabuilder.addEventListeners(new Event_TodoCheck());
 
             jda = jdabuilder.build().awaitReady();
@@ -217,7 +218,7 @@ public class Main {
 
         Timer timer = new Timer();
         // timer.scheduleAtFixedRate(new Task_VerifiedCheck(), 10000L, 60000L); // 1分
-        timer.scheduleAtFixedRate(new Task_MeetingVote(), 20000L, 600000L); // 10分
+        //timer.scheduleAtFixedRate(new Task_MeetingVote(), 20000L, 600000L); // 10分
         // timer.scheduleAtFixedRate(new Task_AccountConnectChecker(), 30000L, 600000L); // 10分
         // timer.scheduleAtFixedRate(new Task_MinecraftConnectedCheck(), 40000L, 1800000L); // 30分
         // timer.scheduleAtFixedRate(new Task_SubAccountCheck(), 50000L, 1800000L); // 30分
