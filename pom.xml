@@ -99,7 +99,7 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.2</version>
+            <version>4.9.3</version>
         </dependency>
         <dependency>
             <groupId>com.optimaize.languagedetector</groupId>
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.3.0_346</version>
+            <version>4.4.0_351</version>
             <exclusions>
                 <exclusion>
                     <groupId>club.minnced</groupId>
