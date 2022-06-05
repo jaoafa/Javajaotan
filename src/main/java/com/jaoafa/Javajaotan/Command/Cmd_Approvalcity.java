@@ -100,15 +100,16 @@ public class Cmd_Approvalcity implements CommandPremise {
             statement.close();
 
             PreparedStatement statement_update = conn
-                    .prepareStatement("UPDATE cities_new_waiting SET status = ? WHERE id = ?");
+                .prepareStatement("UPDATE cities_new_waiting SET status = ?, city_id = ? WHERE id = ?");
             statement_update.setInt(1, 1);
-            statement_update.setInt(2, reqID);
+            statement_update.setInt(2, cities_id);
+            statement_update.setInt(3, reqID);
             statement_update.executeUpdate();
             statement_update.close();
 
             String warnMsg = "・自治体を紹介するまたは自治体ルールなどを記載する「自治体ページ」の制作はjaopediaでお願いします。 https://wiki.jaoafa.com/\n"
-                    + "・自治体は最終ログインから3か月が経過した場合、自治体の所有権がなくなり運営管轄となります。最低限、ログインをある程度継続していたただきますようお願い申し上げます。(基本的に、2か月経過後運営からDiscordにて連絡いたします)\n"
-                    + "・その他のルールについては自治体関連方針にてご確認ください。 https://jaoafa.com/rule/management/cities";
+                + "・自治体は最終ログインから3か月が経過した場合、自治体の所有権がなくなり運営管轄となります。最低限、ログインをある程度継続していたただきますようお願い申し上げます。(基本的に、2か月経過後運営からDiscordにて連絡いたします)\n"
+                + "・その他のルールについては自治体関連方針にてご確認ください。 https://jaoafa.com/rule/management/cities";
 
             TextChannel city_request = Main.getJDA().getTextChannelById(709008822043148340L);
             if (city_request == null) {
