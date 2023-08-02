@@ -1,15 +1,12 @@
 package com.jaoafa.Javajaotan.Lib;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class Javajaotan2Commands {
     static List<String> commands = new ArrayList<>();
@@ -19,6 +16,7 @@ public class Javajaotan2Commands {
         if (fetchTime >= System.currentTimeMillis() - 3600000L) {
             return;
         }
+        /*
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -34,6 +32,16 @@ public class Javajaotan2Commands {
                 for (int i = 0; i < array.length(); i++) {
                     commands.add(array.getJSONObject(i).getString("name").toLowerCase());
                 }
+            }
+        } catch (IOException ignored) {
+        }
+         */
+
+        // implement-commands.json を読み込む
+        try {
+            JSONArray array = new JSONArray(Files.readString(Paths.get("implement-commands.json")));
+            for (int i = 0; i < array.length(); i++) {
+                commands.add(array.getJSONObject(i).getString("name").toLowerCase());
             }
         } catch (IOException ignored) {
         }
